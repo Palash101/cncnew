@@ -4,7 +4,6 @@ import TechStack from "@/components/tech-stack";
 import IndustriesSection from "@/components/industries-section";
 import AgileProcess from "@/components/agile-process";
 import StageWorkflow from "@/components/stage-workflow";
-import AnimatedTestimonialsDemo from "@/components/animated-testimonials-demo";
 
 export default function Home() {
   return (
@@ -15,7 +14,6 @@ export default function Home() {
       <IndustriesSection />
       <AgileProcess />
       {/* <StageWorkflow /> */}
-      <AnimatedTestimonialsDemo />
     </main>
   );
 }

@@ -84,55 +84,55 @@ const techCategories: CategoryRow[] = [
 
 export default function TechStack() {
   return (
-    <section className={`w-full bg-white py-16 sm:py-24 ${font.className}`}>
+    <section className={`w-full bg-white py-12 sm:py-16 md:py-20 lg:py-24 ${font.className}`}>
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12 md:mb-14">
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
             Our Technology Stack
           </h2>
-          <p className="mt-3 text-base text-slate-600 sm:text-lg">
+          <p className="mt-2.5 text-sm text-slate-600 sm:mt-3 sm:text-base md:text-lg max-w-2xl mx-auto">
             Empowering enterprise applications with modern, battle-tested technologies.
           </p>
         </div>
 
         {/* Stack Categories Container */}
-        <div className="flex flex-col gap-5 sm:gap-6">
+        <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
           {techCategories.map((category) => (
             <div
               key={category.id}
-              className={`flex flex-col gap-6 rounded-2xl border ${category.borderColor} ${category.bgColor} p-6 sm:p-8 sm:px-10 lg:flex-row lg:items-center lg:justify-between transition-all duration-200 hover:shadow-xs`}
+              className={`flex flex-col gap-4 rounded-xl sm:rounded-2xl border ${category.borderColor} ${category.bgColor} p-4 sm:p-6 md:p-8 lg:px-10 lg:py-8 lg:flex-row lg:items-center lg:justify-between transition-all duration-200 hover:shadow-xs`}
             >
               {/* Category Title */}
               <div className="lg:w-1/4 shrink-0">
-                <h3 className="text-lg font-bold text-slate-900 sm:text-xl">
+                <h3 className="text-base font-bold text-slate-900 sm:text-lg md:text-xl">
                   {category.title}
                 </h3>
               </div>
 
               {/* Technology Pills */}
-              <div className="flex flex-wrap items-center gap-3.5 lg:w-3/4 lg:justify-start">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-3.5 lg:w-3/4 lg:justify-start">
                 {category.items.map((tech) => (
                   <div
                     key={tech.name}
-                    className="inline-flex items-center gap-2.5 rounded-full border border-slate-200/80 bg-white px-4.5 py-2 text-sm font-semibold text-slate-800 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md cursor-default"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 md:gap-2.5 rounded-full border border-slate-200/80 bg-white px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-slate-800 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md cursor-default max-w-full truncate"
                   >
                     {tech.image ? (
-                      <div className="relative flex h-5 w-5 shrink-0 items-center justify-center">
+                      <div className="relative flex h-4 w-4 sm:h-5 sm:w-5 shrink-0 items-center justify-center">
                         <Image
                           src={tech.image}
                           alt={tech.name}
                           width={20}
                           height={20}
-                          className="max-h-5 max-w-5 object-contain"
+                          className="max-h-4 max-w-4 sm:max-h-5 sm:max-w-5 object-contain"
                         />
                       </div>
                     ) : (
-                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[10px] font-bold text-slate-600 uppercase">
+                      <div className="flex h-4 w-4 sm:h-5 sm:w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[9px] sm:text-[10px] font-bold text-slate-600 uppercase">
                         {tech.name.substring(0, 2)}
                       </div>
                     )}
-                    <span>{tech.name}</span>
+                    <span className="truncate">{tech.name}</span>
                   </div>
                 ))}
               </div>
