@@ -49,6 +49,7 @@ const techCategories: CategoryRow[] = [
       { name: "C#", image: "/backend/c sharp.png" },
       { name: "PHP", image: "/backend/php.png" },
       { name: "Go-Lang", image: "/backend/Go_Logo_B.webp" },
+      { name: "Odoo", image: "/Odoo.png" },
     ],
   },
   {

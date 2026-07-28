@@ -1,6 +1,7 @@
 import HeroSection from "@/components/hero-section";
 import StatsSection from "@/components/stats-section";
 import TechStack from "@/components/tech-stack";
+import OdooSection from "@/components/odoo-section";
 import IndustriesSection from "@/components/industries-section";
 import AgileProcess from "@/components/agile-process";
 import StageWorkflow from "@/components/stage-workflow";
@@ -11,6 +12,7 @@ export default function Home() {
       <HeroSection />
       <StatsSection />
       <TechStack />
+      <OdooSection />
       <IndustriesSection />
       <AgileProcess />
       {/* <StageWorkflow /> */}
