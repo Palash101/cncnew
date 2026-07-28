@@ -17,6 +17,8 @@ export default function StatsSection() {
           alt="Global Networking Background"
           fill
           priority
+          sizes="100vw"
+          quality={75}
           className="object-cover object-center w-full h-full"
         />
       </div>

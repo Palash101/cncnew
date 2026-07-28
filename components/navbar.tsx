@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { motion, AnimatePresence } from "motion/react";
 
 const navbarFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -17,7 +18,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md transition-all ${navbarFont.className}`}
+      className={`sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-md shadow-slate-900/8 transition-all ${navbarFont.className}`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
         {/* Logo */}
@@ -70,59 +71,110 @@ export default function Navbar() {
             <ArrowRight className="ml-1.5 h-4 w-4" />
           </Button>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Animated Mobile Menu Toggle Button */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="inline-flex items-center justify-center rounded-lg p-2 text-[#0B1739] hover:bg-slate-100 focus:outline-none md:hidden cursor-pointer"
+            className="relative inline-flex items-center justify-center rounded-lg p-2 text-[#0B1739] hover:bg-slate-100 focus:outline-none md:hidden cursor-pointer transition-colors"
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <motion.div
+              initial={false}
+              animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </motion.div>
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="border-b border-slate-200 bg-white px-6 py-4 md:hidden">
-          <nav className="flex flex-col gap-4">
-            <Link
-              href="#services"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-semibold tracking-tight text-[#0B1739] hover:text-sky-600"
-            >
-              Services
-            </Link>
-            <Link
-              href="#work"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-semibold tracking-tight text-[#0B1739] hover:text-sky-600"
-            >
-              Our Work
-            </Link>
-            <Link
-              href="#about"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-semibold tracking-tight text-[#0B1739] hover:text-sky-600"
-            >
-              About Us
-            </Link>
-            <Link
-              href="#careers"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-semibold tracking-tight text-[#0B1739] hover:text-sky-600"
-            >
-              Careers
-            </Link>
-            <Button
-              size="default"
-              className="mt-2 w-full bg-[#0B1739] text-white hover:bg-[#152052] cursor-pointer"
-            >
-              Get a Quote
-            </Button>
-          </nav>
-        </div>
-      )}
+      {/* Smooth Animated Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+            className="overflow-hidden border-b border-slate-200/80 bg-white/98 backdrop-blur-lg md:hidden"
+          >
+            <div className="px-6 py-5">
+              <nav className="flex flex-col gap-4">
+                <motion.div
+                  initial={{ y: -8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.05 }}
+                >
+                  <Link
+                    href="#services"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-base font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
+                  >
+                    Services
+                  </Link>
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: -8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.1 }}
+                >
+                  <Link
+                    href="#work"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-base font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
+                  >
+                    Our Work
+                  </Link>
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: -8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.15 }}
+                >
+                  <Link
+                    href="#about"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-base font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
+                  >
+                    About Us
+                  </Link>
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: -8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.2 }}
+                >
+                  <Link
+                    href="#careers"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-base font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
+                  >
+                    Careers
+                  </Link>
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: -8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.2, delay: 0.25 }}
+                >
+                  <Button
+                    size="default"
+                    className="mt-2 w-full bg-[#0B1739] text-white hover:bg-[#152052] cursor-pointer shadow-md"
+                  >
+                    Get a Quote
+                    <ArrowRight className="ml-1.5 h-4 w-4" />
+                  </Button>
+                </motion.div>
+              </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
