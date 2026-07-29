@@ -8,7 +8,7 @@ import { motion } from "motion/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const WORDS = ["DESIGN", "DEVELOPMENT", "DEPLOYMENT", "SUPPORT"];
+const WORDS = ["DIGITAL REALITY", "ENTERPRISE SOLUTIONS", "HIGH-IMPACT SOFTWARE", "FUTURE PRODUCTS"];
 
 export default function HeroSection() {
   const [index, setIndex] = useState(0);
@@ -33,7 +33,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className={`relative min-h-[700px] flex flex-col justify-center overflow-hidden bg-transparent ${inter.className}`}
+      className={`relative min-h-[460px] sm:min-h-[520px] md:min-h-[560px] flex flex-col justify-center overflow-hidden bg-transparent py-10 sm:py-14 md:py-16 ${inter.className}`}
       style={{ fontFamily: "Inter, sans-serif" }}
     >
       {/* Rich Multi-layered Mesh Background with Smooth Ambient Orbs */}
@@ -101,47 +101,40 @@ export default function HeroSection() {
       </div>
 
       {/* Stable Hero Content Container (No Jitter / Boggling on Scroll) */}
-      <div className="relative mx-auto flex max-w-[85rem] flex-col items-center px-6 -mt-6 sm:-mt-10 pt-0 pb-12 text-center sm:pb-16">
+      <div className="relative mx-auto flex max-w-[85rem] flex-col items-center px-6 pt-2 pb-6 sm:pb-8 text-center">
         <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-normal [word-spacing:0.08em] sm:[word-spacing:0.12em] [font-variant-ligatures:none] text-[#0B1739] max-w-6xl leading-[1.25] sm:leading-[1.2] text-center">
-          {/* Line 1 on Medium & Small screens */}
-          <span className="block md:block lg:inline">
-            Your trusted par<span className="inline-block pl-[0.04em]">t</span>ner for
+          {/* Line 1 */}
+          <span className="inline-block sm:inline">
+            Transforming Ideas into
           </span>{" "}
-
-          {/* Line 2 & 3 wrapper */}
-          <span className="inline-block md:block lg:inline mt-1 sm:mt-0">
-            <span className="block sm:inline">
-              Enterprise-grade sof<span className="inline-block pl-[0.03em]">t</span>ware
-            </span>{" "}
-            <span className="relative inline-flex items-center justify-center sm:justify-start overflow-hidden align-bottom h-[1.15em] -mb-1 mt-1 sm:mt-0 transition-[width] duration-300 mx-auto sm:mx-0 sm:ml-1.5">
-              <span className="opacity-0 select-none pointer-events-none whitespace-nowrap pr-1.5" aria-hidden="true">
-                {WORDS[index]}
-              </span>
-              <span
-                className={`absolute inset-y-0 inset-x-0 sm:inset-x-auto sm:left-0 flex items-center justify-center sm:justify-start text-center sm:text-left whitespace-nowrap bg-gradient-to-r from-blue-700 via-sky-500 to-blue-400 bg-clip-text text-transparent pr-1.5 ${
-                  status === "visible"
-                    ? "transition-all duration-500 ease-out translate-y-0 opacity-100"
-                    : status === "exiting"
-                    ? "transition-all duration-500 ease-in -translate-y-full opacity-0"
-                    : "transition-none translate-y-full opacity-0"
-                }`}
-              >
-                {WORDS[index]}
-              </span>
+          <span className="relative inline-flex items-center justify-center sm:justify-start overflow-hidden align-bottom h-[1.15em] -mb-1 mt-1 sm:mt-0 transition-[width] duration-300 mx-auto sm:mx-0 sm:ml-1.5">
+            <span className="opacity-0 select-none pointer-events-none whitespace-nowrap pr-1.5" aria-hidden="true">
+              {WORDS[index]}
+            </span>
+            <span
+              className={`absolute inset-y-0 inset-x-0 sm:inset-x-auto sm:left-0 flex items-center justify-center sm:justify-start text-center sm:text-left whitespace-nowrap bg-gradient-to-r from-blue-700 via-sky-500 to-blue-400 bg-clip-text text-transparent pr-1.5 ${
+                status === "visible"
+                  ? "transition-all duration-500 ease-out translate-y-0 opacity-100"
+                  : status === "exiting"
+                  ? "transition-all duration-500 ease-in -translate-y-full opacity-0"
+                  : "transition-none translate-y-full opacity-0"
+              }`}
+            >
+              {WORDS[index]}
             </span>
           </span>
         </h1>
 
         {/* Subtext */}
-        <p className="mt-6 max-w-5xl text-base text-slate-600 sm:text-lg leading-relaxed font-normal">
-          We build scalable, mission-critical software solutions tailored for modern enterprises and fast-growing tech leaders. Powered by top-tier engineering talent in Bangalore, India, delivering speed, reliability, and measurable business growth.
+        <p className="mt-4 sm:mt-5 max-w-4xl text-base text-slate-600 sm:text-lg md:text-xl leading-relaxed font-normal">
+          Accelerating growth for ambitious brands with technology, experience & innovation for over a decade.
         </p>
 
         {/* CTAs */}
-        <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+        <div className="mt-6 sm:mt-8 flex flex-col gap-3.5 sm:flex-row">
           <Button
             size="lg"
-            className="bg-[#0B1739] text-white hover:bg-[#152052] px-8 py-6 text-base font-semibold shadow-xl shadow-blue-900/15 transition-all hover:scale-[1.02] cursor-pointer"
+            className="bg-[#0B1739] text-white hover:bg-[#152052] px-7 py-5 text-base font-semibold shadow-lg shadow-blue-900/15 transition-all hover:scale-[1.02] cursor-pointer"
           >
             Get a FREE Quote
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -149,7 +142,7 @@ export default function HeroSection() {
           <Button
             size="lg"
             variant="outline"
-            className="border-[#0B1739]/30 px-8 py-6 text-base font-semibold text-[#0B1739] hover:bg-blue-50/80 transition-all hover:scale-[1.02] cursor-pointer"
+            className="border-[#0B1739]/30 px-7 py-5 text-base font-semibold text-[#0B1739] hover:bg-blue-50/80 transition-all hover:scale-[1.02] cursor-pointer"
           >
             View our work
           </Button>

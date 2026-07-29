@@ -97,7 +97,7 @@ export default function IndustriesSection() {
         {/* Section Header */}
         <div className="mb-14 text-center">
           <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Our expertise lies in top Industries & proven results
+            Our Expertise Lies In Top Industries & Proven Results
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-base text-slate-300 sm:text-lg">
             We provide a diverse range of solutions for distinct industries that amplify and boost business performance.
