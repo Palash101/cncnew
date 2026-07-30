@@ -1,0 +1,2 @@
+# cncnew
+craftandcode new theme
