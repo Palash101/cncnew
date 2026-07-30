@@ -4,11 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Mail,
-  Phone,
-  MapPin,
   ArrowRight,
   Sparkles,
-  ShieldCheck,
   Send,
 } from "lucide-react";
 import { useQuoteModal } from "@/context/quote-modal-context";
@@ -88,8 +85,8 @@ export default function Footer() {
             {/* Direct Contact Info */}
             <div className="flex flex-col gap-3 text-sm text-slate-700">
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-600 border border-sky-200/80">
-                  <Mail className="h-4 w-4" />
+                <div className="flex h-6 w-6 items-center justify-center shrink-0">
+                  <Image src="/email.png" alt="Email" width={20} height={20} className="h-5 w-5 object-contain" />
                 </div>
                 <a href="mailto:discuss@craftandcode.in" className="font-medium hover:text-sky-600 transition-colors">
                   discuss@craftandcode.in
@@ -97,8 +94,8 @@ export default function Footer() {
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-600 border border-sky-200/80">
-                  <Phone className="h-4 w-4" />
+                <div className="flex h-6 w-6 items-center justify-center shrink-0">
+                  <Image src="/call.png" alt="Phone" width={20} height={20} className="h-5 w-5 object-contain" />
                 </div>
                 <a href="tel:+917224901787" className="font-medium hover:text-sky-600 transition-colors">
                   +91-72249 01787
@@ -106,10 +103,13 @@ export default function Footer() {
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-600 border border-sky-200/80">
-                  <MapPin className="h-4 w-4" />
+                <div className="flex h-6 w-6 items-center justify-center shrink-0">
+                  <Image src="/map.png" alt="Location" width={20} height={20} className="h-5 w-5 object-contain" />
                 </div>
-                <span className="font-medium">Global Delivery Centers — USA & India</span>
+                <span className="font-medium inline-flex items-center gap-2">
+                  <span>Gwalior, M.P., India</span>
+                  <Image src="/flag.png" alt="India Flag" width={20} height={15} className="h-4 w-auto object-contain shrink-0" />
+                </span>
               </div>
             </div>
           </div>
@@ -192,17 +192,9 @@ export default function Footer() {
             <h4 className="text-sm font-bold uppercase tracking-wider text-[#0B1739] mb-5 border-l-3 border-sky-600 pl-3">
               Enterprise Trust
             </h4>
-            <div className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-5 space-y-4 shadow-sm">
-              <div className="flex items-center gap-2.5 text-sm font-bold text-[#0B1739]">
-                <ShieldCheck className="h-5 w-5 text-sky-600 shrink-0" />
-                <span>ISO 27001 & HIPAA Compliant</span>
-              </div>
-              <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                Enterprise data sovereignty, zero-trust cybersecurity architectures, and end-to-end encrypted AI deployments.
-              </p>
-
+            <div className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-5 shadow-sm">
               {/* Social Icons */}
-              <div className="pt-2 flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 <a
                   href="https://github.com"
                   target="_blank"

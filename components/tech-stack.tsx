@@ -25,9 +25,6 @@ const techCategories: CategoryRow[] = [
       { name: "Vue JS", image: "/frontend/vue.webp" },
       { name: "Angular Js", image: "/frontend/angular.png" },
       { name: "HTML5", image: "/frontend/html.png" },
-      { name: "CSS 3", image: "/frontend/css.png" },
-      { name: "Wordpress", image: "/frontend/wordpress.png" },
-      { name: "Webflow", image: "/frontend/webflow.png" },
     ],
   },
   {
@@ -40,7 +37,6 @@ const techCategories: CategoryRow[] = [
       { name: ".Net", image: "/backend/dot net.webp" },
       { name: "Java", image: "/backend/java.png" },
       { name: "Python", image: "/backend/python.webp" },
-      { name: "C#", image: "/backend/c sharp.png" },
       { name: "PHP", image: "/backend/php.png" },
       { name: "Go-Lang", image: "/backend/Go_Logo_B.webp" },
       { name: "Odoo", image: "/Odoo.png" },
@@ -72,7 +68,6 @@ const techCategories: CategoryRow[] = [
       { name: "Bitbucket", image: "/cloud devops/bit bucket.png" },
       { name: "Github", image: "/cloud devops/github.png" },
       { name: "Gitlab", image: "/cloud devops/git lab.png" },
-      { name: "Sharepoint", image: "/cloud devops/SharePoint_.webp" },
     ],
   },
 ];
