@@ -19,9 +19,9 @@ export default function SolutionsTabbedSection() {
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash;
-      if (hash === "#projects" || hash === "#core") {
+      if (hash === "#projects" || hash === "#core" || hash === "#work") {
         setActiveTab("projects");
-      } else if (hash === "#ai" || hash === "#work") {
+      } else if (hash === "#ai") {
         setActiveTab("ai");
       }
     };
@@ -32,7 +32,8 @@ export default function SolutionsTabbedSection() {
   }, []);
 
   return (
-    <section id="work" className="w-full bg-slate-950 pt-14 sm:pt-20 text-white">
+    <section id="projects" className="w-full bg-slate-950 pt-14 sm:pt-20 text-white scroll-mt-10">
+      <div id="work" />
       {/* Master Section Header & Main Tabs Control */}
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8 text-center">
         

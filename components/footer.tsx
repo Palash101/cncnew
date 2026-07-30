@@ -11,8 +11,10 @@ import {
   ShieldCheck,
   Send,
 } from "lucide-react";
+import { useQuoteModal } from "@/context/quote-modal-context";
 
 export default function Footer() {
+  const { openQuoteModal } = useQuoteModal();
   return (
     <footer className="w-full bg-white text-slate-700 border-t border-slate-200/90 relative overflow-hidden">
       {/* Ambient Subtle Background Glows */}
@@ -22,7 +24,7 @@ export default function Footer() {
       </div>
 
       {/* Top CTA Banner */}
-      <div className="border-b border-slate-200/80 bg-slate-50/80 py-14 sm:py-20">
+      <div id="contact" className="border-b border-slate-200/80 bg-slate-50/80 py-14 sm:py-20 scroll-mt-10">
         <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-10 md:p-12 shadow-xl shadow-slate-900/5 backdrop-blur-md">
             
@@ -51,6 +53,7 @@ export default function Footer() {
               </div>
               <button
                 type="button"
+                onClick={() => openQuoteModal()}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#0B1739] hover:bg-[#152052] px-7 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-[#0B1739]/15 cursor-pointer shrink-0"
               >
                 <span>Get Started</span>

@@ -1,12 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useQuoteModal } from "@/context/quote-modal-context";
 
 const WORDS = ["DIGITAL REALITY", "ENTERPRISE SOLUTIONS", "HIGH-IMPACT SOFTWARE", "FUTURE PRODUCTS"];
 
 export default function HeroSection() {
+  const { openQuoteModal } = useQuoteModal();
   const [index, setIndex] = useState(0);
   const [status, setStatus] = useState<"visible" | "exiting" | "entering">("visible");
 
@@ -108,18 +111,21 @@ export default function HeroSection() {
         <div className="mt-6 sm:mt-8 flex flex-col gap-3.5 sm:flex-row">
           <Button
             size="lg"
-            className="bg-[#0B1739] text-white hover:bg-[#152052] px-7 py-5 text-base font-semibold shadow-lg shadow-blue-900/15 transition-all hover:scale-[1.02] cursor-pointer"
+            onClick={() => openQuoteModal()}
+            className="w-full sm:w-auto bg-[#0B1739] text-white hover:bg-[#152052] px-7 py-5 text-base font-semibold shadow-lg shadow-blue-900/15 transition-all hover:scale-[1.02] cursor-pointer"
           >
             Tell us about your idea
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-[#0B1739]/30 px-7 py-5 text-base font-semibold text-[#0B1739] hover:bg-blue-50/80 transition-all hover:scale-[1.02] cursor-pointer"
-          >
-            View our work
-          </Button>
+          <Link href="#projects">
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full sm:w-auto border-[#0B1739]/30 px-7 py-5 text-base font-semibold text-[#0B1739] hover:bg-blue-50/80 transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              View our work
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

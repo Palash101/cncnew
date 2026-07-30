@@ -6,8 +6,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useQuoteModal } from "@/context/quote-modal-context";
 
 export default function Navbar() {
+  const { openQuoteModal } = useQuoteModal();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 
@@ -40,7 +42,7 @@ export default function Navbar() {
             Services
           </Link>
           <Link
-            href="#work"
+            href="#projects"
             className="text-sm font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
           >
             Our Work
@@ -63,6 +65,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <Button
             size="sm"
+            onClick={() => openQuoteModal()}
             className="hidden bg-[#0B1739] px-5 text-white hover:bg-[#152052] cursor-pointer sm:inline-flex"
           >
             Get a Quote
@@ -119,7 +122,7 @@ export default function Navbar() {
                   transition={{ duration: 0.2, delay: 0.1 }}
                 >
                   <Link
-                    href="#work"
+                    href="#projects"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-base font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
                   >
@@ -162,6 +165,10 @@ export default function Navbar() {
                 >
                   <Button
                     size="default"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openQuoteModal();
+                    }}
                     className="mt-2 w-full bg-[#0B1739] text-white hover:bg-[#152052] cursor-pointer shadow-md"
                   >
                     Get a Quote

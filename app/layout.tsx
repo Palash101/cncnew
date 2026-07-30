@@ -3,6 +3,8 @@ import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import JsonLd from "@/components/json-ld";
+import QuoteModal from "@/components/quote-modal";
+import { QuoteModalProvider } from "@/context/quote-modal-context";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -94,12 +96,13 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans">
         <JsonLd />
-        <Navbar />
-        {children}
-        <Footer />
+        <QuoteModalProvider>
+          <Navbar />
+          {children}
+          <Footer />
+          <QuoteModal />
+        </QuoteModalProvider>
       </body>
     </html>
   );
 }
-
-
