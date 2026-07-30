@@ -3,10 +3,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { Inter } from "next/font/google";
-import { motion } from "motion/react";
-
-const inter = Inter({ subsets: ["latin"] });
 
 const WORDS = ["DIGITAL REALITY", "ENTERPRISE SOLUTIONS", "HIGH-IMPACT SOFTWARE", "FUTURE PRODUCTS"];
 
@@ -33,8 +29,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className={`relative min-h-[460px] sm:min-h-[520px] md:min-h-[560px] flex flex-col justify-center overflow-hidden bg-transparent py-10 sm:py-14 md:py-16 ${inter.className}`}
-      style={{ fontFamily: "Inter, sans-serif" }}
+      className="relative min-h-[460px] sm:min-h-[520px] md:min-h-[560px] flex flex-col justify-center overflow-hidden bg-transparent py-10 sm:py-14 md:py-16"
     >
       {/* Rich Multi-layered Mesh Background with Smooth Ambient Orbs */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
@@ -68,32 +63,11 @@ export default function HeroSection() {
             <rect width="100%" height="100%" strokeWidth="0" fill="url(#hero-grid-pattern)" />
           </svg>
 
-          {/* Animated Horizontal Shimmer Grid Beam */}
-          <motion.div
-            animate={{
-              x: ["-100%", "200%"],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute top-1/4 left-0 w-1/3 h-[2px] bg-gradient-to-r from-transparent via-sky-400 to-transparent blur-[1px] opacity-75"
-          />
+          {/* Animated Horizontal Shimmer Grid Beam (GPU CSS Keyframe) */}
+          <div className="absolute top-1/4 left-0 w-1/3 h-[2px] bg-gradient-to-r from-transparent via-sky-400 to-transparent blur-[1px] opacity-75 animate-shimmer-x" />
 
-          {/* Animated Vertical Shimmer Grid Beam */}
-          <motion.div
-            animate={{
-              y: ["-100%", "200%"],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "linear",
-              delay: 2,
-            }}
-            className="absolute top-0 right-1/3 w-[2px] h-1/2 bg-gradient-to-b from-transparent via-blue-500 to-transparent blur-[1px] opacity-75"
-          />
+          {/* Animated Vertical Shimmer Grid Beam (GPU CSS Keyframe) */}
+          <div className="absolute top-0 right-1/3 w-[2px] h-1/2 bg-gradient-to-b from-transparent via-blue-500 to-transparent blur-[1px] opacity-75 animate-shimmer-y" />
         </div>
 
         {/* Top Shimmer Line */}
@@ -136,7 +110,7 @@ export default function HeroSection() {
             size="lg"
             className="bg-[#0B1739] text-white hover:bg-[#152052] px-7 py-5 text-base font-semibold shadow-lg shadow-blue-900/15 transition-all hover:scale-[1.02] cursor-pointer"
           >
-            Get a FREE Quote
+            Tell us about your idea
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           <Button

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus_Jakarta_Sans } from "next/font/google";
 import {
   Eye,
   CreditCard,
@@ -13,11 +12,6 @@ import {
   ArrowDown,
   ArrowLeft,
 } from "lucide-react";
-
-const font = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
 
 interface ProcessStep {
   id: string;
@@ -104,7 +98,7 @@ export default function AgileProcess() {
 
   return (
     <section
-      className={`w-full bg-[#EBF1FA] py-20 sm:py-28 ${font.className} overflow-hidden`}
+      className="w-full bg-[#EBF1FA] py-20 sm:py-28 overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >

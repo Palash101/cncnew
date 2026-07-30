@@ -1,6 +1,5 @@
 "use client";
 
-import { Plus_Jakarta_Sans } from "next/font/google";
 import {
   Cpu,
   Sparkles,
@@ -12,11 +11,6 @@ import {
   ShieldCheck,
   Radio,
 } from "lucide-react";
-
-const font = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
 
 interface ExpertiseItem {
   id: string;
@@ -93,7 +87,7 @@ const expertiseItems: ExpertiseItem[] = [
 
 export default function ExpertiseSection() {
   return (
-    <section className={`w-full bg-black py-16 sm:py-24 md:py-28 text-white ${font.className}`}>
+    <section id="services" className="w-full bg-black py-16 sm:py-24 md:py-28 text-white">
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">

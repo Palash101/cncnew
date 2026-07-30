@@ -2,12 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Plus_Jakarta_Sans } from "next/font/google";
-
-const font = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
 
 interface MvpStage {
   id: string;
@@ -151,7 +145,7 @@ export default function StageWorkflow() {
 
   return (
     <section
-      className={`w-full bg-[#0B1739] py-20 sm:py-28 ${font.className} text-white overflow-hidden`}
+      className="w-full bg-[#0B1739] py-20 sm:py-28 text-white overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => {
         setIsPaused(false);

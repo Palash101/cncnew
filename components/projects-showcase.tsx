@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Plus_Jakarta_Sans } from "next/font/google";
 import {
   ExternalLink,
   ArrowUpRight,
@@ -13,11 +12,6 @@ import {
   Cpu,
   CheckCircle2,
 } from "lucide-react";
-
-const font = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
 
 interface Project {
   id: string;
@@ -133,7 +127,7 @@ export default function ProjectsShowcase() {
       : projectsData.filter((p) => p.category === activeTab);
 
   return (
-    <section className={`w-full bg-slate-900 py-10 sm:py-14 md:py-16 text-white ${font.className}`}>
+    <section className="w-full bg-slate-900 py-10 sm:py-14 md:py-16 text-white">
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

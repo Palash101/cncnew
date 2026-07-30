@@ -1,4 +1,3 @@
-import { Plus_Jakarta_Sans } from "next/font/google";
 import {
   HeartPulse,
   ShoppingCart,
@@ -9,13 +8,9 @@ import {
   Building2,
   Home,
   Truck,
+  Zap,
   ArrowUpRight,
 } from "lucide-react";
-
-const font = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
 
 interface IndustryItem {
   id: string;
@@ -45,6 +40,13 @@ const industries: IndustryItem[] = [
     description:
       "Providing innovative opportunities for data-driven decisions in Fintech industries elevating operational efficiency and trust.",
     icon: Landmark,
+  },
+  {
+    id: "ev",
+    title: "Electric Vehicles (EV)",
+    description:
+      "Building smart battery management systems, fleet telemetry analytics, and IoT charging station networks for the EV ecosystem.",
+    icon: Zap,
   },
   {
     id: "edtech",
@@ -92,7 +94,7 @@ const industries: IndustryItem[] = [
 
 export default function IndustriesSection() {
   return (
-    <section className={`w-full bg-[#0B1739] py-20 sm:py-28 ${font.className}`}>
+    <section id="industries" className="w-full bg-[#0B1739] py-20 sm:py-28">
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-14 text-center">

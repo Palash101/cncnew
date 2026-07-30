@@ -1,10 +1,4 @@
 import Image from "next/image";
-import { Plus_Jakarta_Sans } from "next/font/google";
-
-const font = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
 
 interface TechItem {
   name: string;
@@ -85,7 +79,7 @@ const techCategories: CategoryRow[] = [
 
 export default function TechStack() {
   return (
-    <section className={`w-full bg-white py-12 sm:py-16 md:py-20 lg:py-24 ${font.className}`}>
+    <section className="w-full bg-white py-12 sm:py-16 md:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-8 text-center sm:mb-12 md:mb-14">

@@ -1,24 +1,18 @@
 import Image from "next/image";
 import { Award, Users, Laptop, Smartphone, Sparkles } from "lucide-react";
-import { Plus_Jakarta_Sans } from "next/font/google";
-
-const font = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
 
 export default function StatsSection() {
   return (
-    <section className={`relative w-full overflow-hidden bg-[#0B1739] py-16 sm:py-24 md:py-28 ${font.className}`}>
+    <section className="relative w-full overflow-hidden bg-[#0B1739] py-16 sm:py-24 md:py-28">
       {/* Full-width Background Image */}
       <div className="absolute inset-0 z-0 opacity-80">
         <Image
           src="/networking.png"
           alt="Global Networking Background"
           fill
-          priority
-          sizes="100vw"
-          quality={75}
+          loading="lazy"
+          sizes="(max-width: 1200px) 100vw, 1200px"
+          quality={60}
           className="object-cover object-center w-full h-full"
         />
       </div>

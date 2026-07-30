@@ -5,20 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ArrowRight } from "lucide-react";
-import { Plus_Jakarta_Sans } from "next/font/google";
 import { motion, AnimatePresence } from "motion/react";
-
-const navbarFont = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+
+
+  
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-md shadow-slate-900/8 transition-all ${navbarFont.className}`}
+      className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-md shadow-slate-900/8 transition-all"
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
         {/* Logo */}
@@ -29,6 +26,7 @@ export default function Navbar() {
             width={180}
             height={48}
             priority
+            sizes="180px"
             className="h-10 w-auto object-contain"
           />
         </Link>
