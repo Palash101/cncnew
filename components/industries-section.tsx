@@ -139,11 +139,65 @@ export default function IndustriesSection() {
             </p>
           </div>
 
-          {/* 3-Column Interactive Layout */}
+          {/* 3-Column Interactive Layout: Left Title Track, Center Image, Right Description */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             
-            {/* Left Column: Active Industry Feature Image with smooth dissolve */}
-            <div className="lg:col-span-4 flex justify-center order-2 lg:order-1">
+            {/* Left Column: Continuous Sliding Track of Titles (Left-most) */}
+            <div className="lg:col-span-4 flex flex-col items-center lg:items-start justify-center h-[320px] sm:h-[380px] overflow-hidden relative order-1">
+              {/* Radial gradient mask for smooth fading at top and bottom */}
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black via-black/85 to-transparent z-10" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black via-black/85 to-transparent z-10" />
+
+              {/* Continuous Sliding Track */}
+              <div
+                className="flex flex-col items-center lg:items-start gap-4 transform-gpu"
+                style={{
+                  transform: `translate3d(0, ${164 - progressIndex * 52}px, 0)`,
+                  willChange: "transform",
+                }}
+              >
+                {industries.map((item, idx) => {
+                  const distance = Math.abs(idx - progressIndex);
+                  const isActive = activeStep === idx;
+                  const scale = Math.max(0.85, 1.15 - distance * 0.25);
+                  const opacity = Math.max(0.3, 1 - distance * 0.45);
+
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        if (containerRef.current) {
+                          const targetScroll =
+                            containerRef.current.offsetTop +
+                            (idx / (industries.length - 1)) *
+                              (containerRef.current.offsetHeight - window.innerHeight);
+                          window.scrollTo({ top: targetScroll, behavior: "smooth" });
+                        }
+                      }}
+                      className="whitespace-nowrap cursor-pointer font-bold h-9 flex items-center justify-center lg:justify-start transition-colors duration-300 origin-center lg:origin-left"
+                      style={{
+                        transform: `scale(${scale})`,
+                        opacity: opacity,
+                      }}
+                    >
+                      <span
+                        className={
+                          isActive
+                            ? "text-xl sm:text-2xl md:text-3xl text-white drop-shadow-[0_0_15px_rgba(56,189,248,0.7)]"
+                            : "text-base sm:text-lg text-slate-400"
+                        }
+                      >
+                        {item.title}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Center Column: Active Industry Feature Image (Center) */}
+            <div className="lg:col-span-4 flex justify-center order-2">
               <div className="relative w-full max-w-[340px] sm:max-w-[420px] h-[230px] sm:h-[300px] rounded-3xl overflow-hidden border border-white/15 shadow-2xl shadow-sky-500/10 bg-slate-900 transform-gpu">
                 {industries.map((item, idx) => (
                   <div
@@ -170,61 +224,7 @@ export default function IndustriesSection() {
               </div>
             </div>
 
-            {/* Middle Column: Continuous Sliding Track of Titles */}
-            <div className="lg:col-span-4 flex flex-col items-center justify-center h-[320px] sm:h-[380px] overflow-hidden relative order-1 lg:order-2">
-              {/* Radial gradient mask for smooth fading at top and bottom */}
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black via-black/85 to-transparent z-10" />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black via-black/85 to-transparent z-10" />
-
-              {/* Continuous Sliding Track */}
-              <div
-                className="flex flex-col items-center gap-4 transform-gpu"
-                style={{
-                  transform: `translate3d(0, ${164 - progressIndex * 52}px, 0)`,
-                  willChange: "transform",
-                }}
-              >
-                {industries.map((item, idx) => {
-                  const distance = Math.abs(idx - progressIndex);
-                  const isActive = activeStep === idx;
-                  const scale = Math.max(0.85, 1.15 - distance * 0.25);
-                  const opacity = Math.max(0.3, 1 - distance * 0.45);
-
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => {
-                        if (containerRef.current) {
-                          const targetScroll =
-                            containerRef.current.offsetTop +
-                            (idx / (industries.length - 1)) *
-                              (containerRef.current.offsetHeight - window.innerHeight);
-                          window.scrollTo({ top: targetScroll, behavior: "smooth" });
-                        }
-                      }}
-                      className="whitespace-nowrap cursor-pointer font-bold h-9 flex items-center justify-center transition-colors duration-300"
-                      style={{
-                        transform: `scale(${scale})`,
-                        opacity: opacity,
-                      }}
-                    >
-                      <span
-                        className={
-                          isActive
-                            ? "text-xl sm:text-2xl md:text-3xl text-white drop-shadow-[0_0_15px_rgba(56,189,248,0.7)]"
-                            : "text-base sm:text-lg text-slate-400"
-                        }
-                      >
-                        {item.title}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Right Column: Active Industry Description & Know More CTA */}
+            {/* Right Column: Active Industry Description & Know More CTA (Right-most) */}
             <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left space-y-5 order-3">
               <div
                 key={activeIndustry.id}
