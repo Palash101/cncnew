@@ -7,7 +7,6 @@ import {
   Store,
   Building2,
   Home,
-  Truck,
   Zap,
   ArrowUpRight,
 } from "lucide-react";
@@ -82,13 +81,6 @@ const industries: IndustryItem[] = [
     description:
       "Driving business growth with digital transformation solutions for real estate businesses with property management, transactions, and others.",
     icon: Home,
-  },
-  {
-    id: "logistics",
-    title: "Logistics",
-    description:
-      "It enhances visibility and efficiency while managing access control across modern supply chain ecosystems.",
-    icon: Truck,
   },
 ];
 
