@@ -27,7 +27,7 @@ const expertiseItems: ExpertiseItem[] = [
     description:
       "AI only creates value when it fits into how an organization actually works. We help enterprises apply intelligence in ways that improve decisions, reduce manual effort, and support operations at scale.",
     image:
-      "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "gen-ai",
@@ -63,7 +63,7 @@ const expertiseItems: ExpertiseItem[] = [
     description:
       "In environments where speed and accuracy matter, vision-based systems can remove friction. We apply computer vision to automate inspection, monitoring, and visual analysis across real operational settings.",
     image:
-      "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "cloud",
@@ -122,7 +122,7 @@ export default function ExpertiseSection() {
             return (
               <div key={item.id} className="flex flex-col text-left group">
                 {/* Card Image Banner */}
-                <div className="relative h-48 sm:h-52 w-full rounded-2xl overflow-hidden mb-5 border border-slate-800/90 group-hover:border-sky-500/40 transition-all duration-300 bg-slate-950 shadow-lg">
+                <div className="relative h-48 sm:h-52 w-full rounded-2xl overflow-hidden mb-5 border border-black transition-all duration-300 bg-black shadow-lg">
                   <Image
                     src={item.image}
                     alt={item.title}
@@ -133,13 +133,13 @@ export default function ExpertiseSection() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                   {/* Floating Icon Badge */}
-                  <div className="absolute bottom-3 left-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-black/75 backdrop-blur-md border border-white/20 text-sky-400 group-hover:border-sky-400 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">
+                  <div className="absolute bottom-3 left-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-black backdrop-blur-md border border-black text-white transition-all duration-300">
                     <Icon className="h-5 w-5" />
                   </div>
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2.5 group-hover:text-sky-400 transition-colors">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2.5 group-hover:text-slate-200 transition-colors">
                   {item.title}
                 </h3>
 

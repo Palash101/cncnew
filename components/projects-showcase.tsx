@@ -173,7 +173,7 @@ export default function ProjectsShowcase() {
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="group flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-800/50 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-sky-500/50 hover:bg-slate-800 hover:shadow-xl hover:shadow-sky-500/10"
+              className="group flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-800/50 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-slate-700 hover:bg-slate-800 hover:shadow-xl"
             >
               <div>
                 {/* Project Image & Badge Container */}
