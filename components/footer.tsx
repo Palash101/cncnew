@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   Mail,
   ArrowRight,
-  Sparkles,
   Send,
 } from "lucide-react";
 import { useQuoteModal } from "@/context/quote-modal-context";
@@ -26,11 +25,7 @@ export default function Footer() {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-10 md:p-12 shadow-xl shadow-slate-900/5 backdrop-blur-md">
             
             <div className="text-center lg:text-left max-w-2xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-sky-700 mb-3">
-                <Sparkles className="h-4 w-4 text-sky-600" />
-                <span>Ready to Elevate Your Enterprise?</span>
-              </div>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0B1739] tracking-tight leading-tight">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-normal text-[#0B1739] tracking-tight leading-tight">
                 Let's Build Something Extraordinary Together
               </h3>
               <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
@@ -79,11 +74,11 @@ export default function Footer() {
             </Link>
             
             <p className="text-sm text-slate-600 leading-relaxed font-normal mb-8 max-w-md">
-              Craft & Code is a premier digital engineering firm specializing in Next-Gen Artificial Intelligence, custom Odoo & ERPNext ERP integrations, and high-performance full-stack platforms for global enterprises.
+              CraftandCode is a premier digital engineering firm specializing in Next-Gen Artificial Intelligence, custom Odoo & ERPNext ERP integrations, and high-performance full-stack platforms for global enterprises.
             </p>
 
             {/* Direct Contact Info */}
-            <div className="flex flex-col gap-3 text-sm text-slate-700">
+            <div className="flex flex-col gap-3.5 text-sm text-slate-700">
               <div className="flex items-center gap-3">
                 <div className="flex h-6 w-6 items-center justify-center shrink-0">
                   <Image src="/email.png" alt="Email" width={20} height={20} className="h-5 w-5 object-contain" />
@@ -114,22 +109,22 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Solutions */}
+          {/* Column 2: Solutions & Expertise */}
           <div className="lg:col-span-3 text-left">
             <h4 className="text-sm font-bold uppercase tracking-wider text-[#0B1739] mb-5 border-l-3 border-sky-600 pl-3">
-              Solutions & Expertise
+              Solutions & Services
             </h4>
             <ul className="flex flex-col gap-3.5 text-sm">
               <li>
-                <Link href="#work" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                <Link href="#services" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
                   <span>Custom LLM & Chatbots</span>
                 </Link>
               </li>
               <li>
-                <Link href="#work" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                <Link href="#services" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Wisper Real-Time Voice Agent</span>
+                  <span>Wisper Voice Agents</span>
                 </Link>
               </li>
               <li>
@@ -141,19 +136,76 @@ export default function Footer() {
               <li>
                 <Link href="#services" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-                  <span>ERPNext & Frappe Doctypes</span>
+                  <span>ERPNext Integration</span>
                 </Link>
               </li>
               <li>
-                <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                <Link href="#services" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-                  <span>EV & Telemetry Infrastructure</span>
+                  <span>Full-Stack Web Apps</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="#services" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                  <span>Cloud DevOps & Microservices</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Company */}
+          {/* Column 3: Industries & Marketplaces */}
+          <div className="lg:col-span-3 text-left">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-[#0B1739] mb-5 border-l-3 border-sky-600 pl-3">
+              Industries & Marketplaces
+            </h4>
+            <ul className="flex flex-col gap-3.5 text-sm">
+              <li>
+                <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                  <span>Food Delivery & On-Demand</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                  <span>B2B & B2C Marketplaces</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                  <span>E-Commerce Platforms</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                  <span>Healthcare & Telemedicine</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                  <span>Fintech & Digital Banking</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                  <span>EV & Telemetry Systems</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                  <span>Ed-Tech & E-Learning</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Company & Ecosystem */}
           <div className="lg:col-span-2 text-left">
             <h4 className="text-sm font-bold uppercase tracking-wider text-[#0B1739] mb-5 border-l-3 border-sky-600 pl-3">
               Company
@@ -170,14 +222,17 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#work" className="text-slate-600 hover:text-[#0B1739] font-medium transition-colors">
-                  Portfolio Showcase
-                </Link>
-              </li>
-              <li>
                 <Link href="#agile" className="text-slate-600 hover:text-[#0B1739] font-medium transition-colors">
                   Agile Workflow Process
                 </Link>
+              </li>
+              <li>
+                <button
+                  onClick={() => openQuoteModal()}
+                  className="text-left text-slate-600 hover:text-[#0B1739] font-medium transition-colors cursor-pointer"
+                >
+                  Request a Quote
+                </button>
               </li>
               <li>
                 <Link href="#" className="text-slate-600 hover:text-[#0B1739] font-medium transition-colors">
@@ -187,58 +242,13 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Compliance & Trust */}
-          <div className="lg:col-span-3 text-left">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-[#0B1739] mb-5 border-l-3 border-sky-600 pl-3">
-              Enterprise Trust
-            </h4>
-            <div className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-5 shadow-sm">
-              {/* Social Icons */}
-              <div className="flex items-center gap-3">
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-[#0B1739] hover:text-white hover:border-[#0B1739] transition-all shadow-xs"
-                  aria-label="GitHub"
-                >
-                  <svg className="h-4.5 w-4.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                  </svg>
-                </a>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-[#0B1739] hover:text-white hover:border-[#0B1739] transition-all shadow-xs"
-                  aria-label="LinkedIn"
-                >
-                  <svg className="h-4.5 w-4.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                  </svg>
-                </a>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-[#0B1739] hover:text-white hover:border-[#0B1739] transition-all shadow-xs"
-                  aria-label="Twitter"
-                >
-                  <svg className="h-4.5 w-4.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="border-t border-slate-200 bg-slate-50 py-7 text-xs text-slate-500">
         <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>Copyright {new Date().getFullYear()} Craft & Code | All Rights Reserved</p>
+          <p>Copyright {new Date().getFullYear()} CraftandCode | All Rights Reserved</p>
           <div className="flex items-center gap-6 text-xs font-medium text-slate-600">
             <Link href="#" className="hover:text-sky-600 transition-colors">
               Privacy Policy
