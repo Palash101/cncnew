@@ -131,8 +131,35 @@ export default function TechStack() {
                   </h3>
                 </div>
 
-                {/* Technology Marquee Train */}
-                <div className="lg:w-3/4 w-full overflow-hidden relative py-1">
+                {/* Mobile Static View (No Moving Animation) */}
+                <div className="flex sm:hidden flex-wrap items-center gap-2 w-full py-1">
+                  {category.items.map((tech) => (
+                    <div
+                      key={`${category.id}-mobile-${tech.name}`}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-xs shrink-0"
+                    >
+                      {tech.image ? (
+                        <div className="relative flex h-4 w-4 shrink-0 items-center justify-center">
+                          <Image
+                            src={tech.image}
+                            alt={tech.name}
+                            width={16}
+                            height={16}
+                            className="max-h-4 max-w-4 object-contain"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[9px] font-bold text-slate-600 uppercase">
+                          {tech.name.substring(0, 2)}
+                        </div>
+                      )}
+                      <span className="whitespace-nowrap">{tech.name}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop Animated Marquee Train (hidden on mobile) */}
+                <div className="hidden sm:block lg:w-3/4 w-full overflow-hidden relative py-1">
                   {/* Left & Right edge fade */}
                   <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-8 bg-gradient-to-r from-inherit to-transparent" />
                   <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-gradient-to-l from-inherit to-transparent" />

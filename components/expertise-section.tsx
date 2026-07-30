@@ -131,11 +131,6 @@ export default function ExpertiseSection() {
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-                  {/* Floating Icon Badge */}
-                  <div className="absolute bottom-3 left-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-black backdrop-blur-md border border-black text-white transition-all duration-300">
-                    <Icon className="h-5 w-5" />
-                  </div>
                 </div>
 
                 {/* Title */}

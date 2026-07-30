@@ -131,7 +131,7 @@ export default function IndustriesSection() {
         <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8 w-full">
           {/* Section Title */}
           <div className="text-center mb-6 sm:mb-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal tracking-wide text-white">
               Our Industry Focus & Impact
             </h2>
             <p className="mt-2 text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
