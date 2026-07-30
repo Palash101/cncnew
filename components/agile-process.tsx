@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Eye,
   CreditCard,
@@ -66,9 +66,9 @@ const steps: ProcessStep[] = [
 ];
 
 export default function AgileProcess() {
-  const [activeStep, setActiveStep] = useState(1);
-  const [isPaused, setIsPaused] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
   const [radius, setRadius] = useState(185);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Responsive radius calculation
   useEffect(() => {
@@ -84,24 +84,44 @@ export default function AgileProcess() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Auto rotate every 4 seconds unless user interacts or hovers
+  // Pinned scroll-driven step rotation animation
   useEffect(() => {
-    if (isPaused) return;
-    const interval = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % steps.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [isPaused]);
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      // Total scrollable distance inside pinned container
+      const totalDistance = rect.height - windowHeight;
+      if (totalDistance <= 0) return;
+
+      // Scrolled distance from top of section
+      const scrolledDistance = -rect.top;
+      const progress = Math.max(
+        0,
+        Math.min(0.999, scrolledDistance / totalDistance)
+      );
+
+      const stepIndex = Math.min(
+        steps.length - 1,
+        Math.floor(progress * steps.length)
+      );
+
+      setActiveStep(stepIndex);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Calculate rotation angle so active step node moves to focal right-center position (- activeStep * 60)
   const rotationAngle = -activeStep * 60;
 
   return (
-    <section
-      className="w-full bg-[#EBF1FA] py-20 sm:py-28 overflow-hidden"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
+    <div id="agile" ref={containerRef} className="relative h-[280vh] w-full">
+      <section className="sticky top-0 h-screen w-full bg-[#EBF1FA] flex items-center justify-center overflow-hidden">
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Heading, Subtitle & Flow Diagram */}
@@ -301,6 +321,7 @@ export default function AgileProcess() {
           </div>
         </div>
       </div>
-    </section>
+      </section>
+    </div>
   );
 }

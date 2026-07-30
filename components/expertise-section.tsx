@@ -1,5 +1,4 @@
-"use client";
-
+import Image from "next/image";
 import {
   Cpu,
   Sparkles,
@@ -17,6 +16,7 @@ interface ExpertiseItem {
   icon: React.ComponentType<{ className?: string }>;
   title: string;
   description: string;
+  image: string;
 }
 
 const expertiseItems: ExpertiseItem[] = [
@@ -26,6 +26,8 @@ const expertiseItems: ExpertiseItem[] = [
     title: "Artificial Intelligence",
     description:
       "AI only creates value when it fits into how an organization actually works. We help enterprises apply intelligence in ways that improve decisions, reduce manual effort, and support operations at scale.",
+    image:
+      "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "gen-ai",
@@ -33,6 +35,8 @@ const expertiseItems: ExpertiseItem[] = [
     title: "Generative AI",
     description:
       "Gen AI is most useful when it becomes part of everyday work. We integrate it into internal knowledge systems, customer interactions, and operational tools, with the controls and governance enterprises expect.",
+    image:
+      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "agentic-ai",
@@ -40,6 +44,8 @@ const expertiseItems: ExpertiseItem[] = [
     title: "Agentic AI",
     description:
       "We work with organizations exploring autonomous systems, helping them introduce AI agents that can take action across processes while remaining transparent, supervised, and accountable.",
+    image:
+      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "ml",
@@ -47,6 +53,8 @@ const expertiseItems: ExpertiseItem[] = [
     title: "Machine Learning",
     description:
       "ML in enterprise environments is less about experimentation and more about reliability. We develop models that adapt over time and continue to perform as data, demand, and conditions change.",
+    image:
+      "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "cv",
@@ -54,6 +62,8 @@ const expertiseItems: ExpertiseItem[] = [
     title: "Computer Vision",
     description:
       "In environments where speed and accuracy matter, vision-based systems can remove friction. We apply computer vision to automate inspection, monitoring, and visual analysis across real operational settings.",
+    image:
+      "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "cloud",
@@ -61,6 +71,8 @@ const expertiseItems: ExpertiseItem[] = [
     title: "Cloud",
     description:
       "Cloud modernization is not a lift-and-shift exercise. We help enterprises rethink how applications and infrastructure are structured so systems remain secure, resilient, and ready to scale over time.",
+    image:
+      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "data-science",
@@ -68,6 +80,8 @@ const expertiseItems: ExpertiseItem[] = [
     title: "Data Science and Analytics",
     description:
       "Data only becomes useful when teams can rely on it. We design data foundations that support analytics and insight across functions, without adding complexity or dependency.",
+    image:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "cybersecurity",
@@ -75,6 +89,8 @@ const expertiseItems: ExpertiseItem[] = [
     title: "Cybersecurity",
     description:
       "Security is treated as a design constraint, not a checklist item. Our systems account for governance, compliance, and risk from the earliest architectural decisions.",
+    image:
+      "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "iot",
@@ -82,6 +98,8 @@ const expertiseItems: ExpertiseItem[] = [
     title: "IoT",
     description:
       "Connected devices generate value only when their data is usable. We help organizations bring physical systems into their digital landscape, improving visibility and control across operations.",
+    image:
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
@@ -103,13 +121,25 @@ export default function ExpertiseSection() {
             const Icon = item.icon;
             return (
               <div key={item.id} className="flex flex-col text-left group">
-                {/* Icon with subtle blue accent */}
-                <div className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400 group-hover:border-sky-400/40 group-hover:bg-sky-500/20 transition-colors">
-                  <Icon className="h-5 w-5" />
+                {/* Card Image Banner */}
+                <div className="relative h-48 sm:h-52 w-full rounded-2xl overflow-hidden mb-5 border border-slate-800/90 group-hover:border-sky-500/40 transition-all duration-300 bg-slate-950 shadow-lg">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                  {/* Floating Icon Badge */}
+                  <div className="absolute bottom-3 left-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-black/75 backdrop-blur-md border border-white/20 text-sky-400 group-hover:border-sky-400 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">
+                    <Icon className="h-5 w-5" />
+                  </div>
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2.5">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2.5 group-hover:text-sky-400 transition-colors">
                   {item.title}
                 </h3>
 
