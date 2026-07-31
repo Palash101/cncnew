@@ -14,20 +14,27 @@ export default function HeroSection() {
   const [status, setStatus] = useState<"visible" | "exiting" | "entering">("visible");
 
   useEffect(() => {
+    let timeout1: NodeJS.Timeout;
+    let timeout2: NodeJS.Timeout;
+
     const timer = setInterval(() => {
       setStatus("exiting");
 
-      setTimeout(() => {
+      timeout1 = setTimeout(() => {
         setIndex((prev) => (prev + 1) % WORDS.length);
         setStatus("entering");
 
-        setTimeout(() => {
+        timeout2 = setTimeout(() => {
           setStatus("visible");
         }, 50);
       }, 500);
     }, 3800);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+    };
   }, []);
 
   return (

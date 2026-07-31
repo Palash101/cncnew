@@ -158,3 +158,28 @@
   animation: shimmer-y 10s linear infinite 2s;
   will-change: transform;
 }
+
+@keyframes techMarqueeRtl {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes techMarqueeLtr {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+.tech-track-rtl {
+  animation: techMarqueeRtl 25s linear infinite;
+  will-change: transform;
+}
+
+.tech-track-ltr {
+  animation: techMarqueeLtr 25s linear infinite;
+  will-change: transform;
+}
+
+.group:hover .tech-track-rtl,
+.group:hover .tech-track-ltr {
+  animation-play-state: paused !important;
+}

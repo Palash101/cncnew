@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -7,10 +5,10 @@ import {
   ArrowRight,
   Send,
 } from "lucide-react";
-import { useQuoteModal } from "@/context/quote-modal-context";
+import QuoteTrigger from "@/components/quote-trigger";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export default function Footer() {
-  const { openQuoteModal } = useQuoteModal();
   return (
     <footer className="w-full bg-white text-slate-700 border-t border-slate-200/90 relative overflow-hidden">
       {/* Ambient Subtle Background Glows */}
@@ -43,14 +41,10 @@ export default function Footer() {
                   className="w-full rounded-2xl bg-slate-50 border border-slate-300 pl-11 pr-4 py-3.5 text-sm text-[#0B1739] placeholder-slate-400 focus:outline-none focus:border-sky-600 focus:bg-white transition-all shadow-inner"
                 />
               </div>
-              <button
-                type="button"
-                onClick={() => openQuoteModal()}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#0B1739] hover:bg-[#152052] px-7 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-[#0B1739]/15 cursor-pointer shrink-0"
-              >
+              <QuoteTrigger className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#0B1739] hover:bg-[#152052] px-7 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-[#0B1739]/15 cursor-pointer shrink-0">
                 <span>Get Started</span>
                 <Send className="h-4 w-4" />
-              </button>
+              </QuoteTrigger>
             </div>
 
           </div>
@@ -74,36 +68,36 @@ export default function Footer() {
             </Link>
             
             <p className="text-sm text-slate-600 leading-relaxed font-normal mb-8 max-w-md">
-              CraftandCode is a premier digital engineering firm specializing in Next-Gen Artificial Intelligence, custom Odoo & ERPNext ERP integrations, and high-performance full-stack platforms for global enterprises.
+              {SITE_CONFIG.legalName} is a premier digital engineering firm specializing in Next-Gen Artificial Intelligence, custom Odoo & ERPNext ERP integrations, and high-performance full-stack platforms for global enterprises.
             </p>
 
             {/* Direct Contact Info */}
             <div className="flex flex-col gap-3.5 text-sm text-slate-700">
               <div className="flex items-center gap-3">
                 <div className="flex h-6 w-6 items-center justify-center shrink-0">
-                  <Image src="/email.png" alt="Email" width={20} height={20} className="h-5 w-5 object-contain" />
+                  <Image src={SITE_CONFIG.assets.emailIcon} alt="Email" width={20} height={20} className="h-5 w-5 object-contain" />
                 </div>
-                <a href="mailto:discuss@craftandcode.in" className="font-medium hover:text-sky-600 transition-colors">
-                  discuss@craftandcode.in
+                <a href={`mailto:${SITE_CONFIG.contact.email}`} className="font-medium hover:text-sky-600 transition-colors">
+                  {SITE_CONFIG.contact.email}
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
                 <div className="flex h-6 w-6 items-center justify-center shrink-0">
-                  <Image src="/call.png" alt="Phone" width={20} height={20} className="h-5 w-5 object-contain" />
+                  <Image src={SITE_CONFIG.assets.phoneIcon} alt="Phone" width={20} height={20} className="h-5 w-5 object-contain" />
                 </div>
-                <a href="tel:+917224901787" className="font-medium hover:text-sky-600 transition-colors">
-                  +91-72249 01787
+                <a href={`tel:${SITE_CONFIG.contact.phoneRaw}`} className="font-medium hover:text-sky-600 transition-colors">
+                  {SITE_CONFIG.contact.phone}
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
                 <div className="flex h-6 w-6 items-center justify-center shrink-0">
-                  <Image src="/map.png" alt="Location" width={20} height={20} className="h-5 w-5 object-contain" />
+                  <Image src={SITE_CONFIG.assets.mapIcon} alt="Location" width={20} height={20} className="h-5 w-5 object-contain" />
                 </div>
                 <span className="font-medium inline-flex items-center gap-2">
-                  <span>Gwalior, M.P., India</span>
-                  <Image src="/flag.png" alt="India Flag" width={20} height={15} className="h-4 w-auto object-contain shrink-0" />
+                  <span>{SITE_CONFIG.contact.location}</span>
+                  <Image src={SITE_CONFIG.assets.flag} alt="India Flag" width={20} height={15} className="h-4 w-auto object-contain shrink-0" />
                 </span>
               </div>
             </div>
@@ -227,12 +221,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <button
-                  onClick={() => openQuoteModal()}
-                  className="text-left text-slate-600 hover:text-[#0B1739] font-medium transition-colors cursor-pointer"
-                >
+                <QuoteTrigger className="text-left text-slate-600 hover:text-[#0B1739] font-medium transition-colors cursor-pointer">
                   Request a Quote
-                </button>
+                </QuoteTrigger>
               </li>
               <li>
                 <Link href="#" className="text-slate-600 hover:text-[#0B1739] font-medium transition-colors">
@@ -246,17 +237,17 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-slate-200 bg-slate-50 py-7 text-xs text-slate-500">
+      <div className="border-t border-slate-200 bg-slate-50 py-7 text-xs text-slate-900 font-medium">
         <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>Copyright {new Date().getFullYear()} CraftandCode | All Rights Reserved</p>
-          <div className="flex items-center gap-6 text-xs font-medium text-slate-600">
-            <Link href="#" className="hover:text-sky-600 transition-colors">
+          <p className="text-black font-semibold">Copyright {new Date().getFullYear()} {SITE_CONFIG.legalName} | All Rights Reserved</p>
+          <div className="flex items-center gap-6 text-xs font-semibold text-black">
+            <Link href="#" className="text-black hover:text-sky-600 transition-colors">
               Privacy Policy
             </Link>
-            <Link href="#" className="hover:text-sky-600 transition-colors">
+            <Link href="#" className="text-black hover:text-sky-600 transition-colors">
               Terms of Service
             </Link>
-            <Link href="#" className="hover:text-sky-600 transition-colors">
+            <Link href="#" className="text-black hover:text-sky-600 transition-colors">
               Security Governance
             </Link>
           </div>

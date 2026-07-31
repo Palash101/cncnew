@@ -4,72 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  Eye,
-  CreditCard,
-  Code2,
-  CheckCheck,
-  PackageCheck,
-  ClipboardList,
   ArrowRight,
   ArrowDown,
   ArrowLeft,
 } from "lucide-react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
-interface ProcessStep {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ElementType;
-}
-
-const steps: ProcessStep[] = [
-  {
-    id: "scoping",
-    title: "Scoping",
-    description:
-      "We begin with in-depth discovery, defining requirements, module breakdown, and technical roadmap architecture.",
-    icon: Eye,
-  },
-  {
-    id: "cost-estimation",
-    title: "Cost Estimation",
-    description:
-      "Get the complete project module wise cost breakdown with maintenance and support plan.",
-    icon: CreditCard,
-  },
-  {
-    id: "development",
-    title: "Development",
-    description:
-      "Agile development sprints with clean code, scalable architecture, and continuous integration.",
-    icon: Code2,
-  },
-  {
-    id: "qa-testing",
-    title: "QA & Testing",
-    description:
-      "Rigorous automated testing, security audits, and bug fixes to guarantee top-grade software delivery.",
-    icon: CheckCheck,
-  },
-  {
-    id: "deployment",
-    title: "Deployment",
-    description:
-      "Automated zero-downtime deployment setup on secure cloud infrastructure environments.",
-    icon: PackageCheck,
-  },
-  {
-    id: "maintenance",
-    title: "Maintenance",
-    description:
-      "Continuous 24/7 post-launch monitoring, performance tuning, regular security updates, and SLA support.",
-    icon: ClipboardList,
-  },
-];
+import { steps } from "@/lib/data/process";
 
 export default function AgileProcess() {
   const [activeStep, setActiveStep] = useState(0);
@@ -96,7 +35,8 @@ export default function AgileProcess() {
 
   // GSAP ScrollTrigger driven step rotation animation
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (typeof window === "undefined" || !containerRef.current) return;
+    gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
@@ -124,7 +64,7 @@ export default function AgileProcess() {
   const rotationAngle = -activeStep * 60;
 
   return (
-    <div id="agile" ref={containerRef} className="relative h-[400vh] w-full">
+    <div id="about" ref={containerRef} className="relative h-[400vh] w-full scroll-mt-20">
       <section className="sticky top-0 h-[100dvh] w-full bg-[#EBF1FA] flex items-center justify-center overflow-hidden py-4 sm:py-8">
         <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-3 sm:px-6 lg:px-8 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12 lg:gap-8 items-center">

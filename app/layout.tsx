@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import JsonLd from "@/components/json-ld";
 import QuoteModal from "@/components/quote-modal";
 import { QuoteModalProvider } from "@/context/quote-modal-context";
+import { SITE_CONFIG } from "@/lib/constants";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -20,13 +21,11 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.craftandcode.in";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: "Craft and Code | Enterprise Software Development Company",
-    template: "%s | Craft and Code",
+    default: `${SITE_CONFIG.name} | Enterprise Software Development Company`,
+    template: `%s | ${SITE_CONFIG.name}`,
   },
   description:
     "Craft and Code is a premier enterprise software development agency in Bangalore, India. We engineer scalable digital products, cloud platforms, and custom software solutions for global leaders.",
@@ -41,9 +40,9 @@ export const metadata: Metadata = {
     "ERPNext Development",
     "Cloud DevOps Engineering",
   ],
-  authors: [{ name: "Craft and Code", url: siteUrl }],
-  creator: "Craft and Code",
-  publisher: "Craft and Code",
+  authors: [{ name: SITE_CONFIG.name, url: SITE_CONFIG.url }],
+  creator: SITE_CONFIG.name,
+  publisher: SITE_CONFIG.name,
   alternates: {
     canonical: "/",
   },
@@ -59,11 +58,11 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Craft and Code | Enterprise Software Development Company",
+    title: `${SITE_CONFIG.name} | Enterprise Software Development Company`,
     description:
       "Architecting high-impact digital products, cloud platforms, and enterprise software solutions.",
-    url: siteUrl,
-    siteName: "Craft and Code",
+    url: SITE_CONFIG.url,
+    siteName: SITE_CONFIG.name,
     locale: "en_US",
     type: "website",
     images: [

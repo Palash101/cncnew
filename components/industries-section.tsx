@@ -11,87 +11,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-interface IndustryItem {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-}
-
-const industries: IndustryItem[] = [
-  {
-    id: "healthcare",
-    title: "Healthcare",
-    description:
-      "We engineer secure, HIPAA-compliant digital healthcare platforms, telemedicine mobile apps, patient portals, and automated EHR integration systems.",
-    image:
-      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "ecommerce",
-    title: "eCommerce",
-    description:
-      "Crafting scalable omnichannel ecommerce platforms, headless checkout experiences, inventory management systems, and personalized shopping AI.",
-    image:
-      "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "finance",
-    title: "Banking & Finance",
-    description:
-      "Providing high-frequency payment gateways, data-driven Fintech analytics, digital wallet ecosystems, and core banking ledger integrations.",
-    image:
-      "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "ev",
-    title: "Electric Vehicles (EV)",
-    description:
-      "Building smart battery management systems, fleet telemetry analytics, real-time IoT charging station networks, and connected vehicle applications.",
-    image:
-      "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "saas",
-    title: "SaaS & Enterprise",
-    description:
-      "Enhancing enterprise operations through custom multi-tenant SaaS architecture, cloud workflow automation, and scalable API platforms.",
-    image:
-      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "social-media",
-    title: "Social Media",
-    description:
-      "We develop social media platforms that enhance community building with AI-Powered Content Moderation, predictive trend analysis, and real-time messaging.",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "on-demand",
-    title: "On-Demand & Delivery",
-    description:
-      "Developing real-time order tracking, multi-vendor dispatch engines, driver route optimization, and instant delivery marketplace platforms.",
-    image:
-      "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "education",
-    title: "Education & Ed-Tech",
-    description:
-      "Crafting unique learning platforms, AI-driven adaptive assessment engines, virtual classrooms, and enterprise LMS integrations.",
-    image:
-      "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "realestate",
-    title: "Real Estate",
-    description:
-      "Driving business growth with digital transformation solutions for real estate businesses with property management, 3D tours, and transaction portals.",
-    image:
-      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80",
-  },
-];
+import { industries } from "@/lib/data/industries";
 
 export default function IndustriesSection() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -100,7 +20,8 @@ export default function IndustriesSection() {
 
   // GSAP ScrollTrigger continuous progress tracking
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (typeof window === "undefined" || !containerRef.current) return;
+    gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
@@ -126,7 +47,7 @@ export default function IndustriesSection() {
   const activeIndustry = industries[activeStep];
 
   return (
-    <div id="industries" ref={containerRef} className="relative h-[650vh] w-full bg-black">
+    <div id="projects" ref={containerRef} className="relative h-[650vh] w-full bg-black scroll-mt-20">
       <section className="sticky top-0 h-screen w-full bg-black flex flex-col justify-center overflow-hidden text-white py-6 sm:py-10">
         <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8 w-full">
           {/* Section Title */}
