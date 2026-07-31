@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { CheckCircle2, Sparkles } from "lucide-react";
 import { aiCapabilities } from "@/lib/data/ai-capabilities";
+import SectionHeader from "@/components/shared/section-header";
 
 export default function AiSection() {
   return (
@@ -16,27 +17,19 @@ export default function AiSection() {
       </div>
 
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-cyan-300 backdrop-blur-md mb-2"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
-            <span>Next-Gen AI Solutions</span>
-          </motion.div>
-
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-white leading-tight">
-            Pioneering Artificial{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent font-medium">
-              Intelligence Projects
-            </span>
-          </h2>
-        </div>
+        <SectionHeader
+          eyebrow="Next-Gen AI Solutions"
+          eyebrowIcon={Sparkles}
+          title={
+            <>
+              Pioneering Artificial{" "}
+              <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent font-medium">
+                Intelligence Projects
+              </span>
+            </>
+          }
+          className="max-w-2xl mb-6 sm:mb-8"
+        />
 
         {/* 3 Inline AI Project Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">

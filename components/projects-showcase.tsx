@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ArrowUpRight, Sparkles, CheckCircle2 } from "lucide-react";
 import { projectsData, categories } from "@/lib/data/projects";
+import SectionHeader from "@/components/shared/section-header";
 
 export default function ProjectsShowcase() {
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -16,22 +17,14 @@ export default function ProjectsShowcase() {
   return (
     <section className="w-full bg-slate-900 py-10 sm:py-14 md:py-16 text-white">
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-sky-400 mb-2.5 backdrop-blur-md">
-            <Sparkles className="h-3.5 w-3.5 text-sky-400" />
-            <span>Featured Portfolio</span>
-          </div>
-
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
-            Our Featured Projects
-          </h2>
-
-          <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-            Discover our portfolio of scalable web applications, mobile platforms, and customized Odoo ERP implementations built for global brands.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="Featured Portfolio"
+          eyebrowIcon={Sparkles}
+          title="Our Featured Projects"
+          description="Discover our portfolio of scalable web applications, mobile platforms, and customized Odoo ERP implementations built for global brands."
+          className="max-w-2xl mb-6 sm:mb-8"
+          titleClassName="font-extrabold"
+        />
 
         {/* Filter Category Tabs */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8 sm:mb-10">

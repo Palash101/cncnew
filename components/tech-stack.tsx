@@ -1,19 +1,18 @@
 import Image from "next/image";
 import { techCategories } from "@/lib/data/tech-stack";
+import SectionHeader from "@/components/shared/section-header";
 
 export default function TechStack() {
   return (
     <section id="careers" className="w-full bg-white py-12 sm:py-16 md:py-20 lg:py-24 scroll-mt-20">
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="mb-8 text-center sm:mb-12 md:mb-14">
-          <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
-            Our Technology Stack
-          </h2>
-          <p className="mt-2.5 text-sm text-slate-600 sm:mt-3 sm:text-base md:text-lg max-w-2xl mx-auto">
-            Empowering enterprise applications with modern, battle-tested technologies.
-          </p>
-        </div>
+        <SectionHeader
+          title="Our Technology Stack"
+          description="Empowering enterprise applications with modern, battle-tested technologies."
+          theme="light"
+          className="mb-8 sm:mb-12 md:mb-14"
+          titleClassName="font-extrabold text-slate-900"
+        />
 
         {/* Stack Categories Container */}
         <div className="flex flex-col gap-3 sm:gap-4">

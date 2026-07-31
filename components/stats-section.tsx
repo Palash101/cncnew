@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Award, Users, Laptop, Smartphone, Sparkles } from "lucide-react";
+import SectionHeader from "@/components/shared/section-header";
 
 export default function StatsSection() {
   return (
@@ -22,23 +23,22 @@ export default function StatsSection() {
 
       {/* Centered Content Container */}
       <div className="relative z-20 mx-auto flex max-w-7xl flex-col items-center px-4 sm:px-6 md:px-8 text-center">
-        {/* Eyebrow */}
-        <div className="mb-4 sm:mb-5 inline-flex items-center gap-2 rounded-full border border-sky-400/40 bg-sky-500/20 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-sky-300 backdrop-blur-md">
-          <Sparkles className="h-4 w-4 text-sky-400" />
-          <span>Enterprise Global Network</span>
-        </div>
-
-        {/* Heading */}
-        <h2 className="max-w-5xl text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-[1.18]">
-          Connecting Visionaries with Scalable{" "}
-          <span className="bg-gradient-to-r from-sky-400 via-blue-300 to-sky-200 bg-clip-text text-transparent">
-            Digital Excellence
-          </span>
-        </h2>
-
-        <p className="mt-4 sm:mt-5 max-w-4xl text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed font-normal drop-shadow-xs">
-          With years of deep technical mastery, Craft and Code bridges complex infrastructure with intuitive user experiences. We empower organizations globally through continuous digital transformation and resilient systems.
-        </p>
+        <SectionHeader
+          eyebrow="Enterprise Global Network"
+          eyebrowIcon={Sparkles}
+          title={
+            <>
+              Connecting Visionaries with Scalable{" "}
+              <span className="bg-gradient-to-r from-sky-400 via-blue-300 to-sky-200 bg-clip-text text-transparent">
+                Digital Excellence
+              </span>
+            </>
+          }
+          description="With years of deep technical mastery, Craft and Code bridges complex infrastructure with intuitive user experiences. We empower organizations globally through continuous digital transformation and resilient systems."
+          className="max-w-5xl mb-0"
+          titleClassName="font-extrabold"
+          descriptionClassName="max-w-4xl text-slate-200"
+        />
 
         {/* Overlaid Glassmorphic Stat Cards Grid - 4 Columns */}
         <div className="mt-10 sm:mt-14 grid w-full max-w-6xl grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">

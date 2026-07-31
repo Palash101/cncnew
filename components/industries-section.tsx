@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import SectionHeader from "@/components/shared/section-header";
 import { useQuoteModal } from "@/context/quote-modal-context";
 import { gsap } from "gsap";
+import { ArrowUpRight } from "lucide-react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 if (typeof window !== "undefined") {
@@ -50,15 +51,11 @@ export default function IndustriesSection() {
     <div id="projects" ref={containerRef} className="relative h-[650vh] w-full bg-black scroll-mt-20">
       <section className="sticky top-0 h-screen w-full bg-black flex flex-col justify-center overflow-hidden text-white py-6 sm:py-10">
         <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8 w-full">
-          {/* Section Title */}
-          <div className="text-center mb-6 sm:mb-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal tracking-wide text-white">
-              Our Industry Focus & Impact
-            </h2>
-            <p className="mt-2 text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
-              Custom digital engineering solutions designed for global industry leaders.
-            </p>
-          </div>
+          <SectionHeader
+            title="Our Industry Focus & Impact"
+            description="Custom digital engineering solutions designed for global industry leaders."
+            className="mb-6 sm:mb-10"
+          />
 
           {/* 3-Column Interactive Layout: Left Title Track, Center Image, Right Description */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">

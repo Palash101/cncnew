@@ -1,17 +1,20 @@
 import Image from "next/image";
 import { expertiseItems } from "@/lib/data/services";
+import SectionHeader from "@/components/shared/section-header";
 
 export default function ExpertiseSection() {
   return (
     <section id="services" className="w-full bg-black py-16 sm:py-24 md:py-28 text-white scroll-mt-20">
       <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-white tracking-tight leading-tight sm:leading-tight">
-            Deep Technical Expertise, <br className="hidden sm:inline" />
-            Supporting Modern Systems
-          </h2>
-        </div>
+        <SectionHeader
+          title={
+            <>
+              Deep Technical Expertise, <br className="hidden sm:inline" />
+              Supporting Modern Systems
+            </>
+          }
+          className="mb-14 sm:mb-20"
+        />
 
         {/* 3x3 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 lg:gap-x-12 gap-y-12 sm:gap-y-14">
