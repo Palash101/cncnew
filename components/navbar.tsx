@@ -8,6 +8,7 @@ import { Menu, X, ArrowRight, Mail, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useQuoteModal } from "@/context/quote-modal-context";
 import { SITE_CONFIG } from "@/lib/constants";
+import QuoteTriggerButton from "@/components/shared/quote-trigger-button";
 
 export default function Navbar() {
   const { openQuoteModal } = useQuoteModal();
@@ -150,16 +151,7 @@ export default function Navbar() {
 
         {/* Right CTA Button & Mobile Toggle */}
         <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => openQuoteModal()}
-            className="group relative hidden sm:inline-flex items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-[#0B1739] to-sky-950 px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md shadow-[#0B1739]/20 hover:from-sky-600 hover:to-blue-700 hover:shadow-lg hover:shadow-sky-500/30 hover:scale-[1.03] transition-all duration-300 cursor-pointer border border-sky-400/20 shrink-0"
-          >
-            <span>Get a Quote</span>
-            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white/10 group-hover:bg-white/25 transition-colors">
-              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform text-white" />
-            </div>
-          </button>
+          <QuoteTriggerButton className="hidden sm:inline-flex" />
 
           {/* Animated Mobile Menu Toggle Button */}
           <button
@@ -253,17 +245,12 @@ export default function Navbar() {
                   transition={{ duration: 0.15, delay: 0.08 }}
                   className="pt-1.5"
                 >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      openQuoteModal();
-                    }}
-                    className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#0B1739] to-sky-900 px-6 py-3 text-sm font-bold text-white shadow-md hover:from-sky-600 hover:to-blue-700 active:scale-[0.99] cursor-pointer transition-all touch-manipulation"
-                  >
-                    <span>Get a Quote</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
+                  <QuoteTriggerButton
+                    variant="mobile"
+                    icon="arrow"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full"
+                  />
                 </motion.div>
               </nav>
             </div>

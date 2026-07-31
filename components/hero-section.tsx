@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import QuoteTriggerButton from "@/components/shared/quote-trigger-button";
 import { useQuoteModal } from "@/context/quote-modal-context";
 
 const WORDS = ["DIGITAL REALITY", "ENTERPRISE SOLUTIONS", "HIGH-IMPACT SOFTWARE", "FUTURE PRODUCTS"];
@@ -116,14 +116,12 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <div className="mt-6 sm:mt-8 flex flex-col gap-3.5 sm:flex-row">
-          <Button
-            size="lg"
-            onClick={() => openQuoteModal()}
-            className="w-full sm:w-auto bg-[#0B1739] text-white hover:bg-[#152052] px-7 py-5 text-base font-semibold shadow-lg shadow-blue-900/15 transition-all hover:scale-[1.02] cursor-pointer"
-          >
-            Tell us about your idea
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          <QuoteTriggerButton
+            variant="solid"
+            label="Tell us about your idea"
+            icon="arrow"
+            className="w-full sm:w-auto"
+          />
           <Link href="#projects">
             <Button
               size="lg"

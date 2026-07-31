@@ -3,9 +3,8 @@ import Link from "next/link";
 import {
   Mail,
   ArrowRight,
-  Send,
 } from "lucide-react";
-import QuoteTrigger from "@/components/quote-trigger";
+import QuoteTriggerButton from "@/components/shared/quote-trigger-button";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export default function Footer() {
@@ -41,10 +40,12 @@ export default function Footer() {
                   className="w-full rounded-2xl bg-slate-50 border border-slate-300 pl-11 pr-4 py-3.5 text-sm text-[#0B1739] placeholder-slate-400 focus:outline-none focus:border-sky-600 focus:bg-white transition-all shadow-inner"
                 />
               </div>
-              <QuoteTrigger className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#0B1739] hover:bg-[#152052] px-7 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-[#0B1739]/15 cursor-pointer shrink-0">
-                <span>Get Started</span>
-                <Send className="h-4 w-4" />
-              </QuoteTrigger>
+              <QuoteTriggerButton
+                variant="footer"
+                label="Get Started"
+                icon="send"
+                className="w-full sm:w-auto"
+              />
             </div>
 
           </div>
@@ -221,9 +222,13 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <QuoteTrigger className="text-left text-slate-600 hover:text-[#0B1739] font-medium transition-colors cursor-pointer">
+                <QuoteTriggerButton
+                  variant="custom"
+                  icon="none"
+                  className="text-left text-slate-600 hover:text-[#0B1739] font-medium transition-colors cursor-pointer"
+                >
                   Request a Quote
-                </QuoteTrigger>
+                </QuoteTriggerButton>
               </li>
               <li>
                 <Link href="#" className="text-slate-600 hover:text-[#0B1739] font-medium transition-colors">

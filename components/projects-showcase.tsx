@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowUpRight, Sparkles, CheckCircle2 } from "lucide-react";
 import { projectsData, categories } from "@/lib/data/projects";
 import SectionHeader from "@/components/shared/section-header";
+import GlassCard from "@/components/shared/glass-card";
 
 export default function ProjectsShowcase() {
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -51,9 +52,10 @@ export default function ProjectsShowcase() {
         {/* Projects Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredProjects.map((project) => (
-            <div
+            <GlassCard
               key={project.id}
-              className="group flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-800/50 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-slate-700 hover:bg-slate-800 hover:shadow-xl"
+              variant="sky"
+              className="group flex flex-col justify-between overflow-hidden !rounded-xl"
             >
               <div>
                 {/* Project Image & Badge Container */}
@@ -125,7 +127,7 @@ export default function ProjectsShowcase() {
                   </a>
                 </div>
               </div>
-            </div>
+            </GlassCard>
           ))}
         </div>
 

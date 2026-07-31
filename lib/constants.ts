@@ -1,5 +1,6 @@
 export const SITE_CONFIG = {
   name: "Craft and Code",
+  fullName: "Craft and Code | Enterprise Software Engineering",
   legalName: "CraftandCode Solution Pvt Ltd",
   domain: "www.craftandcode.in",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.craftandcode.in",
@@ -9,7 +10,12 @@ export const SITE_CONFIG = {
     email: "discuss@craftandcode.in",
     phone: "+91-72249 01787",
     phoneRaw: "+917224901787",
+    displayPhone: "+91-72249 01787",
     location: "Gwalior, M.P., India",
+  },
+  socials: {
+    linkedin: "https://linkedin.com/company/craftandcode",
+    twitter: "https://twitter.com/craftandcode",
   },
   assets: {
     logo: "/craft and code logo.png",
