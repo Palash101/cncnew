@@ -182,13 +182,13 @@ export default function Footer() {
               <li>
                 <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Fintech & Digital Banking</span>
+                  <span>SaaS & Enterprise Systems</span>
                 </Link>
               </li>
               <li>
                 <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-                  <span>EV & Telemetry Systems</span>
+                  <span>Real Estate & PropTech</span>
                 </Link>
               </li>
               <li>

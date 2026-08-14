@@ -4,11 +4,8 @@ import {
   Sparkles,
   Bot,
   Network,
-  Scan,
   Cloud,
   Search,
-  ShieldCheck,
-  Radio,
 } from "lucide-react";
 
 export interface ExpertiseItem {
@@ -57,15 +54,6 @@ export const expertiseItems: ExpertiseItem[] = [
       "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80",
   },
   {
-    id: "cv",
-    icon: Scan,
-    title: "Computer Vision",
-    description:
-      "In environments where speed and accuracy matter, vision-based systems can remove friction. We apply computer vision to automate inspection, monitoring, and visual analysis across real operational settings.",
-    image:
-      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
-  },
-  {
     id: "cloud",
     icon: Cloud,
     title: "Cloud",
@@ -82,23 +70,5 @@ export const expertiseItems: ExpertiseItem[] = [
       "Data only becomes useful when teams can rely on it. We design data foundations that support analytics and insight across functions, without adding complexity or dependency.",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "cybersecurity",
-    icon: ShieldCheck,
-    title: "Cybersecurity",
-    description:
-      "Security is treated as a design constraint, not a checklist item. Our systems account for governance, compliance, and risk from the earliest architectural decisions.",
-    image:
-      "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "iot",
-    icon: Radio,
-    title: "IoT",
-    description:
-      "Connected devices generate value only when their data is usable. We help organizations bring physical systems into their digital landscape, improving visibility and control across operations.",
-    image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
   },
 ];

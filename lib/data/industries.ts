@@ -23,22 +23,6 @@ export const industries: IndustryItem[] = [
       "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80",
   },
   {
-    id: "finance",
-    title: "Banking & Finance",
-    description:
-      "Providing high-frequency payment gateways, data-driven Fintech analytics, digital wallet ecosystems, and core banking ledger integrations.",
-    image:
-      "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "ev",
-    title: "Electric Vehicles (EV)",
-    description:
-      "Building smart battery management systems, fleet telemetry analytics, real-time IoT charging station networks, and connected vehicle applications.",
-    image:
-      "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80",
-  },
-  {
     id: "saas",
     title: "SaaS & Enterprise",
     description:
