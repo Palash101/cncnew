@@ -1,185 +1,242 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Menu, X, ArrowRight } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useMotionValueEvent, useScroll } from "motion/react";
+import { cn } from "@/lib/utils";
 import { useQuoteModal } from "@/context/quote-modal-context";
+
+const NAV_LINKS = [
+  { href: "/#services", id: "services", label: "Services" },
+  { href: "/#projects", id: "projects", label: "Our Work" },
+  { href: "/#about", id: "about", label: "About Us" },
+  { href: "/#careers", id: "careers", label: "Careers" },
+];
+
+// Distance (px) the user must scroll before the bar turns solid
+const SCROLL_THRESHOLD = 24;
 
 export default function Navbar() {
   const { openQuoteModal } = useQuoteModal();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
+  const { scrollY } = useScroll();
 
+  useMotionValueEvent(scrollY, "change", (y) => {
+    setScrolled(y > SCROLL_THRESHOLD);
+  });
 
-  
+  // Sync initial state when the page loads already scrolled (refresh / anchor link)
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setScrolled(window.scrollY > SCROLL_THRESHOLD));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  // Highlight the link of the section currently in view
+  useEffect(() => {
+    const sections = NAV_LINKS.map((l) => document.getElementById(l.id)).filter(
+      (el): el is HTMLElement => el !== null
+    );
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveId(entry.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    sections.forEach((s) => observer.observe(s));
+
+    const clearAtTop = () => {
+      if (window.scrollY < 200) setActiveId(null);
+    };
+    window.addEventListener("scroll", clearAtTop, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", clearAtTop);
+    };
+  }, []);
+
+  // Close mobile menu with Escape
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileMenuOpen]);
+
+  const solid = scrolled || mobileMenuOpen;
+  const highlighted = hovered ?? activeId;
+
   return (
-    <header
-      className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-md shadow-slate-900/8 transition-all"
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed inset-x-0 top-0 z-50"
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-90">
-          <Image
-            src="/craft and code logo.png"
-            alt="Craft and Code Logo"
-            width={180}
-            height={48}
-            priority
-            sizes="180px"
-            className="h-10 w-auto object-contain"
-          />
-        </Link>
+      <div
+        className={cn(
+          "relative w-full border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500",
+          solid
+            ? "border-slate-200/70 bg-white/80 shadow-[0_8px_30px_-12px_rgba(11,23,57,0.18)] backdrop-blur-xl backdrop-saturate-150"
+            : "border-transparent bg-transparent shadow-none"
+        )}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-90"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Image
+                src="/craft and code logo.png"
+                alt="Craft and Code Logo"
+                width={180}
+                height={48}
+                priority
+                sizes="180px"
+                className="h-10 w-auto object-contain"
+              />
+          </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden items-center gap-8 md:flex">
-          <Link
-            href="#services"
-            className="text-sm font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
+          {/* Desktop Navigation */}
+          <nav
+            className="hidden items-center gap-1 md:flex"
+            onMouseLeave={() => setHovered(null)}
           >
-            Services
-          </Link>
-          <Link
-            href="#projects"
-            className="text-sm font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
-          >
-            Our Work
-          </Link>
-          <Link
-            href="#about"
-            className="text-sm font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
-          >
-            About Us
-          </Link>
-          <Link
-            href="#careers"
-            className="text-sm font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
-          >
-            Careers
-          </Link>
-        </nav>
+            {NAV_LINKS.map((link) => {
+              const isActive = activeId === link.id;
+              return (
+                <Link
+                  key={link.id}
+                  href={link.href}
+                  onMouseEnter={() => setHovered(link.id)}
+                  className={cn(
+                    "relative rounded-full px-4 py-2 text-sm font-semibold tracking-tight transition-colors",
+                    isActive ? "text-sky-700" : "text-[#0B1739] hover:text-sky-700"
+                  )}
+                >
+                  {highlighted === link.id && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 -z-10 rounded-full bg-sky-100/80 ring-1 ring-sky-200/70"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
 
-        {/* Right CTA Button & Mobile Toggle */}
-        <div className="flex items-center gap-4">
-          <Button
-            size="sm"
-            onClick={() => openQuoteModal()}
-            className="hidden bg-[#0B1739] px-5 text-white hover:bg-[#152052] cursor-pointer sm:inline-flex"
-          >
-            Get a Quote
-            <ArrowRight className="ml-1.5 h-4 w-4" />
-          </Button>
-
-          {/* Animated Mobile Menu Toggle Button */}
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="relative inline-flex items-center justify-center rounded-lg p-2 text-[#0B1739] hover:bg-slate-100 focus:outline-none md:hidden cursor-pointer transition-colors"
-            aria-label="Toggle menu"
-          >
-            <motion.div
-              initial={false}
-              animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
-              transition={{ duration: 0.2 }}
+          {/* CTA + Mobile Toggle */}
+          <div className="flex items-center gap-2">
+            <motion.button
+              type="button"
+              onClick={() => openQuoteModal()}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="group relative hidden cursor-pointer items-center overflow-hidden rounded-full bg-[#0B1739] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#0B1739]/25 sm:inline-flex"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </motion.div>
-          </button>
+              {/* Shine sweep */}
+              <span className="pointer-events-none absolute inset-y-0 -left-full w-1/2 skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-all duration-700 group-hover:left-[130%]" />
+              <span className="absolute inset-0 bg-gradient-to-r from-sky-500 to-indigo-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <span className="relative flex items-center">
+                Get a Quote
+                <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
+            </motion.button>
+
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((o) => !o)}
+              className="relative inline-flex cursor-pointer items-center justify-center rounded-full p-2 text-[#0B1739] transition-colors hover:bg-slate-900/5 md:hidden"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={mobileMenuOpen ? "close" : "open"}
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="block"
+                >
+                  {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </motion.span>
+              </AnimatePresence>
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Smooth Animated Mobile Menu Dropdown */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-            className="overflow-hidden border-b border-slate-200/80 bg-white/98 backdrop-blur-lg md:hidden"
-          >
-            <div className="px-6 py-5">
-              <nav className="flex flex-col gap-4">
-                <motion.div
-                  initial={{ y: -8, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0.05 }}
-                >
-                  <Link
-                    href="#services"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block text-base font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
+        {/* Mobile Menu */}
+        <AnimatePresence initial={false}>
+          {mobileMenuOpen && (
+            <motion.div
+              key="mobile-menu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden md:hidden"
+            >
+              <nav className="mx-auto flex max-w-6xl flex-col gap-1 border-t border-slate-200/70 px-6 pb-5 pt-3 sm:px-8">
+                {NAV_LINKS.map((link, i) => (
+                  <motion.div
+                    key={link.id}
+                    initial={{ x: -12, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.25, delay: 0.05 + i * 0.05 }}
                   >
-                    Services
-                  </Link>
-                </motion.div>
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        "flex items-center justify-between rounded-xl px-3 py-3 text-base font-semibold tracking-tight transition-colors",
+                        activeId === link.id
+                          ? "bg-sky-50 text-sky-700"
+                          : "text-[#0B1739] hover:bg-slate-50 hover:text-sky-700"
+                      )}
+                    >
+                      {link.label}
+                      <ArrowRight className="h-4 w-4 opacity-40" />
+                    </Link>
+                  </motion.div>
+                ))}
 
                 <motion.div
-                  initial={{ y: -8, opacity: 0 }}
+                  initial={{ y: 8, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0.1 }}
+                  transition={{ duration: 0.25, delay: 0.05 + NAV_LINKS.length * 0.05 }}
                 >
-                  <Link
-                    href="#projects"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block text-base font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
-                  >
-                    Our Work
-                  </Link>
-                </motion.div>
-
-                <motion.div
-                  initial={{ y: -8, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0.15 }}
-                >
-                  <Link
-                    href="#about"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block text-base font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
-                  >
-                    About Us
-                  </Link>
-                </motion.div>
-
-                <motion.div
-                  initial={{ y: -8, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0.2 }}
-                >
-                  <Link
-                    href="#careers"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block text-base font-semibold tracking-tight text-[#0B1739] transition-colors hover:text-sky-600"
-                  >
-                    Careers
-                  </Link>
-                </motion.div>
-
-                <motion.div
-                  initial={{ y: -8, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0.25 }}
-                >
-                  <Button
-                    size="default"
+                  <button
+                    type="button"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       openQuoteModal();
                     }}
-                    className="mt-2 w-full bg-[#0B1739] text-white hover:bg-[#152052] cursor-pointer shadow-md"
+                    className="mt-3 inline-flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#0B1739] to-[#1e3a8a] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#0B1739]/25"
                   >
                     Get a Quote
                     <ArrowRight className="ml-1.5 h-4 w-4" />
-                  </Button>
+                  </button>
                 </motion.div>
               </nav>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.header>
   );
 }

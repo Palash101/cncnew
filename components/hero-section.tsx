@@ -32,7 +32,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative min-h-[460px] sm:min-h-[520px] md:min-h-[560px] flex flex-col justify-center overflow-hidden bg-transparent py-10 sm:py-14 md:py-16"
+      className="relative min-h-[460px] sm:min-h-[520px] md:min-h-[560px] flex flex-col justify-center overflow-hidden bg-transparent pt-28 pb-10 sm:pt-32 sm:pb-14 md:pt-36 md:pb-16"
     >
       {/* Rich Multi-layered Mesh Background with Smooth Ambient Orbs */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">

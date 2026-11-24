@@ -4,13 +4,13 @@ import StatsSection from "@/components/stats-section";
 
 // Lazy-load below-the-fold components to reduce initial JS critical request chain
 const SolutionsTabbedSection = dynamic(
-  () => import("@/components/solutions-tabbed-section")
+  () => import("@/components/solutions-tabbed-section"),
 );
 const ExpertiseSection = dynamic(
-  () => import("@/components/expertise-section")
+  () => import("@/components/expertise-section"),
 );
 const IndustriesSection = dynamic(
-  () => import("@/components/industries-section")
+  () => import("@/components/industries-section"),
 );
 const AgileProcess = dynamic(() => import("@/components/agile-process"));
 const TechStack = dynamic(() => import("@/components/tech-stack"));
