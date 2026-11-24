@@ -138,6 +138,13 @@
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* Native scrollbar hidden; a slim custom one is drawn by <SmoothScroll /> */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   h1,

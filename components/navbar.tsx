@@ -15,7 +15,7 @@ const NAV_LINKS = [
   { href: "/#careers", id: "careers", label: "Careers" },
 ];
 
-// Distance (px) the user must scroll before the bar turns solid
+// Distance (px) the user must scroll before the floating bar expands to full width
 const SCROLL_THRESHOLD = 24;
 
 export default function Navbar() {
@@ -73,7 +73,6 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileMenuOpen]);
 
-  const solid = scrolled || mobileMenuOpen;
   const highlighted = hovered ?? activeId;
 
   return (
@@ -83,12 +82,18 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-50"
     >
+      {/*
+        At the top: a floating, rounded glass bar (keeps the logo readable over the hero).
+        On scroll: it smoothly stretches into a full-width bar pinned to the top.
+      */}
       <div
         className={cn(
-          "relative w-full border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500",
-          solid
-            ? "border-slate-200/70 bg-white/80 shadow-[0_8px_30px_-12px_rgba(11,23,57,0.18)] backdrop-blur-xl backdrop-saturate-150"
-            : "border-transparent bg-transparent shadow-none"
+          "relative mx-auto w-full overflow-hidden border backdrop-blur-xl backdrop-saturate-150",
+          "transition-[max-width,margin,border-radius,background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          scrolled
+            ? "mt-0 max-w-[100vw] rounded-none border-x-transparent border-t-transparent border-b-slate-200/70 bg-white/85 shadow-[0_8px_30px_-12px_rgba(11,23,57,0.18)]"
+            : "mt-3 max-w-[min(1200px,calc(100%-24px))] rounded-2xl border-white/80 bg-white/70 shadow-[0_10px_40px_-12px_rgba(11,23,57,0.25)] ring-1 ring-[#0B1739]/5",
+          mobileMenuOpen && !scrolled && "bg-white/90"
         )}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">

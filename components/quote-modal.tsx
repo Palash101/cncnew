@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useLenis } from "lenis/react";
 import {
   X,
   Send,
@@ -49,17 +50,21 @@ export default function QuoteModal() {
     }
   }, [selectedService]);
 
-  // Lock body scroll when modal is open
+  // Lock page scroll (native + Lenis smooth scroll) when modal is open
+  const lenis = useLenis();
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      lenis?.stop();
     } else {
       document.body.style.overflow = "unset";
+      lenis?.start();
     }
     return () => {
       document.body.style.overflow = "unset";
+      lenis?.start();
     };
-  }, [isOpen]);
+  }, [isOpen, lenis]);
 
   // Close on ESC key press
   useEffect(() => {
@@ -111,7 +116,7 @@ export default function QuoteModal() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div data-lenis-prevent className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
           {/* Backdrop Blur overlay */}
           <motion.div
             initial={{ opacity: 0 }}

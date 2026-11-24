@@ -18,13 +18,23 @@ const TechStack = dynamic(() => import("@/components/tech-stack"));
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-sky-50/80 via-white to-blue-50/50">
-      <HeroSection />
-      <StatsSection />
-      <SolutionsTabbedSection />
-      <ExpertiseSection />
-      <IndustriesSection />
-      <AgileProcess />
-      <TechStack />
+      {/*
+        Hero stays pinned (sticky) while the stats section slides up over it.
+        The wrapper limits how long the hero stays pinned.
+      */}
+      <div className="relative">
+        <HeroSection />
+        <div className="relative z-10 overflow-hidden rounded-t-[28px] shadow-[0_-24px_60px_-12px_rgba(11,23,57,0.35)] sm:rounded-t-[40px]">
+          <StatsSection />
+        </div>
+      </div>
+      <div className="relative z-10">
+        <SolutionsTabbedSection />
+        <ExpertiseSection />
+        <IndustriesSection />
+        <AgileProcess />
+        <TechStack />
+      </div>
     </main>
   );
 }
