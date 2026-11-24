@@ -186,3 +186,51 @@
   animation: shimmer-y 10s linear infinite 2s;
   will-change: transform;
 }
+
+/* Stats section: twinkling stars + drifting aurora */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes aurora-drift {
+  from {
+    transform: translate3d(-6%, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(6%, 8%, 0) scale(1.12);
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle 6s ease-in-out infinite;
+}
+
+.animate-twinkle-slow {
+  animation: twinkle 9s ease-in-out -3s infinite;
+}
+
+.animate-aurora {
+  animation: aurora-drift 16s ease-in-out infinite alternate;
+}
+
+.animate-aurora-slow {
+  animation: aurora-drift 22s ease-in-out -8s infinite alternate-reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-twinkle,
+  .animate-twinkle-slow {
+    animation: none;
+    opacity: 0.4;
+  }
+  .animate-aurora,
+  .animate-aurora-slow {
+    animation: none;
+  }
+}

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   HeartPulse,
   ShoppingCart,
@@ -11,6 +13,18 @@ import {
   Zap,
   ArrowUpRight,
 } from "lucide-react";
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
+import {
+  Container,
+  SectionHeader,
+  Highlight,
+  IconTile,
+  TopHairline,
+  cardClass,
+  reveal,
+  SECTION_Y,
+} from "@/components/ui/section";
 
 interface IndustryItem {
   id: string;
@@ -94,59 +108,55 @@ const industries: IndustryItem[] = [
 
 export default function IndustriesSection() {
   return (
-    <section id="industries" className="w-full bg-[#0B1739] py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="mb-14 text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Our Expertise Lies In Top Industries & Proven Results
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-base text-slate-300 sm:text-lg">
-            We provide a diverse range of solutions for distinct industries that amplify and boost business performance.
-          </p>
-        </div>
-
-        {/* 3x3 Grid of Industry Cards */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 sm:gap-7">
-          {industries.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.id}
-                className="group flex flex-col justify-between rounded-2xl border border-slate-700/50 bg-[#131F42] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-slate-600 hover:bg-[#182752] hover:shadow-xl"
-              >
-                <div>
-                  {/* Icon Badge */}
-                  <div className="mb-6 inline-flex rounded-xl bg-[#1E2B58] p-3 text-sky-400 border border-slate-700/60 shadow-xs transition-colors group-hover:bg-sky-500 group-hover:text-white">
-                    <Icon className="h-6 w-6" />
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-xl font-bold text-white tracking-tight">
-                    {item.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="mt-3 text-sm leading-relaxed text-slate-300 font-normal">
-                    {item.description}
-                  </p>
-                </div>
-
-                {/* Explore More Action */}
-                <div className="mt-7 pt-2">
-                  <a
-                    href={`#${item.id}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-200 transition-colors hover:text-sky-400"
-                  >
-                    <span>Explore More</span>
-                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </a>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+    <section
+      id="industries"
+      className={cn(
+        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#020617_0%,#0B1739_18%,#0B1739_100%)] text-white",
+        SECTION_Y
+      )}
+    >
+      <TopHairline />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute top-1/3 -left-40 h-[30rem] w-[30rem] rounded-full bg-sky-500/10 blur-[120px]" />
+        <div className="absolute -right-40 bottom-0 h-[30rem] w-[30rem] rounded-full bg-blue-600/15 blur-[120px]" />
       </div>
+
+      <Container>
+        <SectionHeader
+          eyebrow="Industries"
+          eyebrowIcon={Building2}
+          title={
+            <>
+              Our Expertise Lies In Top Industries & <Highlight>Proven Results</Highlight>
+            </>
+          }
+          description="We provide a diverse range of solutions for distinct industries that amplify and boost business performance."
+        />
+
+        <div className="mt-14 grid grid-cols-1 gap-5 sm:mt-16 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {industries.map((item, i) => (
+            <motion.div
+              key={item.id}
+              {...reveal(i % 3)}
+              className={cn(cardClass("dark"), "flex flex-col justify-between p-6 sm:p-7")}
+            >
+              <div>
+                <IconTile icon={item.icon} tone="dark" />
+                <h3 className="mt-5 text-lg font-semibold tracking-tight text-white sm:text-xl">{item.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-slate-400">{item.description}</p>
+              </div>
+
+              <a
+                href={`#${item.id}`}
+                className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-300 transition-colors hover:text-sky-200"
+              >
+                Explore More
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+            </motion.div>
+          ))}
+        </div>
+      </Container>
     </section>
   );
 }

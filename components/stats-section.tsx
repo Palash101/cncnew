@@ -1,87 +1,203 @@
-import Image from "next/image";
-import { Award, Users, Laptop, Smartphone, Sparkles } from "lucide-react";
+"use client";
+
+import { useEffect, useRef } from "react";
+import StatsBackground from "@/components/stats-background";
+import { animate, motion, useInView, type Variants } from "motion/react";
+import { Award, Users, Laptop, Smartphone, Sparkles, type LucideIcon } from "lucide-react";
+
+type Stat = {
+  value: number;
+  suffix: string;
+  label: string;
+  description: string;
+  icon: LucideIcon;
+  /** Icon colour + glow tint */
+  tone: string;
+  glow: string;
+};
+
+const STATS: Stat[] = [
+  {
+    value: 15,
+    suffix: "+",
+    label: "Years Experience",
+    description: "Delivering top-tier software",
+    icon: Award,
+    tone: "text-sky-300 border-sky-400/30 bg-sky-400/10",
+    glow: "bg-sky-400/25",
+  },
+  {
+    value: 50,
+    suffix: "+",
+    label: "Global Clients",
+    description: "Trusted partners worldwide",
+    icon: Users,
+    tone: "text-blue-300 border-blue-400/30 bg-blue-400/10",
+    glow: "bg-blue-500/25",
+  },
+  {
+    value: 50,
+    suffix: "+",
+    label: "Mobile Apps",
+    description: "iOS & Android solutions",
+    icon: Smartphone,
+    tone: "text-cyan-300 border-cyan-400/30 bg-cyan-400/10",
+    glow: "bg-cyan-400/25",
+  },
+  {
+    value: 100,
+    suffix: "+",
+    label: "Web Apps",
+    description: "Scalable web platforms",
+    icon: Laptop,
+    tone: "text-indigo-300 border-indigo-400/30 bg-indigo-400/10",
+    glow: "bg-indigo-500/25",
+  },
+];
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: EASE, delay: i * 0.1 },
+  }),
+};
+
+/** Counts up from 0 the first time it scrolls into view */
+function CountUp({ to, suffix }: { to: number; suffix: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  useEffect(() => {
+    if (!inView || !ref.current) return;
+    const node = ref.current;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const controls = animate(0, to, {
+      duration: 1.8,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => (node.textContent = `${Math.round(v)}${suffix}`),
+    });
+    return () => controls.stop();
+  }, [inView, to, suffix]);
+
+  return (
+    <span ref={ref} className="tabular-nums">
+      {to}
+      {suffix}
+    </span>
+  );
+}
 
 export default function StatsSection() {
   return (
-    <section className="relative w-full overflow-hidden bg-[#0B1739] py-16 sm:py-24 md:py-28">
-      {/* Full-width Background Image */}
-      <div className="absolute inset-0 z-0 opacity-80">
-        <Image
-          src="/networking.png"
-          alt="Global Networking Background"
-          fill
-          loading="lazy"
-          sizes="(max-width: 1200px) 100vw, 1200px"
-          quality={60}
-          className="object-cover object-center w-full h-full"
-        />
-      </div>
+    <section className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#0B1739_0%,#071028_45%,#020617_100%)] pt-20 pb-24 text-white sm:pt-28 sm:pb-32">
+      {/* ───────── Background: starfield, aurora, planet horizon, orbits ───────── */}
+      <StatsBackground />
 
-      {/* Full-width Gradient Overlay for Text Readability */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#0B1739]/85 via-[#0B1739]/65 to-[#0B1739]/80" />
+      {/* ───────── Content ───────── */}
+      <div className="relative mx-auto flex max-w-6xl flex-col items-center px-6 text-center sm:px-8">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.24em] text-sky-200 backdrop-blur-md sm:text-[11px]"
+        >
+          <Sparkles className="h-3.5 w-3.5 text-sky-400" />
+          Enterprise Global Network
+        </motion.div>
 
-      {/* Centered Content Container */}
-      <div className="relative z-20 mx-auto flex max-w-7xl flex-col items-center px-4 sm:px-6 md:px-8 text-center">
-        {/* Eyebrow */}
-        <div className="mb-4 sm:mb-5 inline-flex items-center gap-2 rounded-full border border-sky-400/40 bg-sky-500/20 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-sky-300 backdrop-blur-md">
-          <Sparkles className="h-4 w-4 text-sky-400" />
-          <span>Enterprise Global Network</span>
-        </div>
-
-        {/* Heading */}
-        <h2 className="max-w-5xl text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-[1.18]">
+        <motion.h2
+          variants={fadeUp}
+          custom={1}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+          className="max-w-4xl text-[2rem] leading-[1.1] font-semibold tracking-[-0.035em] text-white sm:text-5xl md:text-[52px]"
+        >
           Connecting Visionaries with Scalable{" "}
-          <span className="bg-gradient-to-r from-sky-400 via-blue-300 to-sky-200 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-sky-300 via-sky-400 to-blue-400 bg-clip-text text-transparent">
             Digital Excellence
           </span>
-        </h2>
+        </motion.h2>
 
-        <p className="mt-4 sm:mt-5 max-w-4xl text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed font-normal drop-shadow-xs">
-          With years of deep technical mastery, Craft and Code bridges complex infrastructure with intuitive user experiences. We empower organizations globally through continuous digital transformation and resilient systems.
-        </p>
+        <motion.p
+          variants={fadeUp}
+          custom={2}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+          className="mt-6 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8"
+        >
+          With years of deep technical mastery, Craft and Code bridges complex infrastructure with intuitive user
+          experiences. We empower organizations globally through continuous digital transformation and resilient
+          systems.
+        </motion.p>
 
-        {/* Overlaid Glassmorphic Stat Cards Grid - 4 Columns */}
-        <div className="mt-10 sm:mt-14 grid w-full max-w-6xl grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-          {/* Stat 1: 15+ Years Experience */}
-          <div className="group relative overflow-hidden rounded-2xl border border-white/20 bg-slate-900/60 p-5 sm:p-6 text-left shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-sky-400/60 hover:bg-slate-900/75">
-            <div className="mb-3 inline-flex rounded-xl bg-sky-500/20 p-2.5 sm:p-3 text-sky-300 border border-sky-400/30 transition-colors group-hover:bg-sky-500 group-hover:text-white">
-              <Award className="h-5 w-5 sm:h-6 sm:w-6" />
+        {/* ───────── Stats panel ───────── */}
+        <motion.div
+          variants={fadeUp}
+          custom={3}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="relative mt-14 w-full sm:mt-16"
+        >
+          {/* Gradient border */}
+          <div className="rounded-3xl bg-gradient-to-b from-sky-300/30 via-white/10 to-white/5 p-px shadow-[0_30px_80px_-30px_rgba(14,165,233,0.45)]">
+            <div className="grid grid-cols-2 overflow-hidden rounded-[calc(1.5rem-1px)] bg-[#081230]/80 backdrop-blur-xl lg:grid-cols-4">
+              {STATS.map((stat, i) => {
+                const Icon = stat.icon;
+                return (
+                  <div
+                    key={stat.label}
+                    className={[
+                      "group relative px-5 py-8 text-left transition-colors duration-300 hover:bg-white/[0.03] sm:px-8 sm:py-10",
+                      // Dividers: vertical between columns, horizontal between rows on mobile
+                      i % 2 === 1 ? "border-l border-white/10" : "",
+                      i >= 2 ? "border-t border-white/10 lg:border-t-0" : "",
+                      i === 2 ? "lg:border-l" : "",
+                    ].join(" ")}
+                  >
+                    {/* Hover glow */}
+                    <span
+                      aria-hidden
+                      className={`pointer-events-none absolute -top-10 left-1/2 h-24 w-40 -translate-x-1/2 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100 ${stat.glow}`}
+                    />
+
+                    <div className="relative flex items-center gap-3">
+                      <span
+                        className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border ${stat.tone}`}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                        0{i + 1}
+                      </span>
+                    </div>
+
+                    <div className="relative mt-6 text-4xl leading-none font-bold tracking-[-0.04em] text-white sm:text-5xl lg:text-[56px]">
+                      <CountUp to={stat.value} suffix={stat.suffix} />
+                    </div>
+                    <div className="relative mt-3 text-sm font-semibold text-sky-100 sm:text-base">{stat.label}</div>
+                    <div className="relative mt-1 text-xs leading-relaxed text-slate-400 sm:text-sm">
+                      {stat.description}
+                    </div>
+
+                    {/* Accent line grows on hover */}
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-5 bottom-0 h-px origin-left scale-x-0 bg-gradient-to-r from-sky-400 to-transparent transition-transform duration-500 group-hover:scale-x-100 sm:inset-x-8"
+                    />
+                  </div>
+                );
+              })}
             </div>
-            <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">15+</div>
-            <div className="mt-1 text-xs sm:text-sm font-semibold text-sky-200">Years Experience</div>
-            <div className="mt-1 text-[11px] sm:text-xs text-slate-300">Delivering top-tier software</div>
           </div>
-
-          {/* Stat 2: 50+ Clients */}
-          <div className="group relative overflow-hidden rounded-2xl border border-white/20 bg-slate-900/60 p-5 sm:p-6 text-left shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/60 hover:bg-slate-900/75">
-            <div className="mb-3 inline-flex rounded-xl bg-blue-500/20 p-2.5 sm:p-3 text-blue-300 border border-blue-400/30 transition-colors group-hover:bg-blue-500 group-hover:text-white">
-              <Users className="h-5 w-5 sm:h-6 sm:w-6" />
-            </div>
-            <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">50+</div>
-            <div className="mt-1 text-xs sm:text-sm font-semibold text-blue-200">Global Clients</div>
-            <div className="mt-1 text-[11px] sm:text-xs text-slate-300">Trusted partners worldwide</div>
-          </div>
-
-          {/* Stat 3: 50+ Mobile Apps */}
-          <div className="group relative overflow-hidden rounded-2xl border border-white/20 bg-slate-900/60 p-5 sm:p-6 text-left shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/60 hover:bg-slate-900/75">
-            <div className="mb-3 inline-flex rounded-xl bg-purple-500/20 p-2.5 sm:p-3 text-purple-300 border border-purple-400/30 transition-colors group-hover:bg-purple-500 group-hover:text-white">
-              <Smartphone className="h-5 w-5 sm:h-6 sm:w-6" />
-            </div>
-            <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">50+</div>
-            <div className="mt-1 text-xs sm:text-sm font-semibold text-purple-200">Mobile Apps</div>
-            <div className="mt-1 text-[11px] sm:text-xs text-slate-300">iOS & Android solutions</div>
-          </div>
-
-          {/* Stat 4: 100+ Web Apps */}
-          <div className="group relative overflow-hidden rounded-2xl border border-white/20 bg-slate-900/60 p-5 sm:p-6 text-left shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-indigo-400/60 hover:bg-slate-900/75">
-            <div className="mb-3 inline-flex rounded-xl bg-indigo-500/20 p-2.5 sm:p-3 text-indigo-300 border border-indigo-400/30 transition-colors group-hover:bg-indigo-500 group-hover:text-white">
-              <Laptop className="h-5 w-5 sm:h-6 sm:w-6" />
-            </div>
-            <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">100+</div>
-            <div className="mt-1 text-xs sm:text-sm font-semibold text-indigo-200">Web Apps</div>
-            <div className="mt-1 text-[11px] sm:text-xs text-slate-300">Scalable web platforms</div>
-          </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

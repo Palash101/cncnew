@@ -1,15 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
-import {
-  Bot,
-  BrainCircuit,
-  Zap,
-  CheckCircle2,
-  Sparkles,
-} from "lucide-react";
+import { Bot, BrainCircuit, Zap, CircleCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Container, Highlight, IconTile, cardClass, reveal, subheadingClass } from "@/components/ui/section";
 
 interface AiCapability {
   id: string;
@@ -20,8 +15,6 @@ interface AiCapability {
   isWisper?: boolean;
   description: string;
   highlights: string[];
-  gradient: string;
-  borderColor: string;
 }
 
 const aiCapabilities: AiCapability[] = [
@@ -30,25 +23,17 @@ const aiCapabilities: AiCapability[] = [
     icon: Bot,
     title: "Custom LLM & Chatbots",
     subtitle: "Enterprise Models",
-    imageUrl:
-      "https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=600&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=600&auto=format&fit=crop",
     description:
       "Train & deploy private conversational AI models on custom data with full enterprise data sovereignty.",
-    highlights: [
-      "Custom ChatGPT Chatbots",
-      "Private Enterprise Sovereignty",
-      "Multi-Turn Context & Memory",
-    ],
-    gradient: "from-cyan-500/20 via-blue-500/10 to-transparent",
-    borderColor: "hover:border-cyan-500/50",
+    highlights: ["Custom ChatGPT Chatbots", "Private Enterprise Sovereignty", "Multi-Turn Context & Memory"],
   },
   {
     id: "fine-tuning",
     icon: BrainCircuit,
     title: "Fine-Tuning & RAG",
     subtitle: "Domain Intelligence",
-    imageUrl:
-      "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=600&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=600&auto=format&fit=crop",
     description:
       "Fine-tune open-source models (LLaMA 3, DeepSeek) with QLoRA/LoRA techniques and vector RAG search.",
     highlights: [
@@ -56,8 +41,6 @@ const aiCapabilities: AiCapability[] = [
       "Vector Search (Pinecone/Milvus)",
       "High Precision & Reduced Hallucinations",
     ],
-    gradient: "from-indigo-500/20 via-purple-500/10 to-transparent",
-    borderColor: "hover:border-indigo-500/50",
   },
   {
     id: "wisper-agent",
@@ -67,98 +50,58 @@ const aiCapabilities: AiCapability[] = [
     isWisper: true,
     description:
       "Real-time voice changing, pitch modulation, and zero-latency audio translation for live video calls.",
-    highlights: [
-      "Live Video Call Translation",
-      "Real-Time Voice Modulation",
-      "Sub-120ms Latency Audio Stream",
-    ],
-    gradient: "from-sky-500/20 via-cyan-500/10 to-transparent",
-    borderColor: "hover:border-sky-500/50",
+    highlights: ["Live Video Call Translation", "Real-Time Voice Modulation", "Sub-120ms Latency Audio Stream"],
   },
 ];
 
 export default function AiSection() {
   return (
-    <section className="relative w-full bg-slate-950 py-8 sm:py-10 md:py-12 overflow-hidden text-white">
-      {/* Background Glows */}
-      <div className="absolute inset-0 pointer-events-none -z-10">
-        <div className="absolute top-1/4 -left-32 h-48 w-48 rounded-full bg-cyan-500/15 blur-[100px]" />
-        <div className="absolute bottom-1/3 -right-32 h-48 w-48 rounded-full bg-indigo-500/20 blur-[100px]" />
-      </div>
+    <div className="w-full text-white">
+      <Container>
+        {/* Sub-header */}
+        <motion.h3 {...reveal(0)} className={cn(subheadingClass("dark"), "mb-8 text-center sm:mb-10")}>
+          Pioneering Artificial <Highlight>Intelligence Projects</Highlight>
+        </motion.h3>
 
-      <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-cyan-300 backdrop-blur-md mb-2"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
-            <span>Next-Gen AI Solutions</span>
-          </motion.div>
-
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-white leading-tight">
-            Pioneering Artificial{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent font-medium">
-              Intelligence Projects
-            </span>
-          </h2>
-        </div>
-
-        {/* 3 Inline AI Project Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
+        {/* Cards */}
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 lg:gap-6">
           {aiCapabilities.map((item, idx) => {
-            const Icon = item.icon;
             return (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.35, delay: idx * 0.08 }}
-                className={`group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900/80 p-4 backdrop-blur-xl transition-all duration-300 ${item.borderColor} hover:shadow-lg hover:shadow-cyan-500/10 flex flex-col justify-between`}
+                {...reveal(idx)}
+                className={cn(cardClass("dark"), "flex flex-col justify-between overflow-hidden p-5 sm:p-6")}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`} />
-
-                <div className="relative z-10">
-                  {/* Banner Header Image / Live Animation */}
+                <div>
+                  {/* Banner: image or live waveform */}
                   {item.isWisper ? (
-                    <div className="relative h-24 w-full rounded-lg overflow-hidden border border-cyan-500/30 bg-slate-950 p-2.5 mb-3 flex flex-col justify-between">
+                    <div className="relative mb-5 flex h-36 w-full flex-col justify-between overflow-hidden rounded-xl border border-sky-400/20 bg-[#030a1f] p-3.5">
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-cyan-300 uppercase tracking-wider">
-                          <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
+                        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider text-sky-300 uppercase">
+                          <span className="relative flex h-2 w-2">
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
+                            <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-400" />
+                          </span>
                           Wisper Engine Active
                         </span>
-                        <span className="text-[9px] text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">
+                        <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-medium text-slate-300">
                           &lt;120ms
                         </span>
                       </div>
-                      
-                      {/* Animated Waveform */}
-                      <div className="flex items-center justify-center gap-1 h-8 my-auto">
-                        {[40, 70, 30, 90, 60, 100, 45, 80, 55, 95, 35, 75].map((h, i) => (
+
+                      <div className="my-auto flex h-14 items-center justify-center gap-1">
+                        {[40, 70, 30, 90, 60, 100, 45, 80, 55, 95, 35, 75, 50, 85].map((h, i) => (
                           <motion.div
                             key={i}
-                            animate={{
-                              height: [`${h * 0.3}%`, `${h}%`, `${h * 0.4}%`],
-                            }}
-                            transition={{
-                              duration: 1.2,
-                              repeat: Infinity,
-                              repeatType: "reverse",
-                              delay: i * 0.08,
-                            }}
-                            className="w-1 rounded-full bg-gradient-to-t from-cyan-500 to-indigo-400"
+                            animate={{ height: [`${h * 0.3}%`, `${h}%`, `${h * 0.4}%`] }}
+                            transition={{ duration: 1.2, repeat: Infinity, repeatType: "reverse", delay: i * 0.08 }}
+                            className="w-1 rounded-full bg-gradient-to-t from-sky-500 to-blue-300"
                           />
                         ))}
                       </div>
                     </div>
                   ) : (
-                    <div className="relative h-24 w-full rounded-lg overflow-hidden border border-slate-800 mb-3 bg-slate-950">
+                    <div className="relative mb-5 h-36 w-full overflow-hidden rounded-xl border border-white/10 bg-[#030a1f]">
                       <Image
                         src={item.imageUrl || ""}
                         alt={item.title}
@@ -166,46 +109,36 @@ export default function AiSection() {
                         sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
-
-                      <div className="absolute top-2 left-2 z-10">
-                        <span className="rounded-full bg-slate-950/90 border border-slate-700/80 px-2 py-0.5 text-[10px] font-semibold text-cyan-300 backdrop-blur-md">
-                          {item.subtitle}
-                        </span>
-                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#030a1f] via-[#030a1f]/30 to-transparent" />
+                      <span className="absolute top-3 left-3 rounded-full border border-white/15 bg-[#030a1f]/80 px-2.5 py-0.5 text-[11px] font-semibold text-sky-200 backdrop-blur-md">
+                        {item.subtitle}
+                      </span>
                     </div>
                   )}
 
-                  {/* Card Title & Icon */}
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 group-hover:scale-105 transition-transform">
-                      <Icon className="h-3.5 w-3.5" />
-                    </div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
+                  <div className="flex items-center gap-3">
+                    <IconTile icon={item.icon} tone="dark" className="h-10 w-10" />
+                    <h4 className="text-lg font-semibold tracking-tight text-white transition-colors group-hover:text-sky-200">
                       {item.title}
-                    </h3>
+                    </h4>
                   </div>
 
-                  <p className="text-[11px] text-slate-300 leading-relaxed line-clamp-2">
-                    {item.description}
-                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-400">{item.description}</p>
                 </div>
 
-                {/* Highlights Bullet List */}
-                <div className="relative z-10 mt-3 pt-2.5 border-t border-slate-800/80 flex flex-col gap-1">
+                <ul className="mt-5 flex flex-col gap-2 border-t border-white/10 pt-4">
                   {item.highlights.map((point) => (
-                    <div key={point} className="flex items-center gap-1.5 text-[10px] font-medium text-slate-300">
-                      <CheckCircle2 className="h-3 w-3 text-cyan-400 shrink-0" />
-                      <span className="truncate">{point}</span>
-                    </div>
+                    <li key={point} className="flex items-center gap-2 text-sm text-slate-300">
+                      <CircleCheck className="h-4 w-4 shrink-0 text-sky-400" />
+                      <span>{point}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </motion.div>
             );
           })}
         </div>
-
-      </div>
-    </section>
+      </Container>
+    </div>
   );
 }

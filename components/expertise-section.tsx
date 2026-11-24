@@ -10,7 +10,20 @@ import {
   Search,
   ShieldCheck,
   Radio,
+  Layers,
 } from "lucide-react";
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
+import {
+  Container,
+  SectionHeader,
+  Highlight,
+  IconTile,
+  TopHairline,
+  cardClass,
+  reveal,
+  SECTION_Y,
+} from "@/components/ui/section";
 
 interface ExpertiseItem {
   id: string;
@@ -87,41 +100,37 @@ const expertiseItems: ExpertiseItem[] = [
 
 export default function ExpertiseSection() {
   return (
-    <section id="services" className="w-full bg-black py-16 sm:py-24 md:py-28 text-white">
-      <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-white tracking-tight leading-tight sm:leading-tight">
-            Deep Technical Expertise, <br className="hidden sm:inline" />
-            Supporting Modern Systems
-          </h2>
-        </div>
-
-        {/* 3x3 Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 lg:gap-x-12 gap-y-12 sm:gap-y-14">
-          {expertiseItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div key={item.id} className="flex flex-col text-left group">
-                {/* Icon with subtle blue accent */}
-                <div className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400 group-hover:border-sky-400/40 group-hover:bg-sky-500/20 transition-colors">
-                  <Icon className="h-5 w-5" />
-                </div>
-
-                {/* Title */}
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2.5">
-                  {item.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
-                  {item.description}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+    <section id="services" className={cn("relative isolate w-full overflow-hidden bg-[#020617] text-white", SECTION_Y)}>
+      <TopHairline />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute top-0 left-1/2 h-[24rem] w-[52rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500/10 blur-[120px]" />
       </div>
+
+      <Container>
+        <SectionHeader
+          eyebrow="What We Do"
+          eyebrowIcon={Layers}
+          title={
+            <>
+              Deep Technical Expertise, <Highlight>Supporting Modern Systems</Highlight>
+            </>
+          }
+        />
+
+        <div className="mt-14 grid grid-cols-1 gap-5 sm:mt-16 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {expertiseItems.map((item, i) => (
+            <motion.div
+              key={item.id}
+              {...reveal(i % 3)}
+              className={cn(cardClass("dark"), "flex flex-col p-6 sm:p-7")}
+            >
+              <IconTile icon={item.icon} tone="dark" />
+              <h3 className="mt-5 text-lg font-semibold tracking-tight text-white sm:text-xl">{item.title}</h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-slate-400">{item.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </Container>
     </section>
   );
 }

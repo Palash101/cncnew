@@ -12,6 +12,7 @@ import {
   Send,
 } from "lucide-react";
 import { useQuoteModal } from "@/context/quote-modal-context";
+import { Eyebrow, Highlight, headingClass } from "@/components/ui/section";
 
 export default function Footer() {
   const { openQuoteModal } = useQuoteModal();
@@ -24,19 +25,18 @@ export default function Footer() {
       </div>
 
       {/* Top CTA Banner */}
-      <div id="contact" className="border-b border-slate-200/80 bg-slate-50/80 py-14 sm:py-20 scroll-mt-10">
-        <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-10 md:p-12 shadow-xl shadow-slate-900/5 backdrop-blur-md">
+      <div id="contact" className="relative border-b border-slate-200/80 bg-[linear-gradient(180deg,#ffffff_0%,#effaff_100%)] py-20 sm:py-28 scroll-mt-10">
+        <div className="mx-auto w-full max-w-6xl px-6 sm:px-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-white/80 rounded-3xl border border-white p-8 sm:p-10 md:p-12 shadow-[0_24px_70px_-28px_rgba(11,23,57,0.3)] ring-1 ring-sky-100 backdrop-blur-xl">
             
             <div className="text-center lg:text-left max-w-2xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-sky-700 mb-3">
-                <Sparkles className="h-4 w-4 text-sky-600" />
-                <span>Ready to Elevate Your Enterprise?</span>
-              </div>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0B1739] tracking-tight leading-tight">
-                Let's Build Something Extraordinary Together
+              <Eyebrow icon={Sparkles} tone="light" className="mb-5">
+                Ready to Elevate Your Enterprise?
+              </Eyebrow>
+              <h3 className={headingClass("light")}>
+                Let&apos;s Build Something <Highlight tone="light">Extraordinary Together</Highlight>
               </h3>
-              <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
+              <p className="mt-5 text-base text-slate-600 leading-7 sm:text-lg">
                 Partner with our engineering experts to deploy custom AI models, enterprise ERP platforms, and high-frequency web systems.
               </p>
             </div>
@@ -48,13 +48,13 @@ export default function Footer() {
                 <input
                   type="email"
                   placeholder="Enter your work email address"
-                  className="w-full rounded-2xl bg-slate-50 border border-slate-300 pl-11 pr-4 py-3.5 text-sm text-[#0B1739] placeholder-slate-400 focus:outline-none focus:border-sky-600 focus:bg-white transition-all shadow-inner"
+                  className="w-full rounded-xl bg-white border border-slate-200 pl-11 pr-4 py-3.5 text-sm text-[#0B1739] placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100 transition-all"
                 />
               </div>
               <button
                 type="button"
                 onClick={() => openQuoteModal()}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#0B1739] hover:bg-[#152052] px-7 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-[#0B1739]/15 cursor-pointer shrink-0"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-xl bg-[#0B1739] hover:bg-[#152752] hover:-translate-y-0.5 px-7 py-3.5 text-sm font-semibold text-white transition-all shadow-[0_14px_30px_rgba(11,23,57,0.2)] cursor-pointer shrink-0"
               >
                 <span>Get Started</span>
                 <Send className="h-4 w-4" />
@@ -66,7 +66,7 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Links & Info - Larger Padding & Typography */}
-      <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24">
+      <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 py-16 sm:py-20 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-14">
           
           {/* Brand & Description Column */}
@@ -88,25 +88,25 @@ export default function Footer() {
             {/* Direct Contact Info */}
             <div className="flex flex-col gap-3 text-sm text-slate-700">
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-600 border border-sky-200/80">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-600 border border-sky-200">
                   <Mail className="h-4 w-4" />
                 </div>
-                <a href="mailto:discuss@craftandcode.in" className="font-medium hover:text-sky-600 transition-colors">
+                <a href="mailto:discuss@craftandcode.in" className="font-medium hover:text-[#1673b8] transition-colors">
                   discuss@craftandcode.in
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-600 border border-sky-200/80">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-600 border border-sky-200">
                   <Phone className="h-4 w-4" />
                 </div>
-                <a href="tel:+917224901787" className="font-medium hover:text-sky-600 transition-colors">
+                <a href="tel:+917224901787" className="font-medium hover:text-[#1673b8] transition-colors">
                   +91-72249 01787
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-600 border border-sky-200/80">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-600 border border-sky-200">
                   <MapPin className="h-4 w-4" />
                 </div>
                 <span className="font-medium">Global Delivery Centers — USA & India</span>
@@ -116,36 +116,36 @@ export default function Footer() {
 
           {/* Column 2: Solutions */}
           <div className="lg:col-span-3 text-left">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-[#0B1739] mb-5 border-l-3 border-sky-600 pl-3">
+            <h4 className="mb-5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0B1739]">
               Solutions & Expertise
             </h4>
             <ul className="flex flex-col gap-3.5 text-sm">
               <li>
-                <Link href="#work" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                <Link href="#work" className="text-slate-600 hover:text-[#1673b8] font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
                   <span>Custom LLM & Chatbots</span>
                 </Link>
               </li>
               <li>
-                <Link href="#work" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                <Link href="#work" className="text-slate-600 hover:text-[#1673b8] font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
                   <span>Wisper Real-Time Voice Agent</span>
                 </Link>
               </li>
               <li>
-                <Link href="#services" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                <Link href="#services" className="text-slate-600 hover:text-[#1673b8] font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
                   <span>Odoo 18 ERP & CRM Suite</span>
                 </Link>
               </li>
               <li>
-                <Link href="#services" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                <Link href="#services" className="text-slate-600 hover:text-[#1673b8] font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
                   <span>ERPNext & Frappe Doctypes</span>
                 </Link>
               </li>
               <li>
-                <Link href="#industries" className="text-slate-600 hover:text-sky-600 font-medium transition-colors flex items-center gap-2">
+                <Link href="#industries" className="text-slate-600 hover:text-[#1673b8] font-medium transition-colors flex items-center gap-2">
                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
                   <span>EV & Telemetry Infrastructure</span>
                 </Link>
@@ -155,7 +155,7 @@ export default function Footer() {
 
           {/* Column 3: Company */}
           <div className="lg:col-span-2 text-left">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-[#0B1739] mb-5 border-l-3 border-sky-600 pl-3">
+            <h4 className="mb-5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0B1739]">
               Company
             </h4>
             <ul className="flex flex-col gap-3.5 text-sm">
@@ -189,7 +189,7 @@ export default function Footer() {
 
           {/* Column 4: Compliance & Trust */}
           <div className="lg:col-span-3 text-left">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-[#0B1739] mb-5 border-l-3 border-sky-600 pl-3">
+            <h4 className="mb-5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0B1739]">
               Enterprise Trust
             </h4>
             <div className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-5 space-y-4 shadow-sm">
@@ -245,16 +245,16 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-slate-200 bg-slate-50 py-7 text-xs text-slate-500">
-        <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p>Copyright {new Date().getFullYear()} Craft & Code | All Rights Reserved</p>
           <div className="flex items-center gap-6 text-xs font-medium text-slate-600">
-            <Link href="#" className="hover:text-sky-600 transition-colors">
+            <Link href="#" className="hover:text-[#1673b8] transition-colors">
               Privacy Policy
             </Link>
-            <Link href="#" className="hover:text-sky-600 transition-colors">
+            <Link href="#" className="hover:text-[#1673b8] transition-colors">
               Terms of Service
             </Link>
-            <Link href="#" className="hover:text-sky-600 transition-colors">
+            <Link href="#" className="hover:text-[#1673b8] transition-colors">
               Security Governance
             </Link>
           </div>

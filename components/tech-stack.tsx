@@ -1,4 +1,10 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "motion/react";
+import { Monitor, Server, Smartphone, Cloud, Cpu, type LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Container, SectionHeader, Highlight, IconTile, cardClass, reveal, SECTION_Y } from "@/components/ui/section";
 
 interface TechItem {
   name: string;
@@ -8,8 +14,7 @@ interface TechItem {
 interface CategoryRow {
   id: string;
   title: string;
-  bgColor: string;
-  borderColor: string;
+  icon: LucideIcon;
   items: TechItem[];
 }
 
@@ -17,8 +22,7 @@ const techCategories: CategoryRow[] = [
   {
     id: "frontend",
     title: "Frontend Development",
-    bgColor: "bg-[#FDF2F4]",
-    borderColor: "border-[#FBE2E6]",
+    icon: Monitor,
     items: [
       { name: "React Js", image: "/frontend/react.png" },
       { name: "Next Js", image: "/frontend/nextjs.png" },
@@ -33,8 +37,7 @@ const techCategories: CategoryRow[] = [
   {
     id: "backend",
     title: "Backend Development",
-    bgColor: "bg-[#F0FDF4]",
-    borderColor: "border-[#DCFCE7]",
+    icon: Server,
     items: [
       { name: "Node Js", image: "/backend/Node.js_.webp" },
       { name: ".Net", image: "/backend/dot net.webp" },
@@ -49,8 +52,7 @@ const techCategories: CategoryRow[] = [
   {
     id: "mobile",
     title: "Mobile Frameworks",
-    bgColor: "bg-[#F0F9FF]",
-    borderColor: "border-[#E0F2FE]",
+    icon: Smartphone,
     items: [
       { name: "iOS", image: "/mobile framework/ios.webp" },
       { name: "Android", image: "/mobile framework/android.png" },
@@ -62,8 +64,7 @@ const techCategories: CategoryRow[] = [
   {
     id: "cloud",
     title: "Cloud & DevOps",
-    bgColor: "bg-[#FEFCE8]",
-    borderColor: "border-[#FEF08A]",
+    icon: Cloud,
     items: [
       { name: "Azure", image: "/cloud devops/azure.png" },
       { name: "AWS", image: "/cloud devops/aws-icon.webp" },
@@ -79,62 +80,68 @@ const techCategories: CategoryRow[] = [
 
 export default function TechStack() {
   return (
-    <section className="w-full bg-white py-12 sm:py-16 md:py-20 lg:py-24">
-      <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="mb-8 text-center sm:mb-12 md:mb-14">
-          <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
-            Our Technology Stack
-          </h2>
-          <p className="mt-2.5 text-sm text-slate-600 sm:mt-3 sm:text-base md:text-lg max-w-2xl mx-auto">
-            Empowering enterprise applications with modern, battle-tested technologies.
-          </p>
-        </div>
+    <section className={cn("relative isolate w-full overflow-hidden bg-white text-[#0B1739]", SECTION_Y)}>
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute top-0 left-1/2 h-[22rem] w-[48rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-100/70 blur-[120px]" />
+      </div>
 
-        {/* Stack Categories Container */}
-        <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
-          {techCategories.map((category) => (
-            <div
+      <Container>
+        <SectionHeader
+          tone="light"
+          eyebrow="Technology"
+          eyebrowIcon={Cpu}
+          title={
+            <>
+              Our <Highlight tone="light">Technology Stack</Highlight>
+            </>
+          }
+          description="Empowering enterprise applications with modern, battle-tested technologies."
+        />
+
+        <div className="mt-14 flex flex-col gap-4 sm:mt-16 sm:gap-5">
+          {techCategories.map((category, i) => (
+            <motion.div
               key={category.id}
-              className={`flex flex-col gap-4 rounded-xl sm:rounded-2xl border ${category.borderColor} ${category.bgColor} p-4 sm:p-6 md:p-8 lg:px-10 lg:py-8 lg:flex-row lg:items-center lg:justify-between transition-all duration-200 hover:shadow-xs`}
+              {...reveal(i)}
+              className={cn(
+                cardClass("light"),
+                "flex flex-col gap-5 p-5 hover:translate-y-0 sm:p-7 lg:flex-row lg:items-center lg:gap-8"
+              )}
             >
-              {/* Category Title */}
-              <div className="lg:w-1/4 shrink-0">
-                <h3 className="text-base font-bold text-slate-900 sm:text-lg md:text-xl">
-                  {category.title}
-                </h3>
+              <div className="flex shrink-0 items-center gap-3.5 lg:w-64">
+                <IconTile icon={category.icon} tone="light" />
+                <h3 className="text-base font-semibold tracking-tight text-[#0B1739] sm:text-lg">{category.title}</h3>
               </div>
 
-              {/* Technology Pills */}
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-3.5 lg:w-3/4 lg:justify-start">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
                 {category.items.map((tech) => (
                   <div
                     key={tech.name}
-                    className="inline-flex items-center gap-1.5 sm:gap-2 md:gap-2.5 rounded-full border border-slate-200/80 bg-white px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-slate-800 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md cursor-default max-w-full truncate"
+                    className="inline-flex max-w-full cursor-default items-center gap-2 truncate rounded-full border border-slate-200/80 bg-slate-50/60 px-3 py-1.5 text-xs font-semibold text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white hover:text-[#0B1739] hover:shadow-md sm:px-4 sm:py-2 sm:text-sm"
                   >
                     {tech.image ? (
-                      <div className="relative flex h-4 w-4 sm:h-5 sm:w-5 shrink-0 items-center justify-center">
+                      <span className="relative flex h-4 w-4 shrink-0 items-center justify-center sm:h-5 sm:w-5">
                         <Image
                           src={tech.image}
-                          alt={tech.name}
+                          alt=""
                           width={20}
                           height={20}
-                          className="max-h-4 max-w-4 sm:max-h-5 sm:max-w-5 object-contain"
+                          className="max-h-4 max-w-4 object-contain sm:max-h-5 sm:max-w-5"
                         />
-                      </div>
+                      </span>
                     ) : (
-                      <div className="flex h-4 w-4 sm:h-5 sm:w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[9px] sm:text-[10px] font-bold text-slate-600 uppercase">
+                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[9px] font-bold text-slate-600 uppercase sm:h-5 sm:w-5 sm:text-[10px]">
                         {tech.name.substring(0, 2)}
-                      </div>
+                      </span>
                     )}
                     <span className="truncate">{tech.name}</span>
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -11,7 +11,10 @@ import {
   ArrowRight,
   ArrowDown,
   ArrowLeft,
+  Workflow,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Container, SectionHeader, Highlight, SECTION_Y } from "@/components/ui/section";
 
 interface ProcessStep {
   id: string;
@@ -98,27 +101,37 @@ export default function AgileProcess() {
 
   return (
     <section
-      className="w-full bg-[#EBF1FA] py-20 sm:py-28 overflow-hidden"
+      id="agile"
+      className={cn(
+        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#effaff_0%,#f6fbff_60%,#ffffff_100%)] text-[#0B1739]",
+        SECTION_Y
+      )}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      {/* Background: fine grid + soft glows (same language as the hero) */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(22,115,184,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(22,115,184,0.06)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_70%_60%_at_70%_50%,black,transparent)]" />
+        <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-sky-200/50 blur-[120px]" />
+        <div className="absolute -right-32 bottom-0 h-[28rem] w-[28rem] rounded-full bg-blue-200/40 blur-[120px]" />
+      </div>
+
+      <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Heading, Subtitle & Flow Diagram */}
           <div className="lg:col-span-6 flex flex-col justify-center">
-            {/* Heading */}
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl leading-[1.15]">
-              Our Agile Process.
-              <br />
-              <span className="bg-gradient-to-r from-sky-600 to-blue-700 bg-clip-text text-transparent">
-                Simple, Seamless, Streamlined
-              </span>
-            </h2>
-
-            {/* Subtitle */}
-            <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg max-w-xl">
-              We follow a structured and agile development approach with project management planner to ensure the successful delivery of every project, focusing on quality, cost-optimization, transparency, and client satisfaction.
-            </p>
+            <SectionHeader
+              tone="light"
+              align="left"
+              eyebrow="Our Process"
+              eyebrowIcon={Workflow}
+              title={
+                <>
+                  Our Agile Process. <Highlight tone="light">Simple, Seamless, Streamlined</Highlight>
+                </>
+              }
+              description="We follow a structured and agile development approach with project management planner to ensure the successful delivery of every project, focusing on quality, cost-optimization, transparency, and client satisfaction."
+            />
 
             {/* Flow Diagram Pills Grid */}
             <div className="mt-10 max-w-xl">
@@ -128,40 +141,40 @@ export default function AgileProcess() {
                 <button
                   type="button"
                   onClick={() => setActiveStep(0)}
-                  className={`flex-1 rounded-full px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer text-center ${
+                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
                     activeStep === 0
-                      ? "bg-sky-600 text-white shadow-lg ring-2 ring-sky-400 scale-105"
-                      : "bg-[#1E293B] text-slate-200 hover:bg-slate-800 hover:text-white"
+                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
+                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
                   }`}
                 >
                   Scoping
                 </button>
 
-                <ArrowRight className="h-4 w-4 shrink-0 text-amber-500" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-sky-500" />
 
                 {/* Step 1: Cost Estimation */}
                 <button
                   type="button"
                   onClick={() => setActiveStep(1)}
-                  className={`flex-1 rounded-full px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer text-center ${
+                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
                     activeStep === 1
-                      ? "bg-sky-600 text-white shadow-lg ring-2 ring-sky-400 scale-105"
-                      : "bg-[#1E293B] text-slate-200 hover:bg-slate-800 hover:text-white"
+                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
+                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
                   }`}
                 >
                   Cost Estimation
                 </button>
 
-                <ArrowRight className="h-4 w-4 shrink-0 text-amber-500" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-sky-500" />
 
                 {/* Step 2: Development */}
                 <button
                   type="button"
                   onClick={() => setActiveStep(2)}
-                  className={`flex-1 rounded-full px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer text-center ${
+                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
                     activeStep === 2
-                      ? "bg-sky-600 text-white shadow-lg ring-2 ring-sky-400 scale-105"
-                      : "bg-[#1E293B] text-slate-200 hover:bg-slate-800 hover:text-white"
+                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
+                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
                   }`}
                 >
                   Development
@@ -170,7 +183,7 @@ export default function AgileProcess() {
 
               {/* Connecting Down Arrow on right */}
               <div className="flex justify-end pr-8 sm:pr-12 my-2 sm:my-3">
-                <ArrowDown className="h-4 w-4 text-amber-500" />
+                <ArrowDown className="h-4 w-4 text-sky-500" />
               </div>
 
               {/* Row 2: Maintenance <- Deployment <- QA & Testing */}
@@ -179,40 +192,40 @@ export default function AgileProcess() {
                 <button
                   type="button"
                   onClick={() => setActiveStep(5)}
-                  className={`flex-1 rounded-full px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer text-center ${
+                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
                     activeStep === 5
-                      ? "bg-sky-600 text-white shadow-lg ring-2 ring-sky-400 scale-105"
-                      : "bg-[#1E293B] text-slate-200 hover:bg-slate-800 hover:text-white"
+                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
+                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
                   }`}
                 >
                   Maintenance
                 </button>
 
-                <ArrowLeft className="h-4 w-4 shrink-0 text-amber-500" />
+                <ArrowLeft className="h-4 w-4 shrink-0 text-sky-500" />
 
                 {/* Step 4: Deployment */}
                 <button
                   type="button"
                   onClick={() => setActiveStep(4)}
-                  className={`flex-1 rounded-full px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer text-center ${
+                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
                     activeStep === 4
-                      ? "bg-sky-600 text-white shadow-lg ring-2 ring-sky-400 scale-105"
-                      : "bg-[#1E293B] text-slate-200 hover:bg-slate-800 hover:text-white"
+                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
+                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
                   }`}
                 >
                   Deployment
                 </button>
 
-                <ArrowLeft className="h-4 w-4 shrink-0 text-amber-500" />
+                <ArrowLeft className="h-4 w-4 shrink-0 text-sky-500" />
 
                 {/* Step 3: QA & Testing */}
                 <button
                   type="button"
                   onClick={() => setActiveStep(3)}
-                  className={`flex-1 rounded-full px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer text-center ${
+                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
                     activeStep === 3
-                      ? "bg-sky-600 text-white shadow-lg ring-2 ring-sky-400 scale-105"
-                      : "bg-[#1E293B] text-slate-200 hover:bg-slate-800 hover:text-white"
+                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
+                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
                   }`}
                 >
                   QA & Testing
@@ -265,7 +278,7 @@ export default function AgileProcess() {
                         onClick={() => setActiveStep(idx)}
                         className={`flex items-center justify-center rounded-2xl cursor-pointer ${
                           isActive
-                            ? "w-14 h-14 bg-sky-600 text-white shadow-xl shadow-sky-500/30 ring-4 ring-sky-200 scale-110"
+                            ? "w-14 h-14 bg-[#0B1739] text-white shadow-xl shadow-[#0B1739]/30 ring-4 ring-sky-200 scale-110"
                             : "w-11 h-11 bg-white text-slate-700 border border-slate-200 shadow-md hover:bg-sky-50 hover:text-sky-600 hover:scale-105"
                         }`}
                         style={{
@@ -289,10 +302,10 @@ export default function AgileProcess() {
                   key={steps[activeStep].id}
                   className="animate-in fade-in zoom-in-95 duration-500"
                 >
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-sky-600 tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-semibold tracking-[-0.03em] text-[#0B1739]">
                     {steps[activeStep].title}
                   </h3>
-                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-600 font-medium">
+                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-600">
                     {steps[activeStep].description}
                   </p>
                 </div>
@@ -300,7 +313,7 @@ export default function AgileProcess() {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

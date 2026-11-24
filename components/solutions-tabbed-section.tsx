@@ -1,17 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  FolderKanban,
-  Sparkles,
-  Bot,
-} from "lucide-react";
+import { motion } from "motion/react";
+import { FolderKanban, Sparkles, Bot } from "lucide-react";
 // import OdooSection from "@/components/odoo-section";
 // import ErpNextSection from "@/components/erpnext-section";
 import AiSection from "@/components/ai-section";
 import ProjectsShowcase from "@/components/projects-showcase";
+import { cn } from "@/lib/utils";
+import { Container, SectionHeader, Highlight, reveal, SECTION_Y } from "@/components/ui/section";
 
 type TabOption = "ai" | "projects";
+
+const TABS: { id: TabOption; label: string; icon: React.ElementType }[] = [
+  { id: "ai", label: "AI Solutions", icon: Bot },
+  { id: "projects", label: "Featured Projects", icon: FolderKanban },
+];
 
 export default function SolutionsTabbedSection() {
   const [activeTab, setActiveTab] = useState<TabOption>("ai");
@@ -32,75 +36,68 @@ export default function SolutionsTabbedSection() {
   }, []);
 
   return (
-    <section id="projects" className="w-full bg-slate-950 pt-14 sm:pt-20 text-white scroll-mt-10">
+    <section id="projects" className={cn("relative isolate w-full overflow-hidden bg-[#020617] text-white", SECTION_Y)}>
       <div id="work" />
-      {/* Master Section Header & Main Tabs Control */}
-      <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8 text-center">
-        
-        {/* Category Pill Tag */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-sky-400 mb-4 backdrop-blur-md">
-          <Sparkles className="h-4 w-4 text-sky-400" />
-          <span>Innovations & Portfolio</span>
-        </div>
-
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-white leading-tight tracking-normal">
-          Explore AI Solutions & Project <span className="tracking-wide">Portfolios</span>
-        </h2>
-        <p className="mt-3 text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          Switch between our Next-Gen Artificial Intelligence capabilities and full-stack project showcases below.
-        </p>
-
-        {/* Tabs Bar: AI Solutions vs Featured Projects */}
-        <div className="mt-8 sm:mt-10 flex justify-center pb-6">
-          <div className="inline-flex items-center gap-2 rounded-2xl border border-slate-800 bg-slate-900/90 p-2 backdrop-blur-xl shadow-xl">
-            
-            {/* AI Solutions Tab */}
-            <button
-              onClick={() => setActiveTab("ai")}
-              className={`flex items-center gap-2.5 rounded-xl px-5 sm:px-8 py-3 text-sm sm:text-base font-bold transition-all duration-300 cursor-pointer ${
-                activeTab === "ai"
-                  ? "bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow-lg shadow-cyan-600/30 scale-102"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800/80"
-              }`}
-            >
-              <Bot className="h-5 w-5" />
-              <span>AI Solutions</span>
-            </button>
-
-            {/* Featured Projects Tab */}
-            <button
-              onClick={() => setActiveTab("projects")}
-              className={`flex items-center gap-2.5 rounded-xl px-5 sm:px-8 py-3 text-sm sm:text-base font-bold transition-all duration-300 cursor-pointer ${
-                activeTab === "projects"
-                  ? "bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-lg shadow-sky-600/30 scale-102"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800/80"
-              }`}
-            >
-              <FolderKanban className="h-5 w-5" />
-              <span>Featured Projects</span>
-            </button>
-
-            {/* ERP Section (Commented Out) */}
-            {/* 
-            <button
-              onClick={() => setActiveTab("erp")}
-              className="..."
-            >
-              <Boxes className="h-5 w-5" />
-              <span>ERP Solutions</span>
-            </button>
-            */}
-
-          </div>
-        </div>
+      {/* Ambient glows */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute top-24 -left-40 h-[28rem] w-[28rem] rounded-full bg-sky-500/10 blur-[120px]" />
+        <div className="absolute -right-40 bottom-24 h-[28rem] w-[28rem] rounded-full bg-blue-600/10 blur-[120px]" />
       </div>
 
-      {/* Render Active Component based on Selected Tab */}
-      <div className="w-full transition-all duration-300">
+      <Container>
+        <SectionHeader
+          eyebrow="Innovations & Portfolio"
+          eyebrowIcon={Sparkles}
+          title={
+            <>
+              Explore AI Solutions & <Highlight>Project Portfolios</Highlight>
+            </>
+          }
+          description="Switch between our Next-Gen Artificial Intelligence capabilities and full-stack project showcases below."
+        />
+
+        {/* Tabs */}
+        <motion.div {...reveal(3)} className="mt-10 flex justify-center">
+          <div
+            role="tablist"
+            aria-label="Solutions"
+            className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1.5 backdrop-blur-xl"
+          >
+            {TABS.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={cn(
+                    "relative inline-flex cursor-pointer items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-300 sm:px-7",
+                    isActive ? "text-[#0B1739]" : "text-slate-400 hover:text-white"
+                  )}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="solutions-tab"
+                      className="absolute inset-0 rounded-full bg-white shadow-[0_8px_24px_-8px_rgba(56,189,248,0.6)]"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                  <Icon className="relative h-4 w-4" />
+                  <span className="relative">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </motion.div>
+      </Container>
+
+      {/* Active panel */}
+      <div className="mt-14 w-full sm:mt-16">
         {activeTab === "ai" && <AiSection />}
         {activeTab === "projects" && <ProjectsShowcase />}
-        
-        {/* Commented Out ERP Section */}
         {/* {activeTab === "erp" && <OdooSection />} */}
       </div>
     </section>

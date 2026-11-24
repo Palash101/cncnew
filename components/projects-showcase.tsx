@@ -2,16 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import {
-  ExternalLink,
-  ArrowUpRight,
-  Sparkles,
-  Layers,
-  Globe,
-  Smartphone,
-  Cpu,
-  CheckCircle2,
-} from "lucide-react";
+import { motion } from "motion/react";
+import { ArrowUpRight, Sparkles, Layers, Globe, Smartphone, Cpu, CircleCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Container, Highlight, cardClass, reveal, subheadingClass } from "@/components/ui/section";
 
 interface Project {
   id: string;
@@ -34,8 +28,7 @@ const projectsData: Project[] = [
     categoryLabel: "Odoo ERP",
     description:
       "Custom Odoo 18 implementation featuring automated accounting, multi-warehouse inventory tracking, and real-time sales reporting.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
     techStack: ["Odoo 18", "Python", "PostgreSQL", "OWL Framework"],
     metrics: "45% Operational Efficiency Boost",
     demoUrl: "#",
@@ -48,8 +41,7 @@ const projectsData: Project[] = [
     categoryLabel: "Web Application",
     description:
       "High-frequency web trading dashboard with real-time WebSocket market updates, interactive charts, and secure wallet management.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1000&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1000&auto=format&fit=crop",
     techStack: ["Next.js 15", "TypeScript", "Tailwind CSS", "Node.js"],
     metrics: "1M+ Daily Transactions",
     demoUrl: "#",
@@ -62,8 +54,7 @@ const projectsData: Project[] = [
     categoryLabel: "Mobile App",
     description:
       "Cross-platform mobile application providing real-time GPS fleet tracking, driver dispatch, and automated proof of delivery.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?q=80&w=1000&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?q=80&w=1000&auto=format&fit=crop",
     techStack: ["Flutter", "Dart", "Firebase", "Google Maps API"],
     metrics: "50k+ Active Mobile Drivers",
     demoUrl: "#",
@@ -76,8 +67,7 @@ const projectsData: Project[] = [
     categoryLabel: "Cloud & SaaS",
     description:
       "HIPAA-compliant AI diagnostic web platform analyzing patient scans, managing medical records, and scheduling telehealth visits.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1000&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1000&auto=format&fit=crop",
     techStack: ["React", "Python", "FastAPI", "AWS Cloud"],
     metrics: "99.9% System Uptime",
     demoUrl: "#",
@@ -89,8 +79,7 @@ const projectsData: Project[] = [
     categoryLabel: "Web Application",
     description:
       "Headless e-commerce storefront integrated with inventory management, custom payment gateways, and localized multi-language checkout.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1556742049-0a67daf40955?q=80&w=1000&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1556742049-0a67daf40955?q=80&w=1000&auto=format&fit=crop",
     techStack: ["Next.js", "GraphQL", "Stripe API", "Tailwind CSS"],
     metrics: "3x Checkout Conversion Rate",
     demoUrl: "#",
@@ -102,8 +91,7 @@ const projectsData: Project[] = [
     categoryLabel: "Odoo ERP",
     description:
       "Tailor-made Odoo module bridging global suppliers with local logistics centers for automated purchase orders and stock alerts.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1000&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1000&auto=format&fit=crop",
     techStack: ["Odoo 17", "Python", "XML-RPC", "Docker"],
     metrics: "30k+ Orders Managed Daily",
     demoUrl: "#",
@@ -122,44 +110,38 @@ export default function ProjectsShowcase() {
   const [activeTab, setActiveTab] = useState<string>("all");
 
   const filteredProjects =
-    activeTab === "all"
-      ? projectsData
-      : projectsData.filter((p) => p.category === activeTab);
+    activeTab === "all" ? projectsData : projectsData.filter((p) => p.category === activeTab);
 
   return (
-    <section className="w-full bg-slate-900 py-10 sm:py-14 md:py-16 text-white">
-      <div className="mx-auto max-w-7xl xl:max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-sky-400 mb-2.5 backdrop-blur-md">
-            <Sparkles className="h-3.5 w-3.5 text-sky-400" />
-            <span>Featured Portfolio</span>
-          </div>
-
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
-            Our Featured Projects
-          </h2>
-
-          <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-            Discover our portfolio of scalable web applications, mobile platforms, and customized Odoo ERP implementations built for global brands.
-          </p>
+    <div className="w-full text-white">
+      <Container>
+        {/* Sub-header */}
+        <div className="mb-8 flex flex-col items-center text-center sm:mb-10">
+          <motion.h3 {...reveal(0)} className={subheadingClass("dark")}>
+            Our <Highlight>Featured Projects</Highlight>
+          </motion.h3>
+          <motion.p {...reveal(1)} className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
+            Discover our portfolio of scalable web applications, mobile platforms, and customized Odoo ERP
+            implementations built for global brands.
+          </motion.p>
         </div>
 
-        {/* Filter Category Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-8 sm:mb-10">
+        {/* Filters */}
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
           {categories.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
+                type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                className={cn(
+                  "inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold transition-all duration-200 sm:text-sm",
                   isActive
-                    ? "bg-sky-500 text-white shadow-md shadow-sky-500/25 scale-105"
-                    : "bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-700/60"
-                }`}
+                    ? "border-white bg-white text-[#0B1739] shadow-[0_8px_24px_-8px_rgba(56,189,248,0.6)]"
+                    : "border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:text-white"
+                )}
               >
                 <Icon className="h-3.5 w-3.5" />
                 <span>{tab.label}</span>
@@ -168,16 +150,15 @@ export default function ProjectsShowcase() {
           })}
         </div>
 
-        {/* Projects Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {/* Grid */}
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="group flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-800/50 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-sky-500/50 hover:bg-slate-800 hover:shadow-xl hover:shadow-sky-500/10"
+              className={cn(cardClass("dark"), "flex flex-col justify-between overflow-hidden")}
             >
               <div>
-                {/* Project Image & Badge Container */}
-                <div className="relative h-32 sm:h-36 w-full overflow-hidden bg-slate-950">
+                <div className="relative h-44 w-full overflow-hidden bg-[#030a1f]">
                   <Image
                     src={project.imageUrl}
                     alt={project.title}
@@ -185,71 +166,55 @@ export default function ProjectsShowcase() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#030a1f] via-[#030a1f]/20 to-transparent" />
 
-                  {/* Category Pill */}
-                  <div className="absolute top-2.5 left-2.5 z-10">
-                    <span className="inline-flex items-center rounded-full bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-2.5 py-0.5 text-[11px] font-semibold text-sky-300">
-                      {project.categoryLabel}
-                    </span>
-                  </div>
+                  <span className="absolute top-3 left-3 rounded-full border border-white/15 bg-[#030a1f]/80 px-2.5 py-0.5 text-[11px] font-semibold text-sky-200 backdrop-blur-md">
+                    {project.categoryLabel}
+                  </span>
 
-                  {/* Metric Badge */}
                   {project.metrics && (
-                    <div className="absolute bottom-2 left-2.5 right-2.5 z-10">
-                      <span className="inline-flex items-center gap-1 rounded-lg bg-sky-950/80 backdrop-blur-md border border-sky-500/30 px-2 py-0.5 text-[10px] font-semibold text-sky-200">
-                        <CheckCircle2 className="h-3 w-3 text-sky-400 shrink-0" />
-                        <span className="truncate">{project.metrics}</span>
-                      </span>
-                    </div>
+                    <span className="absolute bottom-3 left-3 inline-flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-lg border border-sky-400/30 bg-[#030a1f]/80 px-2.5 py-1 text-[11px] font-semibold text-sky-100 backdrop-blur-md">
+                      <CircleCheck className="h-3.5 w-3.5 shrink-0 text-sky-400" />
+                      <span className="truncate">{project.metrics}</span>
+                    </span>
                   )}
                 </div>
 
-                {/* Project Info Content */}
-                <div className="p-4">
-                  <h3 className="text-base font-bold text-white group-hover:text-sky-300 transition-colors">
+                <div className="p-5 sm:p-6">
+                  <h4 className="text-lg font-semibold tracking-tight text-white transition-colors group-hover:text-sky-200">
                     {project.title}
-                  </h3>
-
-                  <p className="mt-1.5 text-xs text-slate-300 leading-relaxed line-clamp-2 font-normal">
-                    {project.description}
-                  </p>
+                  </h4>
+                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-400">{project.description}</p>
                 </div>
               </div>
 
-              {/* Footer Tech Stack & Action Button */}
-              <div className="px-4 pb-4 pt-2 border-t border-slate-700/50 flex flex-col gap-3">
-                {/* Tech Stack Pills */}
-                <div className="flex flex-wrap items-center gap-1">
+              <div className="flex flex-col gap-4 border-t border-white/10 px-5 pt-4 pb-5 sm:px-6">
+                <div className="flex flex-wrap items-center gap-1.5">
                   {project.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="inline-block rounded-md bg-slate-900/80 border border-slate-700/60 px-2 py-0.5 text-[10px] font-semibold text-slate-300"
+                      className="inline-block rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium text-slate-300"
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
 
-                {/* View Details / Live Link */}
-                <div className="flex items-center justify-between pt-0.5">
-                  <span className="text-[11px] font-semibold text-slate-400">
-                    Case Study & Code
-                  </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-slate-500">Case Study & Code</span>
                   <a
                     href={project.demoUrl || "#"}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-sky-400 hover:text-sky-300 transition-colors"
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-sky-300 transition-colors hover:text-sky-200"
                   >
-                    <span>View Project</span>
-                    <ArrowUpRight className="h-3.5 w-3.5" />
+                    View Project
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
-      </div>
-    </section>
+      </Container>
+    </div>
   );
 }
