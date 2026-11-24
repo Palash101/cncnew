@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import StatsBackground from "@/components/stats-background";
-import { animate, motion, useInView, type Variants } from "motion/react";
+import { Eyebrow, Highlight, fadeUp, maskUp, zoomIn } from "@/components/ui/section";
+import { useEffect, useRef } from "react";
+import { animate, motion, useInView } from "motion/react";
 import { Award, Users, Laptop, Smartphone, Sparkles, type LucideIcon } from "lucide-react";
 
 type Stat = {
@@ -55,28 +56,19 @@ const STATS: Stat[] = [
   },
 ];
 
-const EASE = [0.22, 1, 0.36, 1] as const;
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  show: (i: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: EASE, delay: i * 0.1 },
-  }),
-};
 
-/** Counts up from 0 the first time it scrolls into view */
+/** Counts up from 0 once, the first time it scrolls into view */
 function CountUp({ to, suffix }: { to: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   useEffect(() => {
     if (!inView || !ref.current) return;
-    const node = ref.current;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const node = ref.current;
     const controls = animate(0, to, {
-      duration: 1.8,
+      duration: 1.6,
       ease: [0.16, 1, 0.3, 1],
       onUpdate: (v) => (node.textContent = `${Math.round(v)}${suffix}`),
     });
@@ -104,14 +96,13 @@ export default function StatsSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.24em] text-sky-200 backdrop-blur-md sm:text-[11px]"
+          className="mb-6"
         >
-          <Sparkles className="h-3.5 w-3.5 text-sky-400" />
-          Enterprise Global Network
+          <Eyebrow icon={Sparkles}>Enterprise Global Network</Eyebrow>
         </motion.div>
 
         <motion.h2
-          variants={fadeUp}
+          variants={maskUp}
           custom={1}
           initial="hidden"
           whileInView="show"
@@ -119,9 +110,7 @@ export default function StatsSection() {
           className="max-w-4xl text-[2rem] leading-[1.1] font-semibold tracking-[-0.035em] text-white sm:text-5xl md:text-[52px]"
         >
           Connecting Visionaries with Scalable{" "}
-          <span className="bg-gradient-to-r from-sky-300 via-sky-400 to-blue-400 bg-clip-text text-transparent">
-            Digital Excellence
-          </span>
+          <Highlight>Digital Excellence</Highlight>
         </motion.h2>
 
         <motion.p
@@ -139,7 +128,7 @@ export default function StatsSection() {
 
         {/* ───────── Stats panel ───────── */}
         <motion.div
-          variants={fadeUp}
+          variants={zoomIn}
           custom={3}
           initial="hidden"
           whileInView="show"
@@ -162,15 +151,10 @@ export default function StatsSection() {
                       i === 2 ? "lg:border-l" : "",
                     ].join(" ")}
                   >
-                    {/* Hover glow */}
-                    <span
-                      aria-hidden
-                      className={`pointer-events-none absolute -top-10 left-1/2 h-24 w-40 -translate-x-1/2 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100 ${stat.glow}`}
-                    />
 
                     <div className="relative flex items-center gap-3">
                       <span
-                        className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border ${stat.tone}`}
+                        className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:scale-110 ${stat.tone}`}
                       >
                         <Icon className="h-5 w-5" />
                       </span>
@@ -186,12 +170,6 @@ export default function StatsSection() {
                     <div className="relative mt-1 text-xs leading-relaxed text-slate-400 sm:text-sm">
                       {stat.description}
                     </div>
-
-                    {/* Accent line grows on hover */}
-                    <span
-                      aria-hidden
-                      className="absolute inset-x-5 bottom-0 h-px origin-left scale-x-0 bg-gradient-to-r from-sky-400 to-transparent transition-transform duration-500 group-hover:scale-x-100 sm:inset-x-8"
-                    />
                   </div>
                 );
               })}

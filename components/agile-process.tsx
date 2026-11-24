@@ -14,7 +14,8 @@ import {
   Workflow,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Container, SectionHeader, Highlight, SECTION_Y } from "@/components/ui/section";
+import { motion } from "motion/react";
+import { Container, SectionHeader, Highlight, SECTION_Y, TopHairline, revealBlock } from "@/components/ui/section";
 
 interface ProcessStep {
   id: string;
@@ -109,6 +110,7 @@ export default function AgileProcess() {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
+      <TopHairline tone="light" />
       {/* Background: fine grid + soft glows (same language as the hero) */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(22,115,184,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(22,115,184,0.06)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_70%_60%_at_70%_50%,black,transparent)]" />
@@ -236,7 +238,7 @@ export default function AgileProcess() {
 
           {/* Right Column: Rotating Circular Orbit Component */}
           <div className="lg:col-span-6 flex justify-center items-center py-6">
-            <div className="relative w-[380px] h-[380px] sm:w-[460px] sm:h-[460px] flex items-center justify-center">
+            <motion.div {...revealBlock(1)} className="relative w-[380px] h-[380px] sm:w-[460px] sm:h-[460px] flex items-center justify-center">
               {/* Orbit Ring Line - Passes exactly through the geometric middle of every node badge (diameter = radius * 2) */}
               <div
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-sky-400/50 pointer-events-none z-0"
@@ -279,7 +281,7 @@ export default function AgileProcess() {
                         className={`flex items-center justify-center rounded-2xl cursor-pointer ${
                           isActive
                             ? "w-14 h-14 bg-[#0B1739] text-white shadow-xl shadow-[#0B1739]/30 ring-4 ring-sky-200 scale-110"
-                            : "w-11 h-11 bg-white text-slate-700 border border-slate-200 shadow-md hover:bg-sky-50 hover:text-sky-600 hover:scale-105"
+                            : "w-11 h-11 bg-white text-slate-700 border border-slate-200 shadow-md hover:bg-sky-50 hover:text-sky-600"
                         }`}
                         style={{
                           transform: `rotate(${-rotationAngle}deg)`,
@@ -310,7 +312,7 @@ export default function AgileProcess() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </Container>

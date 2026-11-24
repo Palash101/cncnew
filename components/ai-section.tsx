@@ -4,7 +4,15 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { Bot, BrainCircuit, Zap, CircleCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Container, Highlight, IconTile, cardClass, reveal, subheadingClass } from "@/components/ui/section";
+import {
+  Container,
+  Highlight,
+  IconTile,
+  cardClass,
+  subheadingClass,
+  revealCard,
+  revealHeading,
+} from "@/components/ui/section";
 
 interface AiCapability {
   id: string;
@@ -59,7 +67,7 @@ export default function AiSection() {
     <div className="w-full text-white">
       <Container>
         {/* Sub-header */}
-        <motion.h3 {...reveal(0)} className={cn(subheadingClass("dark"), "mb-8 text-center sm:mb-10")}>
+        <motion.h3 {...revealHeading(0)} className={cn(subheadingClass("dark"), "mb-8 text-center sm:mb-10")}>
           Pioneering Artificial <Highlight>Intelligence Projects</Highlight>
         </motion.h3>
 
@@ -69,7 +77,7 @@ export default function AiSection() {
             return (
               <motion.div
                 key={item.id}
-                {...reveal(idx)}
+                {...revealCard(idx)}
                 className={cn(cardClass("dark"), "flex flex-col justify-between overflow-hidden p-5 sm:p-6")}
               >
                 <div>
@@ -79,8 +87,7 @@ export default function AiSection() {
                       <div className="flex items-center justify-between">
                         <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider text-sky-300 uppercase">
                           <span className="relative flex h-2 w-2">
-                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
-                            <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-400" />
+                                                        <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-400" />
                           </span>
                           Wisper Engine Active
                         </span>
@@ -91,12 +98,7 @@ export default function AiSection() {
 
                       <div className="my-auto flex h-14 items-center justify-center gap-1">
                         {[40, 70, 30, 90, 60, 100, 45, 80, 55, 95, 35, 75, 50, 85].map((h, i) => (
-                          <motion.div
-                            key={i}
-                            animate={{ height: [`${h * 0.3}%`, `${h}%`, `${h * 0.4}%`] }}
-                            transition={{ duration: 1.2, repeat: Infinity, repeatType: "reverse", delay: i * 0.08 }}
-                            className="w-1 rounded-full bg-gradient-to-t from-sky-500 to-blue-300"
-                          />
+                          <div key={i} style={{ height: `${h}%` }} className="w-1 rounded-full bg-gradient-to-t from-sky-500 to-blue-300" />
                         ))}
                       </div>
                     </div>
@@ -107,7 +109,7 @@ export default function AiSection() {
                         alt={item.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        className="object-cover object-center"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#030a1f] via-[#030a1f]/30 to-transparent" />
                       <span className="absolute top-3 left-3 rounded-full border border-white/15 bg-[#030a1f]/80 px-2.5 py-0.5 text-[11px] font-semibold text-sky-200 backdrop-blur-md">

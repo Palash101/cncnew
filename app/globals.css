@@ -159,78 +159,80 @@
   }
 }
 
-@keyframes shimmer-x {
+/* ───────── Light accent animations (transform / background-position only) ───────── */
+
+/* Gradient words in headings: slow shimmer */
+@keyframes text-shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.animate-text-shimmer {
+  background-size: 200% auto;
+  animation: text-shimmer 6s linear infinite;
+}
+
+/* Eyebrow badges: quick light sheen every few seconds */
+@keyframes badge-shine {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  45%,
+  100% {
+    transform: translateX(350%) skewX(-20deg);
+  }
+}
+
+.animate-badge-shine {
+  animation: badge-shine 4.5s ease-in-out infinite;
+}
+
+/* Section top edge: a short light beam travelling along the hairline */
+@keyframes line-sweep {
   0% {
     transform: translateX(-100%);
   }
   100% {
-    transform: translateX(200%);
+    transform: translateX(500%);
   }
 }
 
-@keyframes shimmer-y {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(200%);
-  }
+.animate-line-sweep {
+  animation: line-sweep 7s ease-in-out infinite;
 }
 
-.animate-shimmer-x {
-  animation: shimmer-x 8s linear infinite;
-  will-change: transform;
+/* Cards: diagonal sheen that sweeps across on hover */
+.card-sheen {
+  overflow: hidden;
 }
 
-.animate-shimmer-y {
-  animation: shimmer-y 10s linear infinite 2s;
-  will-change: transform;
+.card-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--sheen, rgba(255, 255, 255, 0.08)), transparent);
+  transform: translateX(-160%) skewX(-20deg);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Stats section: twinkling stars + drifting aurora */
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 0.2;
-  }
+.card-sheen:hover::after {
+  transform: translateX(330%) skewX(-20deg);
 }
 
-@keyframes aurora-drift {
-  from {
-    transform: translate3d(-6%, 0, 0) scale(1);
-  }
-  to {
-    transform: translate3d(6%, 8%, 0) scale(1.12);
-  }
-}
-
-.animate-twinkle {
-  animation: twinkle 6s ease-in-out infinite;
-}
-
-.animate-twinkle-slow {
-  animation: twinkle 9s ease-in-out -3s infinite;
-}
-
-.animate-aurora {
-  animation: aurora-drift 16s ease-in-out infinite alternate;
-}
-
-.animate-aurora-slow {
-  animation: aurora-drift 22s ease-in-out -8s infinite alternate-reverse;
+.card-sheen-light {
+  --sheen: rgba(56, 189, 248, 0.12);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-twinkle,
-  .animate-twinkle-slow {
+  .animate-text-shimmer,
+  .animate-badge-shine,
+  .animate-line-sweep {
     animation: none;
-    opacity: 0.4;
   }
-  .animate-aurora,
-  .animate-aurora-slow {
-    animation: none;
+  .card-sheen::after {
+    display: none;
   }
 }

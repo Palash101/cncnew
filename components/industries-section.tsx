@@ -22,8 +22,8 @@ import {
   IconTile,
   TopHairline,
   cardClass,
-  reveal,
   SECTION_Y,
+  revealCard,
 } from "@/components/ui/section";
 
 interface IndustryItem {
@@ -137,7 +137,7 @@ export default function IndustriesSection() {
           {industries.map((item, i) => (
             <motion.div
               key={item.id}
-              {...reveal(i % 3)}
+              {...revealCard(i % 3)}
               className={cn(cardClass("dark"), "flex flex-col justify-between p-6 sm:p-7")}
             >
               <div>
@@ -151,7 +151,7 @@ export default function IndustriesSection() {
                 className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-300 transition-colors hover:text-sky-200"
               >
                 Explore More
-                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight className="h-4 w-4" />
               </a>
             </motion.div>
           ))}

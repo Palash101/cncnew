@@ -8,7 +8,7 @@ import { FolderKanban, Sparkles, Bot } from "lucide-react";
 import AiSection from "@/components/ai-section";
 import ProjectsShowcase from "@/components/projects-showcase";
 import { cn } from "@/lib/utils";
-import { Container, SectionHeader, Highlight, reveal, SECTION_Y } from "@/components/ui/section";
+import { Container, SectionHeader, Highlight, reveal, SECTION_Y, TopHairline } from "@/components/ui/section";
 
 type TabOption = "ai" | "projects";
 
@@ -37,6 +37,7 @@ export default function SolutionsTabbedSection() {
 
   return (
     <section id="projects" className={cn("relative isolate w-full overflow-hidden bg-[#020617] text-white", SECTION_Y)}>
+      <TopHairline />
       <div id="work" />
       {/* Ambient glows */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">

@@ -21,8 +21,8 @@ import {
   IconTile,
   TopHairline,
   cardClass,
-  reveal,
   SECTION_Y,
+  revealCard,
 } from "@/components/ui/section";
 
 interface ExpertiseItem {
@@ -121,7 +121,7 @@ export default function ExpertiseSection() {
           {expertiseItems.map((item, i) => (
             <motion.div
               key={item.id}
-              {...reveal(i % 3)}
+              {...revealCard(i % 3)}
               className={cn(cardClass("dark"), "flex flex-col p-6 sm:p-7")}
             >
               <IconTile icon={item.icon} tone="dark" />

@@ -4,7 +4,16 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { Monitor, Server, Smartphone, Cloud, Cpu, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Container, SectionHeader, Highlight, IconTile, cardClass, reveal, SECTION_Y } from "@/components/ui/section";
+import {
+  Container,
+  SectionHeader,
+  Highlight,
+  IconTile,
+  cardClass,
+  SECTION_Y,
+  TopHairline,
+  revealCard,
+} from "@/components/ui/section";
 
 interface TechItem {
   name: string;
@@ -81,6 +90,7 @@ const techCategories: CategoryRow[] = [
 export default function TechStack() {
   return (
     <section className={cn("relative isolate w-full overflow-hidden bg-white text-[#0B1739]", SECTION_Y)}>
+      <TopHairline tone="light" />
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute top-0 left-1/2 h-[22rem] w-[48rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-100/70 blur-[120px]" />
       </div>
@@ -102,10 +112,10 @@ export default function TechStack() {
           {techCategories.map((category, i) => (
             <motion.div
               key={category.id}
-              {...reveal(i)}
+              {...revealCard(i)}
               className={cn(
                 cardClass("light"),
-                "flex flex-col gap-5 p-5 hover:translate-y-0 sm:p-7 lg:flex-row lg:items-center lg:gap-8"
+                "flex flex-col gap-5 p-5 sm:p-7 lg:flex-row lg:items-center lg:gap-8"
               )}
             >
               <div className="flex shrink-0 items-center gap-3.5 lg:w-64">
@@ -117,7 +127,7 @@ export default function TechStack() {
                 {category.items.map((tech) => (
                   <div
                     key={tech.name}
-                    className="inline-flex max-w-full cursor-default items-center gap-2 truncate rounded-full border border-slate-200/80 bg-slate-50/60 px-3 py-1.5 text-xs font-semibold text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white hover:text-[#0B1739] hover:shadow-md sm:px-4 sm:py-2 sm:text-sm"
+                    className="inline-flex max-w-full cursor-default items-center gap-2 truncate rounded-full border border-slate-200/80 bg-slate-50/60 px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors duration-200 hover:border-sky-200 hover:bg-white hover:text-[#0B1739] sm:px-4 sm:py-2 sm:text-sm"
                   >
                     {tech.image ? (
                       <span className="relative flex h-4 w-4 shrink-0 items-center justify-center sm:h-5 sm:w-5">

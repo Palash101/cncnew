@@ -17,13 +17,49 @@ export type Tone = "dark" | "light";
 export const EASE = [0.22, 1, 0.36, 1] as const;
 
 export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 28 },
   show: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: EASE, delay: i * 0.1 },
+    transition: { duration: 0.75, ease: EASE, delay: i * 0.1 },
   }),
 };
+
+/** Headings: text rises out of a mask ("wipe-up" reveal) */
+export const maskUp: Variants = {
+  hidden: { opacity: 0, y: 36, clipPath: "inset(0% 0% 100% 0%)" },
+  show: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    clipPath: "inset(-20% -10% -25% -10%)",
+    transition: { duration: 0.95, ease: EASE, delay: i * 0.1 },
+  }),
+};
+
+/** Cards: rise, un-blur and settle, staggered by index */
+export const cardUp: Variants = {
+  hidden: { opacity: 0, y: 44, scale: 0.96, filter: "blur(6px)" },
+  show: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { duration: 0.8, ease: EASE, delay: i * 0.12 },
+  }),
+};
+
+/** Large blocks (panels, diagrams, CTA boxes): soft zoom-in */
+export const zoomIn: Variants = {
+  hidden: { opacity: 0, scale: 0.94, y: 24 },
+  show: (i: number = 0) => ({
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: EASE, delay: i * 0.1 },
+  }),
+};
+
+const inView = { once: true, margin: "-80px" } as const;
 
 /** Standard reveal props for whileInView animations */
 export const reveal = (i = 0) => ({
@@ -31,8 +67,12 @@ export const reveal = (i = 0) => ({
   custom: i,
   initial: "hidden" as const,
   whileInView: "show" as const,
-  viewport: { once: true, margin: "-80px" },
+  viewport: inView,
 });
+
+export const revealHeading = (i = 0) => ({ ...reveal(i), variants: maskUp });
+export const revealCard = (i = 0) => ({ ...reveal(i), variants: cardUp, viewport: { once: true, margin: "-40px" } });
+export const revealBlock = (i = 0) => ({ ...reveal(i), variants: zoomIn });
 
 /** Standard vertical rhythm for top-level sections */
 export const SECTION_Y = "py-20 sm:py-28";
@@ -56,7 +96,7 @@ export function Eyebrow({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[10px] font-bold uppercase tracking-[0.24em] backdrop-blur-md sm:text-[11px]",
+        "relative inline-flex items-center gap-2 overflow-hidden rounded-full border px-4 py-2 text-[10px] font-bold uppercase tracking-[0.24em] backdrop-blur-md sm:text-[11px]",
         tone === "dark"
           ? "border-sky-400/30 bg-sky-400/10 text-sky-200"
           : "border-sky-300/60 bg-white/70 text-sky-800 shadow-sm",
@@ -69,6 +109,14 @@ export function Eyebrow({
         <span className="h-1.5 w-1.5 rounded-full bg-sky-500 shadow-[0_0_10px_#38bdf8]" />
       )}
       {children}
+      {/* Light sheen passing over the badge */}
+      <span
+        aria-hidden
+        className={cn(
+          "animate-badge-shine pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent to-transparent",
+          tone === "dark" ? "via-white/25" : "via-white/80"
+        )}
+      />
     </span>
   );
 }
@@ -78,10 +126,10 @@ export function Highlight({ children, tone = "dark" }: { children: React.ReactNo
   return (
     <span
       className={cn(
-        "bg-clip-text text-transparent",
+        "animate-text-shimmer bg-clip-text text-transparent",
         tone === "dark"
-          ? "bg-gradient-to-r from-sky-300 via-sky-400 to-blue-400"
-          : "bg-gradient-to-r from-[#1673b8] via-[#26a9dc] to-[#1673b8]"
+          ? "bg-gradient-to-r from-sky-300 via-blue-400 to-sky-300"
+          : "bg-gradient-to-r from-[#1673b8] via-[#38bdf8] to-[#1673b8]"
       )}
     >
       {children}
@@ -133,7 +181,7 @@ export function SectionHeader({
           </Eyebrow>
         </motion.div>
       )}
-      <motion.h2 {...reveal(1)} className={cn(headingClass(tone), centered ? "max-w-4xl" : "max-w-3xl")}>
+      <motion.h2 {...revealHeading(1)} className={cn(headingClass(tone), centered ? "max-w-4xl" : "max-w-3xl")}>
         {title}
       </motion.h2>
       {description && (
@@ -158,7 +206,7 @@ export function IconTile({
   return (
     <span
       className={cn(
-        "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-colors duration-300",
+        "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-300 group-hover:scale-110",
         tone === "dark"
           ? "border-sky-400/30 bg-sky-400/10 text-sky-300 group-hover:border-sky-400/60 group-hover:bg-sky-400/20"
           : "border-sky-200 bg-sky-50 text-sky-600 group-hover:border-sky-300 group-hover:bg-sky-100",
@@ -173,18 +221,28 @@ export function IconTile({
 /** Card surface classes */
 export const cardClass = (tone: Tone = "dark") =>
   cn(
-    "group relative rounded-2xl border transition-all duration-300",
+    "card-sheen group relative rounded-2xl border transition-all duration-300 ease-out",
     tone === "dark"
-      ? "border-white/10 bg-white/[0.03] hover:-translate-y-1 hover:border-sky-400/40 hover:bg-white/[0.06] hover:shadow-[0_24px_60px_-24px_rgba(14,165,233,0.35)]"
-      : "border-slate-200/80 bg-white shadow-[0_10px_40px_-18px_rgba(11,23,57,0.18)] hover:-translate-y-1 hover:border-sky-200 hover:shadow-[0_22px_50px_-20px_rgba(22,115,184,0.35)]"
+      ? "border-white/10 bg-white/[0.03] hover:-translate-y-1 hover:border-sky-400/40 hover:bg-white/[0.06] hover:shadow-[0_20px_50px_-24px_rgba(14,165,233,0.45)]"
+      : "card-sheen-light border-slate-200/80 bg-white shadow-[0_8px_30px_-18px_rgba(11,23,57,0.15)] hover:-translate-y-1 hover:border-sky-200 hover:shadow-[0_20px_45px_-20px_rgba(22,115,184,0.3)]"
   );
 
-/** Thin glowing line along the top edge of dark sections */
-export function TopHairline() {
+/** Thin line along a section's top edge, with a short light beam travelling across it */
+export function TopHairline({ tone = "dark" }: { tone?: Tone }) {
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/30 to-transparent"
-    />
+    <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px overflow-hidden">
+      <div
+        className={cn(
+          "absolute inset-0 bg-gradient-to-r from-transparent to-transparent",
+          tone === "dark" ? "via-sky-300/30" : "via-sky-400/40"
+        )}
+      />
+      <div
+        className={cn(
+          "animate-line-sweep absolute inset-y-0 left-0 w-1/5 bg-gradient-to-r from-transparent to-transparent",
+          tone === "dark" ? "via-sky-200" : "via-[#1673b8]"
+        )}
+      />
+    </div>
   );
 }

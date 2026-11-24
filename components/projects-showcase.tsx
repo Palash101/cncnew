@@ -5,7 +5,15 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { ArrowUpRight, Sparkles, Layers, Globe, Smartphone, Cpu, CircleCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Container, Highlight, cardClass, reveal, subheadingClass } from "@/components/ui/section";
+import {
+  Container,
+  Highlight,
+  cardClass,
+  reveal,
+  subheadingClass,
+  revealHeading,
+  revealCard,
+} from "@/components/ui/section";
 
 interface Project {
   id: string;
@@ -117,7 +125,7 @@ export default function ProjectsShowcase() {
       <Container>
         {/* Sub-header */}
         <div className="mb-8 flex flex-col items-center text-center sm:mb-10">
-          <motion.h3 {...reveal(0)} className={subheadingClass("dark")}>
+          <motion.h3 {...revealHeading(0)} className={subheadingClass("dark")}>
             Our <Highlight>Featured Projects</Highlight>
           </motion.h3>
           <motion.p {...reveal(1)} className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
@@ -152,9 +160,10 @@ export default function ProjectsShowcase() {
 
         {/* Grid */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {filteredProjects.map((project) => (
-            <div
+          {filteredProjects.map((project, i) => (
+            <motion.div
               key={project.id}
+              {...revealCard(i % 3)}
               className={cn(cardClass("dark"), "flex flex-col justify-between overflow-hidden")}
             >
               <div>
@@ -164,7 +173,7 @@ export default function ProjectsShowcase() {
                     alt={project.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover object-center"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#030a1f] via-[#030a1f]/20 to-transparent" />
 
@@ -207,11 +216,11 @@ export default function ProjectsShowcase() {
                     className="inline-flex items-center gap-1 text-sm font-semibold text-sky-300 transition-colors hover:text-sky-200"
                   >
                     View Project
-                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight className="h-4 w-4" />
                   </a>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </Container>
