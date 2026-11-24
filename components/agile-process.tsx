@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Eye,
   CreditCard,
@@ -8,14 +8,11 @@ import {
   CheckCheck,
   PackageCheck,
   ClipboardList,
-  ArrowRight,
-  ArrowDown,
-  ArrowLeft,
   Workflow,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import { Container, SectionHeader, Highlight, SECTION_Y, TopHairline, revealBlock } from "@/components/ui/section";
+import { cn } from "@/lib/utils";
+import { Container, SectionHeader, Highlight, reveal, revealBlock } from "@/components/ui/section";
 
 interface ProcessStep {
   id: string;
@@ -70,58 +67,59 @@ const steps: ProcessStep[] = [
 ];
 
 export default function AgileProcess() {
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [radius, setRadius] = useState(185);
 
-  // Responsive radius calculation
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setRadius(135);
-      } else {
-        setRadius(185);
-      }
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Auto rotate every 4 seconds unless user interacts or hovers
+  // Auto-advance every 4.5s; pauses while the user hovers or focuses the section
   useEffect(() => {
     if (isPaused) return;
-    const interval = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % steps.length);
-    }, 4000);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const interval = setInterval(() => setActiveStep((prev) => (prev + 1) % steps.length), 4500);
     return () => clearInterval(interval);
   }, [isPaused]);
 
-  // Calculate rotation angle so active step node moves to focal right-center position (- activeStep * 60)
-  const rotationAngle = -activeStep * 60;
+  const listRef = useRef<HTMLOListElement>(null);
+  const fillRef = useRef<HTMLSpanElement>(null);
+
+  // Grow the stepper's progress line exactly to the active step's circle
+  // (measured from the DOM, so it stays aligned while descriptions expand/collapse)
+  useEffect(() => {
+    const list = listRef.current;
+    const fill = fillRef.current;
+    if (!list || !fill) return;
+    const sync = () => {
+      const item = list.querySelectorAll<HTMLLIElement>(":scope > li")[activeStep];
+      if (!item) return;
+      // circle centre = li top + button padding (8px) + half circle (20px); track starts at 20px
+      fill.style.height = `${Math.max(0, item.offsetTop + 8 + 20 - 20)}px`;
+    };
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(list);
+    return () => ro.disconnect();
+  }, [activeStep]);
+  const arc = (activeStep / steps.length) * 100; // % of the orbit ring completed
+  const ActiveIcon = steps[activeStep].icon;
 
   return (
     <section
       id="agile"
-      className={cn(
-        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#effaff_0%,#f6fbff_60%,#ffffff_100%)] text-[#0B1739]",
-        SECTION_Y
-      )}
+      className="relative isolate -mt-10 w-full overflow-hidden bg-[linear-gradient(180deg,#e8f4fc_0%,#eff7fd_55%,#eaf4fb_100%)] pt-30 pb-20 text-[#0B1739] sm:-mt-12 sm:pt-40 sm:pb-28"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
     >
-      <TopHairline tone="light" />
       {/* Background: fine grid + soft glows (same language as the hero) */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(22,115,184,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(22,115,184,0.06)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_70%_60%_at_70%_50%,black,transparent)]" />
-        <div className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-sky-200/50 blur-[120px]" />
-        <div className="absolute -right-32 bottom-0 h-[28rem] w-[28rem] rounded-full bg-blue-200/40 blur-[120px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(22,115,184,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(22,115,184,0.06)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_60%_60%_at_75%_55%,black,transparent)]" />
+        <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-sky-200/50 blur-[120px]" />
       </div>
 
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* Left Column: Heading, Subtitle & Flow Diagram */}
-          <div className="lg:col-span-6 flex flex-col justify-center">
+        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+          {/* ───── Left: heading + stepper ───── */}
+          <div>
             <SectionHeader
               tone="light"
               align="left"
@@ -135,185 +133,147 @@ export default function AgileProcess() {
               description="We follow a structured and agile development approach with project management planner to ensure the successful delivery of every project, focusing on quality, cost-optimization, transparency, and client satisfaction."
             />
 
-            {/* Flow Diagram Pills Grid */}
-            <div className="mt-10 max-w-xl">
-              {/* Row 1: Scoping -> Cost Estimation -> Development */}
-              <div className="flex items-center justify-between gap-2 sm:gap-3">
-                {/* Step 0: Scoping */}
-                <button
-                  type="button"
-                  onClick={() => setActiveStep(0)}
-                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
-                    activeStep === 0
-                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
-                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
-                  }`}
-                >
-                  Scoping
-                </button>
-
-                <ArrowRight className="h-4 w-4 shrink-0 text-sky-500" />
-
-                {/* Step 1: Cost Estimation */}
-                <button
-                  type="button"
-                  onClick={() => setActiveStep(1)}
-                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
-                    activeStep === 1
-                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
-                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
-                  }`}
-                >
-                  Cost Estimation
-                </button>
-
-                <ArrowRight className="h-4 w-4 shrink-0 text-sky-500" />
-
-                {/* Step 2: Development */}
-                <button
-                  type="button"
-                  onClick={() => setActiveStep(2)}
-                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
-                    activeStep === 2
-                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
-                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
-                  }`}
-                >
-                  Development
-                </button>
-              </div>
-
-              {/* Connecting Down Arrow on right */}
-              <div className="flex justify-end pr-8 sm:pr-12 my-2 sm:my-3">
-                <ArrowDown className="h-4 w-4 text-sky-500" />
-              </div>
-
-              {/* Row 2: Maintenance <- Deployment <- QA & Testing */}
-              <div className="flex items-center justify-between gap-2 sm:gap-3">
-                {/* Step 5: Maintenance */}
-                <button
-                  type="button"
-                  onClick={() => setActiveStep(5)}
-                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
-                    activeStep === 5
-                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
-                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
-                  }`}
-                >
-                  Maintenance
-                </button>
-
-                <ArrowLeft className="h-4 w-4 shrink-0 text-sky-500" />
-
-                {/* Step 4: Deployment */}
-                <button
-                  type="button"
-                  onClick={() => setActiveStep(4)}
-                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
-                    activeStep === 4
-                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
-                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
-                  }`}
-                >
-                  Deployment
-                </button>
-
-                <ArrowLeft className="h-4 w-4 shrink-0 text-sky-500" />
-
-                {/* Step 3: QA & Testing */}
-                <button
-                  type="button"
-                  onClick={() => setActiveStep(3)}
-                  className={`flex-1 rounded-full border px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer text-center ${
-                    activeStep === 3
-                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_10px_24px_-8px_rgba(11,23,57,0.45)] scale-105"
-                      : "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-sky-300 hover:text-[#0B1739]"
-                  }`}
-                >
-                  QA & Testing
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Rotating Circular Orbit Component */}
-          <div className="lg:col-span-6 flex justify-center items-center py-6">
-            <motion.div {...revealBlock(1)} className="relative w-[380px] h-[380px] sm:w-[460px] sm:h-[460px] flex items-center justify-center">
-              {/* Orbit Ring Line - Passes exactly through the geometric middle of every node badge (diameter = radius * 2) */}
-              <div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-sky-400/50 pointer-events-none z-0"
-                style={{
-                  width: `${radius * 2}px`,
-                  height: `${radius * 2}px`,
-                }}
+            <ol ref={listRef} className="relative mt-10 space-y-1" aria-label="Process stages">
+              {/* Track + animated progress fill */}
+              <span aria-hidden className="absolute top-5 bottom-5 left-[19px] w-px bg-slate-200" />
+              <span
+                ref={fillRef}
+                aria-hidden
+                className="absolute top-5 left-[19px] h-0 w-px bg-gradient-to-b from-[#1673b8] to-sky-400 transition-[height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
               />
 
-              {/* Rotating Container holding all 6 nodes */}
-              <div
-                className="absolute inset-0 w-full h-full z-10"
-                style={{
-                  transform: `rotate(${rotationAngle}deg)`,
-                  transition: "transform 1000ms cubic-bezier(0.16, 1, 0.3, 1)",
-                  willChange: "transform",
-                }}
-              >
-                {steps.map((step, idx) => {
-                  const Icon = step.icon;
-                  const isActive = activeStep === idx;
-                  // Base angle for node positioning (0 deg at top, 60 deg increments)
-                  const angleDeg = idx * 60 - 90;
-                  const angleRad = (angleDeg * Math.PI) / 180;
-                  const x = radius * Math.cos(angleRad);
-                  const y = radius * Math.sin(angleRad);
-
-                  return (
-                    <div
-                      key={step.id}
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                      style={{
-                        transform: `translate(${x}px, ${y}px)`,
-                      }}
+              {steps.map((step, idx) => {
+                const isActive = idx === activeStep;
+                const isDone = idx < activeStep;
+                return (
+                  <motion.li key={step.id} {...reveal(idx)} className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setActiveStep(idx)}
+                      aria-current={isActive ? "step" : undefined}
+                      className={cn(
+                        "flex w-full cursor-pointer items-start gap-4 rounded-xl py-2 pr-3 text-left transition-colors duration-300",
+                        isActive ? "bg-white shadow-[0_10px_30px_-18px_rgba(11,23,57,0.35)] ring-1 ring-sky-100" : "hover:bg-white/60"
+                      )}
                     >
-                      {/* Counter-rotate node container to keep icon upright */}
-                      <button
-                        type="button"
-                        onClick={() => setActiveStep(idx)}
-                        className={`flex items-center justify-center rounded-2xl cursor-pointer ${
-                          isActive
-                            ? "w-14 h-14 bg-[#0B1739] text-white shadow-xl shadow-[#0B1739]/30 ring-4 ring-sky-200 scale-110"
-                            : "w-11 h-11 bg-white text-slate-700 border border-slate-200 shadow-md hover:bg-sky-50 hover:text-sky-600"
-                        }`}
-                        style={{
-                          transform: `rotate(${-rotationAngle}deg)`,
-                          transition:
-                            "transform 1000ms cubic-bezier(0.16, 1, 0.3, 1), background-color 400ms ease, box-shadow 400ms ease, width 400ms ease, height 400ms ease",
-                          willChange: "transform",
-                        }}
-                        aria-label={step.title}
+                      <span
+                        className={cn(
+                          "relative z-10 ml-px inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-all duration-300",
+                          isActive && "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_8px_20px_-6px_rgba(11,23,57,0.5)]",
+                          isDone && "border-sky-300 bg-sky-50 text-[#1673b8]",
+                          !isActive && !isDone && "border-slate-200 bg-white text-slate-400"
+                        )}
                       >
-                        <Icon className={isActive ? "h-6 w-6" : "h-5 w-5"} />
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      <span className="min-w-0 pt-2">
+                        <span
+                          className={cn(
+                            "block text-base font-semibold tracking-tight transition-colors",
+                            isActive ? "text-[#0B1739]" : "text-slate-500"
+                          )}
+                        >
+                          {step.title}
+                        </span>
+                        {/* Description expands for the active step */}
+                        <span
+                          className={cn(
+                            "grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                            isActive ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                          )}
+                        >
+                          <span className="overflow-hidden">
+                            <span className="block pt-1.5 pb-1 text-sm leading-relaxed text-slate-600">
+                              {step.description}
+                            </span>
+                          </span>
+                        </span>
+                      </span>
+                    </button>
+                  </motion.li>
+                );
+              })}
+            </ol>
+          </div>
 
-              {/* Center Info Card */}
-              <div className="relative z-20 max-w-[240px] sm:max-w-[280px] text-center px-4 py-6">
-                <div
-                  key={steps[activeStep].id}
-                  className="animate-in fade-in zoom-in-95 duration-500"
-                >
-                  <h3 className="text-xl sm:text-2xl font-semibold tracking-[-0.03em] text-[#0B1739]">
+          {/* ───── Right: orbit diagram ───── */}
+          <motion.div {...revealBlock(2)} className="flex justify-center">
+            <div className="relative aspect-square w-full max-w-[460px]">
+              {/* Ring + animated progress arc */}
+              <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full -rotate-90" aria-hidden>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#cfe6f5" strokeWidth="0.4" />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="40"
+                  fill="none"
+                  stroke="url(#agile-arc)"
+                  strokeWidth="0.8"
+                  strokeLinecap="round"
+                  pathLength={100}
+                  strokeDasharray={`${arc} 100`}
+                  className="transition-[stroke-dasharray] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+                />
+                <circle cx="50" cy="50" r="28" fill="none" stroke="#e3f1fa" strokeWidth="0.3" strokeDasharray="1 1.5" />
+                <defs>
+                  <linearGradient id="agile-arc" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stopColor="#1673b8" />
+                    <stop offset="1" stopColor="#38bdf8" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              {/* Stage nodes, placed on the ring with percentages (no JS measuring) */}
+              {steps.map((step, idx) => {
+                const Icon = step.icon;
+                const isActive = idx === activeStep;
+                const isDone = idx < activeStep;
+                const angle = ((idx * 360) / steps.length - 90) * (Math.PI / 180);
+                const left = 50 + 40 * Math.cos(angle);
+                const top = 50 + 40 * Math.sin(angle);
+                return (
+                  <motion.button
+                    key={step.id}
+                    type="button"
+                    onClick={() => setActiveStep(idx)}
+                    aria-label={step.title}
+                    initial={{ opacity: 0, scale: 0.6 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.35 + idx * 0.08 }}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+                    style={{ left: `${left}%`, top: `${top}%` }}
+                  >
+                    <span
+                      className={cn(
+                        "relative flex items-center justify-center rounded-2xl border transition-all duration-500",
+                        isActive
+                          ? "h-14 w-14 border-[#0B1739] bg-[#0B1739] text-white shadow-[0_14px_30px_-10px_rgba(11,23,57,0.55)] ring-4 ring-sky-200/70 sm:h-16 sm:w-16"
+                          : isDone
+                            ? "h-11 w-11 border-sky-200 bg-sky-50 text-[#1673b8] sm:h-12 sm:w-12"
+                            : "h-11 w-11 border-slate-200 bg-white text-slate-500 shadow-sm hover:border-sky-300 hover:text-[#1673b8] sm:h-12 sm:w-12"
+                      )}
+                    >
+                      <Icon className={isActive ? "h-6 w-6" : "h-5 w-5"} />
+                    </span>
+                  </motion.button>
+                );
+              })}
+
+              {/* Centre: active stage */}
+              <div className="absolute inset-[24%] flex flex-col items-center justify-center rounded-full bg-white/80 text-center shadow-[0_20px_50px_-24px_rgba(11,23,57,0.35)] ring-1 ring-sky-100 backdrop-blur-sm">
+                <div key={steps[activeStep].id} className="animate-in fade-in zoom-in-95 px-4 duration-500">
+                  <ActiveIcon className="mx-auto h-6 w-6 text-[#1673b8]" />
+                  <p className="mt-2 font-mono text-[11px] tracking-[0.2em] text-slate-400 uppercase">
+                    Stage {String(activeStep + 1).padStart(2, "0")} / {String(steps.length).padStart(2, "0")}
+                  </p>
+                  <p className="mt-1 text-lg font-semibold tracking-tight text-[#0B1739] sm:text-xl">
                     {steps[activeStep].title}
-                  </h3>
-                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-600">
-                    {steps[activeStep].description}
                   </p>
                 </div>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </Container>
     </section>

@@ -8,11 +8,11 @@ import { cn } from "@/lib/utils";
 import {
   Container,
   Highlight,
-  cardClass,
   reveal,
   subheadingClass,
   revealHeading,
   revealCard,
+  showcaseCard,
 } from "@/components/ui/section";
 
 interface Project {
@@ -121,106 +121,105 @@ export default function ProjectsShowcase() {
     activeTab === "all" ? projectsData : projectsData.filter((p) => p.category === activeTab);
 
   return (
-    <div className="w-full text-white">
+    <div className="w-full text-[#0B1739]">
       <Container>
-        {/* Sub-header */}
-        <div className="mb-8 flex flex-col items-center text-center sm:mb-10">
-          <motion.h3 {...revealHeading(0)} className={subheadingClass("dark")}>
-            Our <Highlight>Featured Projects</Highlight>
-          </motion.h3>
-          <motion.p {...reveal(1)} className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
-            Discover our portfolio of scalable web applications, mobile platforms, and customized Odoo ERP
-            implementations built for global brands.
-          </motion.p>
+        {/* Sub-header + filters on one line (desktop) */}
+        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-xl">
+            <motion.h3 {...revealHeading(0)} className={subheadingClass("light")}>
+              Our <Highlight tone="light">Featured Projects</Highlight>
+            </motion.h3>
+            <motion.p {...reveal(1)} className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
+              Discover our portfolio of scalable web applications, mobile platforms, and customized Odoo ERP
+              implementations built for global brands.
+            </motion.p>
+          </div>
+
+          <motion.div {...reveal(2)} className="flex flex-wrap gap-2" role="tablist" aria-label="Project categories">
+            {categories.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={cn(
+                    "inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-semibold transition-colors duration-200 sm:text-sm",
+                    isActive
+                      ? "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_8px_20px_-10px_rgba(11,23,57,0.6)]"
+                      : "border-slate-200 bg-white text-slate-600 hover:border-sky-300 hover:text-[#0B1739]"
+                  )}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </motion.div>
         </div>
 
-        {/* Filters */}
-        <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
-          {categories.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  "inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold transition-all duration-200 sm:text-sm",
-                  isActive
-                    ? "border-white bg-white text-[#0B1739] shadow-[0_8px_24px_-8px_rgba(56,189,248,0.6)]"
-                    : "border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:text-white"
-                )}
-              >
-                <Icon className="h-3.5 w-3.5" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        {/* Project grid — consistent card dimensions */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project, i) => (
-            <motion.div
+            <motion.article
               key={project.id}
               {...revealCard(i % 3)}
-              className={cn(cardClass("dark"), "flex flex-col justify-between overflow-hidden")}
+              className={showcaseCard}
             >
-              <div>
-                <div className="relative h-44 w-full overflow-hidden bg-[#030a1f]">
-                  <Image
-                    src={project.imageUrl}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover object-center"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#030a1f] via-[#030a1f]/20 to-transparent" />
+              {/* Preview */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                <Image
+                  src={project.imageUrl}
+                  alt={project.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 380px"
+                  className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05] motion-reduce:transition-none"
+                />
+                {/* Soft bottom shade so the image sits cleanly on the white card */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1739]/25 via-transparent to-transparent" />
 
-                  <span className="absolute top-3 left-3 rounded-full border border-white/15 bg-[#030a1f]/80 px-2.5 py-0.5 text-[11px] font-semibold text-sky-200 backdrop-blur-md">
-                    {project.categoryLabel}
-                  </span>
-
-                  {project.metrics && (
-                    <span className="absolute bottom-3 left-3 inline-flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-lg border border-sky-400/30 bg-[#030a1f]/80 px-2.5 py-1 text-[11px] font-semibold text-sky-100 backdrop-blur-md">
-                      <CircleCheck className="h-3.5 w-3.5 shrink-0 text-sky-400" />
-                      <span className="truncate">{project.metrics}</span>
-                    </span>
-                  )}
-                </div>
-
-                <div className="p-5 sm:p-6">
-                  <h4 className="text-lg font-semibold tracking-tight text-white transition-colors group-hover:text-sky-200">
-                    {project.title}
-                  </h4>
-                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-400">{project.description}</p>
-                </div>
+                <span className="absolute top-3.5 left-3.5 rounded-md bg-white/90 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-[#0B1739] uppercase shadow-sm backdrop-blur-sm">
+                  {project.categoryLabel}
+                </span>
               </div>
 
-              <div className="flex flex-col gap-4 border-t border-white/10 px-5 pt-4 pb-5 sm:px-6">
-                <div className="flex flex-wrap items-center gap-1.5">
+              {/* Info */}
+              <div className="flex flex-1 flex-col p-5 sm:p-6">
+                {project.metrics && (
+                  <p className="flex items-center gap-1.5 text-xs font-semibold text-[#1673b8]">
+                    <CircleCheck className="h-3.5 w-3.5 shrink-0" />
+                    {project.metrics}
+                  </p>
+                )}
+                <h4 className="mt-2.5 text-lg leading-snug font-semibold tracking-tight text-[#0B1739]">{project.title}</h4>
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{project.description}</p>
+
+                <div className="mt-5 mb-5 flex flex-wrap gap-1.5">
                   {project.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="inline-block rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium text-slate-300"
+                      className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600"
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="mt-auto flex items-center justify-between border-t border-slate-200/80 pt-4">
                   <span className="text-xs font-medium text-slate-500">Case Study & Code</span>
                   <a
                     href={project.demoUrl || "#"}
-                    className="inline-flex items-center gap-1 text-sm font-semibold text-sky-300 transition-colors hover:text-sky-200"
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-[#1673b8] transition-colors hover:text-[#0B1739]"
                   >
                     View Project
-                    <ArrowUpRight className="h-4 w-4" />
+                    <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
       </Container>

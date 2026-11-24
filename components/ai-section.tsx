@@ -7,11 +7,10 @@ import { cn } from "@/lib/utils";
 import {
   Container,
   Highlight,
-  IconTile,
-  cardClass,
   subheadingClass,
   revealCard,
   revealHeading,
+  showcaseCard,
 } from "@/components/ui/section";
 
 interface AiCapability {
@@ -64,79 +63,80 @@ const aiCapabilities: AiCapability[] = [
 
 export default function AiSection() {
   return (
-    <div className="w-full text-white">
+    <div className="w-full text-[#0B1739]">
       <Container>
         {/* Sub-header */}
-        <motion.h3 {...revealHeading(0)} className={cn(subheadingClass("dark"), "mb-8 text-center sm:mb-10")}>
-          Pioneering Artificial <Highlight>Intelligence Projects</Highlight>
+        <motion.h3 {...revealHeading(0)} className={cn(subheadingClass("light"), "mb-8 text-center sm:mb-10")}>
+          Pioneering Artificial <Highlight tone="light">Intelligence Projects</Highlight>
         </motion.h3>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 lg:gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {aiCapabilities.map((item, idx) => {
+            const Icon = item.icon;
             return (
-              <motion.div
-                key={item.id}
-                {...revealCard(idx)}
-                className={cn(cardClass("dark"), "flex flex-col justify-between overflow-hidden p-5 sm:p-6")}
-              >
-                <div>
-                  {/* Banner: image or live waveform */}
-                  {item.isWisper ? (
-                    <div className="relative mb-5 flex h-36 w-full flex-col justify-between overflow-hidden rounded-xl border border-sky-400/20 bg-[#030a1f] p-3.5">
-                      <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider text-sky-300 uppercase">
-                          <span className="relative flex h-2 w-2">
-                                                        <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-400" />
-                          </span>
-                          Wisper Engine Active
-                        </span>
-                        <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-medium text-slate-300">
-                          &lt;120ms
-                        </span>
-                      </div>
-
-                      <div className="my-auto flex h-14 items-center justify-center gap-1">
-                        {[40, 70, 30, 90, 60, 100, 45, 80, 55, 95, 35, 75, 50, 85].map((h, i) => (
-                          <div key={i} style={{ height: `${h}%` }} className="w-1 rounded-full bg-gradient-to-t from-sky-500 to-blue-300" />
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="relative mb-5 h-36 w-full overflow-hidden rounded-xl border border-white/10 bg-[#030a1f]">
-                      <Image
-                        src={item.imageUrl || ""}
-                        alt={item.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover object-center"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#030a1f] via-[#030a1f]/30 to-transparent" />
-                      <span className="absolute top-3 left-3 rounded-full border border-white/15 bg-[#030a1f]/80 px-2.5 py-0.5 text-[11px] font-semibold text-sky-200 backdrop-blur-md">
-                        {item.subtitle}
+              <motion.article key={item.id} {...revealCard(idx)} className={showcaseCard}>
+                {/* Preview: image, or a "live engine" screen for Wisper */}
+                {item.isWisper ? (
+                  <div className="relative flex aspect-[16/10] w-full flex-col justify-between overflow-hidden bg-[radial-gradient(ellipse_at_50%_65%,rgba(56,189,248,0.18),transparent_70%),#0B1739] p-5">
+                    <div className="flex items-center justify-between">
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider text-sky-300 uppercase">
+                        <span className="h-2 w-2 rounded-full bg-sky-400" />
+                        Wisper Engine Active
+                      </span>
+                      <span className="rounded-md bg-white/10 px-2 py-0.5 text-[11px] font-medium text-slate-200">
+                        &lt;120ms
                       </span>
                     </div>
-                  )}
+                    <div className="my-auto flex h-20 items-center justify-center gap-1.5">
+                      {[40, 70, 30, 90, 60, 100, 45, 80, 55, 95, 35, 75, 50, 85].map((h, i) => (
+                        <div
+                          key={i}
+                          style={{ height: `${h}%` }}
+                          className="w-1 origin-bottom rounded-full bg-gradient-to-t from-sky-500 to-blue-300 transition-transform duration-500 group-hover:scale-y-110"
+                        />
+                      ))}
+                    </div>
+                    <span className="self-start rounded-md bg-white/10 px-2.5 py-1 text-[11px] font-semibold text-sky-100">
+                      {item.subtitle}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                    <Image
+                      src={item.imageUrl || ""}
+                      alt={item.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05] motion-reduce:transition-none"
+                    />
+                    <span className="absolute top-3.5 left-3.5 rounded-md bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-[#0B1739] shadow-sm backdrop-blur-sm">
+                      {item.subtitle}
+                    </span>
+                  </div>
+                )}
 
+                {/* Body */}
+                <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-center gap-3">
-                    <IconTile icon={item.icon} tone="dark" className="h-10 w-10" />
-                    <h4 className="text-lg font-semibold tracking-tight text-white transition-colors group-hover:text-sky-200">
-                      {item.title}
-                    </h4>
+                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sky-200 bg-sky-50 text-[#1673b8]">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <h4 className="text-lg font-semibold tracking-tight text-[#0B1739]">{item.title}</h4>
                   </div>
 
-                  <p className="mt-3 text-sm leading-relaxed text-slate-400">{item.description}</p>
-                </div>
+                  <p className="mt-3 mb-auto text-sm leading-relaxed text-slate-600">{item.description}</p>
 
-                <ul className="mt-5 flex flex-col gap-2 border-t border-white/10 pt-4">
-                  {item.highlights.map((point) => (
-                    <li key={point} className="flex items-center gap-2 text-sm text-slate-300">
-                      <CircleCheck className="h-4 w-4 shrink-0 text-sky-400" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+                  <ul className="mt-5 flex flex-col gap-2 border-t border-slate-200/80 pt-4">
+                    {item.highlights.map((point) => (
+                      <li key={point} className="flex items-center gap-2 text-sm text-slate-700">
+                        <CircleCheck className="h-4 w-4 shrink-0 text-[#1673b8]" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.article>
             );
           })}
         </div>

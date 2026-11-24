@@ -15,13 +15,11 @@ export default function StatsBackground() {
 
       {/* Soft glows */}
       <div className="absolute -top-40 left-1/2 h-[26rem] w-[56rem] -translate-x-1/2 rounded-full bg-sky-500/15 blur-[120px]" />
-      <div className="absolute bottom-0 left-1/2 h-[18rem] w-[50rem] -translate-x-1/2 translate-y-1/2 rounded-full bg-blue-600/15 blur-[120px]" />
+      <div className="absolute right-0 bottom-0 h-[24rem] w-[34rem] translate-x-1/4 translate-y-1/3 rounded-full bg-cyan-400/10 blur-[120px]" />
 
       {/* Thin light line along the top edge */}
       <TopHairline />
 
-      {/* Fade into the next section */}
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#020617]" />
     </div>
   );
 }

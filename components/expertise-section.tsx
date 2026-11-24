@@ -18,11 +18,10 @@ import {
   Container,
   SectionHeader,
   Highlight,
-  IconTile,
   TopHairline,
-  cardClass,
-  SECTION_Y,
+  reveal,
   revealCard,
+  SECTION_Y,
 } from "@/components/ui/section";
 
 interface ExpertiseItem {
@@ -99,36 +98,116 @@ const expertiseItems: ExpertiseItem[] = [
 ];
 
 export default function ExpertiseSection() {
+  // First three = flagship AI capabilities (featured); the rest = supporting capabilities
+  const [lead, ...featuredRest] = expertiseItems.slice(0, 3);
+  const supporting = expertiseItems.slice(3);
+  const LeadIcon = lead.icon;
+
   return (
-    <section id="services" className={cn("relative isolate w-full overflow-hidden bg-[#020617] text-white", SECTION_Y)}>
+    <section
+      id="services"
+      className={cn(
+        // Dark panel with a rounded top edge overlapping the light Solutions section above
+        "relative isolate z-10 -mt-10 w-full overflow-hidden rounded-t-[28px] bg-[linear-gradient(180deg,#0B1739_0%,#071028_55%,#050d24_100%)] text-white shadow-[0_-20px_50px_-24px_rgba(11,23,57,0.35)] sm:-mt-12 sm:rounded-t-[40px]",
+        SECTION_Y
+      )}
+    >
       <TopHairline />
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/2 h-[24rem] w-[52rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500/10 blur-[120px]" />
+        <div className="absolute top-0 right-0 h-[30rem] w-[30rem] translate-x-1/3 -translate-y-1/3 rounded-full bg-sky-500/10 blur-[120px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(125,211,252,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(125,211,252,0.045)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_50%_40%_at_85%_10%,black,transparent)]" />
       </div>
 
       <Container>
-        <SectionHeader
-          eyebrow="What We Do"
-          eyebrowIcon={Layers}
-          title={
-            <>
-              Deep Technical Expertise, <Highlight>Supporting Modern Systems</Highlight>
-            </>
-          }
-        />
+        {/* Header: title left, intro line right */}
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
+          <SectionHeader
+            align="left"
+            eyebrow="What We Do"
+            eyebrowIcon={Layers}
+            title={
+              <>
+                Deep Technical Expertise, <Highlight>Supporting Modern Systems</Highlight>
+              </>
+            }
+          />
+          <motion.p {...reveal(2)} className="max-w-md text-base leading-7 text-slate-400 lg:pb-2">
+            {expertiseItems.length} capabilities, one engineering team — from intelligent systems to the cloud,
+            data and security foundations they run on.
+          </motion.p>
+        </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-5 sm:mt-16 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {expertiseItems.map((item, i) => (
-            <motion.div
-              key={item.id}
-              {...revealCard(i % 3)}
-              className={cn(cardClass("dark"), "flex flex-col p-6 sm:p-7")}
-            >
-              <IconTile icon={item.icon} tone="dark" />
-              <h3 className="mt-5 text-lg font-semibold tracking-tight text-white sm:text-xl">{item.title}</h3>
-              <p className="mt-2.5 text-sm leading-relaxed text-slate-400">{item.description}</p>
-            </motion.div>
-          ))}
+        {/* ───── Featured bento ───── */}
+        <div className="mt-14 grid gap-5 sm:mt-16 lg:grid-cols-12 lg:grid-rows-2">
+          {/* Lead capability */}
+          <motion.article
+            {...revealCard(0)}
+            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-sky-400/20 bg-[linear-gradient(160deg,rgba(22,115,184,0.22)_0%,rgba(8,18,48,0.9)_55%)] p-7 transition-colors duration-300 hover:border-sky-400/45 sm:p-9 lg:col-span-7 lg:row-span-2"
+          >
+            {/* Decorative concentric rings */}
+            <div aria-hidden className="pointer-events-none absolute -right-20 -bottom-20 h-80 w-80">
+              {[320, 240, 160].map((d) => (
+                <span
+                  key={d}
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-sky-300/10 transition-colors duration-500 group-hover:border-sky-300/20"
+                  style={{ width: d, height: d }}
+                />
+              ))}
+            </div>
+
+            <div className="relative flex items-start justify-between">
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-400/35 bg-sky-400/15 text-sky-200">
+                <LeadIcon className="h-7 w-7" />
+              </span>
+              <span className="font-mono text-xs text-sky-300/70">01 / Core</span>
+            </div>
+
+            <div className="relative mt-16 lg:mt-0">
+              <h3 className="text-2xl font-semibold tracking-[-0.03em] text-white sm:text-[2rem]">{lead.title}</h3>
+              <p className="mt-4 max-w-lg text-base leading-7 text-slate-300">{lead.description}</p>
+            </div>
+          </motion.article>
+
+          {/* Two more featured */}
+          {featuredRest.map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <motion.article
+                key={item.id}
+                {...revealCard(i + 1)}
+                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors duration-300 hover:border-sky-400/35 hover:bg-white/[0.05] sm:p-7 lg:col-span-5"
+              >
+                <div className="flex items-center gap-4">
+                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-sky-400/30 bg-sky-400/10 text-sky-300">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="text-xl font-semibold tracking-tight text-white">{item.title}</h3>
+                  <span className="ml-auto font-mono text-xs text-slate-500">0{i + 2}</span>
+                </div>
+                <p className="mt-4 text-sm leading-relaxed text-slate-400 sm:text-[15px]">{item.description}</p>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        {/* ───── Supporting capabilities: divider list, not cards ───── */}
+        <div className="mt-14 grid gap-x-10 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
+          {supporting.map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <motion.article
+                key={item.id}
+                {...revealCard(i % 3)}
+                className="group border-t border-white/10 py-7 transition-colors duration-300 hover:border-sky-400/50"
+              >
+                <div className="flex items-center gap-3">
+                  <Icon className="h-5 w-5 text-sky-400 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  <h3 className="text-lg font-semibold tracking-tight text-white">{item.title}</h3>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-slate-400">{item.description}</p>
+              </motion.article>
+            );
+          })}
         </div>
       </Container>
     </section>

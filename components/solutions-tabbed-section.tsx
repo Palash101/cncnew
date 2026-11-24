@@ -8,7 +8,7 @@ import { FolderKanban, Sparkles, Bot } from "lucide-react";
 import AiSection from "@/components/ai-section";
 import ProjectsShowcase from "@/components/projects-showcase";
 import { cn } from "@/lib/utils";
-import { Container, SectionHeader, Highlight, reveal, SECTION_Y, TopHairline } from "@/components/ui/section";
+import { Container, SectionHeader, Highlight, reveal } from "@/components/ui/section";
 
 type TabOption = "ai" | "projects";
 
@@ -36,22 +36,25 @@ export default function SolutionsTabbedSection() {
   }, []);
 
   return (
-    <section id="projects" className={cn("relative isolate w-full overflow-hidden bg-[#020617] text-white", SECTION_Y)}>
-      <TopHairline />
+    <section
+      id="projects"
+      className="relative isolate -mt-10 w-full overflow-hidden bg-[linear-gradient(180deg,#eef6fc_0%,#f5f9fd_100%)] pt-30 pb-20 text-[#0B1739] sm:-mt-12 sm:pt-40 sm:pb-28"
+    >
       <div id="work" />
       {/* Ambient glows */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-24 -left-40 h-[28rem] w-[28rem] rounded-full bg-sky-500/10 blur-[120px]" />
-        <div className="absolute -right-40 bottom-24 h-[28rem] w-[28rem] rounded-full bg-blue-600/10 blur-[120px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(22,115,184,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(22,115,184,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_60%_35%_at_50%_15%,black,transparent)]" />
+        <div className="absolute top-40 left-1/2 h-[22rem] w-[48rem] -translate-x-1/2 rounded-full bg-sky-200/50 blur-[120px]" />
       </div>
 
       <Container>
         <SectionHeader
+          tone="light"
           eyebrow="Innovations & Portfolio"
           eyebrowIcon={Sparkles}
           title={
             <>
-              Explore AI Solutions & <Highlight>Project Portfolios</Highlight>
+              Explore AI Solutions & <Highlight tone="light">Project Portfolios</Highlight>
             </>
           }
           description="Switch between our Next-Gen Artificial Intelligence capabilities and full-stack project showcases below."
@@ -62,7 +65,7 @@ export default function SolutionsTabbedSection() {
           <div
             role="tablist"
             aria-label="Solutions"
-            className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1.5 backdrop-blur-xl"
+            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1.5 shadow-[0_10px_30px_-18px_rgba(11,23,57,0.35)]"
           >
             {TABS.map((tab) => {
               const Icon = tab.icon;
@@ -76,13 +79,13 @@ export default function SolutionsTabbedSection() {
                   onClick={() => setActiveTab(tab.id)}
                   className={cn(
                     "relative inline-flex cursor-pointer items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-300 sm:px-7",
-                    isActive ? "text-[#0B1739]" : "text-slate-400 hover:text-white"
+                    isActive ? "text-white" : "text-slate-500 hover:text-[#0B1739]"
                   )}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="solutions-tab"
-                      className="absolute inset-0 rounded-full bg-white shadow-[0_8px_24px_-8px_rgba(56,189,248,0.6)]"
+                      className="absolute inset-0 rounded-full bg-[#0B1739] shadow-[0_8px_20px_-8px_rgba(11,23,57,0.6)]"
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}

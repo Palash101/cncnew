@@ -4,16 +4,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { Monitor, Server, Smartphone, Cloud, Cpu, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  Container,
-  SectionHeader,
-  Highlight,
-  IconTile,
-  cardClass,
-  SECTION_Y,
-  TopHairline,
-  revealCard,
-} from "@/components/ui/section";
+import { Container, SectionHeader, Highlight, TopHairline, revealCard, SECTION_Y } from "@/components/ui/section";
 
 interface TechItem {
   name: string;
@@ -108,48 +99,66 @@ export default function TechStack() {
           description="Empowering enterprise applications with modern, battle-tested technologies."
         />
 
-        <div className="mt-14 flex flex-col gap-4 sm:mt-16 sm:gap-5">
-          {techCategories.map((category, i) => (
-            <motion.div
-              key={category.id}
-              {...revealCard(i)}
-              className={cn(
-                cardClass("light"),
-                "flex flex-col gap-5 p-5 sm:p-7 lg:flex-row lg:items-center lg:gap-8"
-              )}
-            >
-              <div className="flex shrink-0 items-center gap-3.5 lg:w-64">
-                <IconTile icon={category.icon} tone="light" />
-                <h3 className="text-base font-semibold tracking-tight text-[#0B1739] sm:text-lg">{category.title}</h3>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-                {category.items.map((tech) => (
-                  <div
-                    key={tech.name}
-                    className="inline-flex max-w-full cursor-default items-center gap-2 truncate rounded-full border border-slate-200/80 bg-slate-50/60 px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors duration-200 hover:border-sky-200 hover:bg-white hover:text-[#0B1739] sm:px-4 sm:py-2 sm:text-sm"
-                  >
-                    {tech.image ? (
-                      <span className="relative flex h-4 w-4 shrink-0 items-center justify-center sm:h-5 sm:w-5">
-                        <Image
-                          src={tech.image}
-                          alt=""
-                          width={20}
-                          height={20}
-                          className="max-h-4 max-w-4 object-contain sm:max-h-5 sm:max-w-5"
-                        />
-                      </span>
-                    ) : (
-                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[9px] font-bold text-slate-600 uppercase sm:h-5 sm:w-5 sm:text-[10px]">
-                        {tech.name.substring(0, 2)}
-                      </span>
-                    )}
-                    <span className="truncate">{tech.name}</span>
+        {/* Ecosystem: one row per category */}
+        <div className="mt-14 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_20px_60px_-36px_rgba(11,23,57,0.25)] sm:mt-16">
+          {techCategories.map((category, rowIdx) => {
+            const Icon = category.icon;
+            return (
+              <motion.div
+                key={category.id}
+                {...revealCard(rowIdx)}
+                className={cn(
+                  "grid gap-5 p-5 sm:p-7 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10 lg:p-8",
+                  rowIdx > 0 && "border-t border-slate-200/80",
+                  rowIdx % 2 === 1 && "bg-slate-50/50"
+                )}
+              >
+                {/* Category label */}
+                <div className="flex items-center gap-3.5 lg:flex-col lg:items-start lg:gap-4">
+                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-sky-200 bg-sky-50 text-[#1673b8]">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <h3 className="text-base font-semibold tracking-tight text-[#0B1739] sm:text-lg">
+                      {category.title}
+                    </h3>
+                    <p className="mt-0.5 text-xs font-medium text-slate-500">
+                      {category.items.length} technologies
+                    </p>
                   </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+                </div>
+
+                {/* Logo tiles */}
+                <ul className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 sm:gap-3 xl:grid-cols-8">
+                  {category.items.map((tech) => (
+                    <li
+                      key={tech.name}
+                      className="group flex flex-col items-center justify-center gap-2.5 rounded-xl border border-slate-200/80 bg-white px-2 py-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-[0_12px_28px_-16px_rgba(22,115,184,0.45)] motion-reduce:hover:translate-y-0"
+                    >
+                      <span className="relative flex h-9 w-9 items-center justify-center">
+                        {tech.image ? (
+                          <Image
+                            src={tech.image}
+                            alt=""
+                            width={36}
+                            height={36}
+                            className="max-h-9 max-w-9 object-contain transition-transform duration-300 group-hover:scale-110"
+                          />
+                        ) : (
+                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600 uppercase">
+                            {tech.name.substring(0, 2)}
+                          </span>
+                        )}
+                      </span>
+                      <span className="w-full truncate text-center text-xs font-semibold text-slate-700 group-hover:text-[#0B1739]">
+                        {tech.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            );
+          })}
         </div>
       </Container>
     </section>

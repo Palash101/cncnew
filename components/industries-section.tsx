@@ -19,11 +19,10 @@ import {
   Container,
   SectionHeader,
   Highlight,
-  IconTile,
   TopHairline,
-  cardClass,
+  reveal,
+  revealBlock,
   SECTION_Y,
-  revealCard,
 } from "@/components/ui/section";
 
 interface IndustryItem {
@@ -111,51 +110,86 @@ export default function IndustriesSection() {
     <section
       id="industries"
       className={cn(
-        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#020617_0%,#0B1739_18%,#0B1739_100%)] text-white",
+        // Continues the dark block from "What We Do"; rounded bottom edge overlaps the light Agile section
+        "relative isolate z-10 w-full overflow-hidden rounded-b-[28px] bg-[linear-gradient(180deg,#050d24_0%,#0B1739_30%,#081230_100%)] text-white shadow-[0_30px_60px_-20px_rgba(11,23,57,0.45)] sm:rounded-b-[40px]",
         SECTION_Y
       )}
     >
       <TopHairline />
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-1/3 -left-40 h-[30rem] w-[30rem] rounded-full bg-sky-500/10 blur-[120px]" />
-        <div className="absolute -right-40 bottom-0 h-[30rem] w-[30rem] rounded-full bg-blue-600/15 blur-[120px]" />
+        <div className="absolute -top-32 left-1/2 h-[24rem] w-[52rem] -translate-x-1/2 rounded-full bg-sky-500/15 blur-[120px]" />
+        <div className="absolute -right-40 bottom-0 h-[26rem] w-[26rem] rounded-full bg-cyan-400/10 blur-[120px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(125,211,252,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(125,211,252,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_60%_40%_at_50%_0%,black,transparent)]" />
       </div>
 
       <Container>
-        <SectionHeader
-          eyebrow="Industries"
-          eyebrowIcon={Building2}
-          title={
-            <>
-              Our Expertise Lies In Top Industries & <Highlight>Proven Results</Highlight>
-            </>
-          }
-          description="We provide a diverse range of solutions for distinct industries that amplify and boost business performance."
-        />
-
-        <div className="mt-14 grid grid-cols-1 gap-5 sm:mt-16 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {industries.map((item, i) => (
-            <motion.div
-              key={item.id}
-              {...revealCard(i % 3)}
-              className={cn(cardClass("dark"), "flex flex-col justify-between p-6 sm:p-7")}
-            >
-              <div>
-                <IconTile icon={item.icon} tone="dark" />
-                <h3 className="mt-5 text-lg font-semibold tracking-tight text-white sm:text-xl">{item.title}</h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-slate-400">{item.description}</p>
-              </div>
-
-              <a
-                href={`#${item.id}`}
-                className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-300 transition-colors hover:text-sky-200"
-              >
-                Explore More
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
-            </motion.div>
-          ))}
+        {/* Split header */}
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
+          <SectionHeader
+            align="left"
+            eyebrow="Industries"
+            eyebrowIcon={Building2}
+            title={
+              <>
+                Our Expertise Lies In Top Industries & <Highlight>Proven Results</Highlight>
+              </>
+            }
+          />
+          <motion.p {...reveal(2)} className="max-w-md text-base leading-7 text-slate-300 lg:pb-2">
+            We provide a diverse range of solutions for distinct industries that amplify and boost business
+            performance.
+          </motion.p>
         </div>
+
+        {/* Directory panel */}
+        <motion.div
+          {...revealBlock(1)}
+          className="mt-14 overflow-hidden rounded-2xl border border-white/10 bg-[#06102b]/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_30px_70px_-40px_rgba(14,165,233,0.45)] sm:mt-16"
+        >
+          <ul className="grid md:grid-cols-2">
+            {industries.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <li
+                  key={item.id}
+                  className={cn(
+                    "border-white/10",
+                    i > 0 && "border-t",
+                    i === 1 && "md:border-t-0",
+                    i % 2 === 1 && "md:border-l"
+                  )}
+                >
+                  <a
+                    href={`#${item.id}`}
+                    aria-label={`Explore ${item.title}`}
+                    className="group relative flex h-full gap-5 p-6 transition-colors duration-300 hover:bg-white/[0.04] sm:p-7"
+                  >
+                    {/* Left accent bar */}
+                    <span
+                      aria-hidden
+                      className="absolute inset-y-6 left-0 w-0.5 origin-top scale-y-0 rounded-full bg-sky-400 transition-transform duration-300 group-hover:scale-y-100"
+                    />
+
+                    <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-sky-300 transition-colors duration-300 group-hover:border-sky-400/40 group-hover:bg-sky-400/10">
+                      <Icon className="h-5 w-5" />
+                    </span>
+
+                    <span className="min-w-0 flex-1">
+                      <span className="flex items-center justify-between gap-3">
+                        <span className="text-lg font-semibold tracking-tight text-white">{item.title}</span>
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-slate-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-sky-300" />
+                      </span>
+                      <span className="mt-2 block text-sm leading-relaxed text-slate-400">{item.description}</span>
+                      <span className="mt-3 inline-block text-xs font-semibold tracking-wide text-sky-300/80 uppercase transition-colors group-hover:text-sky-200">
+                        Explore More
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </motion.div>
       </Container>
     </section>
   );

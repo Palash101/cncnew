@@ -246,3 +246,7 @@ export function TopHairline({ tone = "dark" }: { tone?: Tone }) {
     </div>
   );
 }
+
+/** Shared light card surface for the AI + project showcase */
+export const showcaseCard =
+  "group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_14px_40px_-26px_rgba(11,23,57,0.35)] transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-sky-200 hover:shadow-[0_28px_60px_-30px_rgba(22,115,184,0.45)] motion-reduce:hover:translate-y-0";
