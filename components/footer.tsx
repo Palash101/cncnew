@@ -61,9 +61,8 @@ export default function Footer() {
     <footer className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#0B1739_0%,#071028_45%,#020617_100%)] text-slate-300">
       <TopHairline />
 
-      {/* Background: faint grid + soft glows */}
+      {/* Background: soft glows */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(125,211,252,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(125,211,252,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_70%_45%_at_50%_15%,black,transparent)]" />
         <div className="absolute -top-40 left-1/2 h-[26rem] w-[56rem] -translate-x-1/2 rounded-full bg-sky-500/15 blur-[120px]" />
         <div className="absolute right-0 bottom-0 h-[24rem] w-[24rem] translate-x-1/3 translate-y-1/3 rounded-full bg-blue-600/15 blur-[120px]" />
       </div>

@@ -9,6 +9,7 @@ import AiSection from "@/components/ai-section";
 import ProjectsShowcase from "@/components/projects-showcase";
 import { cn } from "@/lib/utils";
 import { Container, SectionHeader, Highlight, reveal } from "@/components/ui/section";
+import AmbientBackground from "@/components/ui/ambient-background";
 
 type TabOption = "ai" | "projects";
 
@@ -38,14 +39,11 @@ export default function SolutionsTabbedSection() {
   return (
     <section
       id="projects"
-      className="relative isolate -mt-10 w-full overflow-hidden bg-[linear-gradient(180deg,#eef6fc_0%,#f5f9fd_100%)] pt-30 pb-20 text-[#0B1739] sm:-mt-12 sm:pt-40 sm:pb-28"
+      className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#eef6fc_0%,#f5f9fd_100%)] py-20 text-[#0B1739] sm:py-28"
     >
       <div id="work" />
       {/* Ambient glows */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(22,115,184,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(22,115,184,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_60%_35%_at_50%_15%,black,transparent)]" />
-        <div className="absolute top-40 left-1/2 h-[22rem] w-[48rem] -translate-x-1/2 rounded-full bg-sky-200/50 blur-[120px]" />
-      </div>
+      <AmbientBackground variant="ice" />
 
       <Container>
         <SectionHeader

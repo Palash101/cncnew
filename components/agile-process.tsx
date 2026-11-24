@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import {
   Eye,
   CreditCard,
@@ -10,9 +9,15 @@ import {
   ClipboardList,
   Workflow,
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, MotionConfig } from "motion/react";
 import { cn } from "@/lib/utils";
-import { Container, SectionHeader, Highlight, reveal, revealBlock } from "@/components/ui/section";
+import {
+  Container,
+  SectionHeader,
+  Highlight,
+  reveal,
+} from "@/components/ui/section";
+import AmbientBackground from "@/components/ui/ambient-background";
 
 interface ProcessStep {
   id: string;
@@ -66,60 +71,60 @@ const steps: ProcessStep[] = [
   },
 ];
 
+// ───────── Chevron pipeline (SVG viewBox 1200 × 96) ─────────
+const VB_W = 1200;
+const VB_H = 96;
+const SEG = VB_W / steps.length; // 200 per stage
+const NOTCH = 24; // arrow depth
+const GAP = 6;
+
+// Progressive tone: pale ice → brand blue → navy
+const FILLS = [
+  "#dbeefa",
+  "#bcdff5",
+  "#86c3ea",
+  "#3d97d4",
+  "#1673b8",
+  "#0B1739",
+];
+const ON_DARK = [false, false, false, true, true, true];
+
+/** Horizontal chevron polygon for stage i (first has a flat back, every other one a notch) */
+function chevronPoints(i: number) {
+  const x0 = i * SEG;
+  const x1 = x0 + SEG - GAP;
+  const mid = VB_H / 2;
+  const back =
+    i === 0
+      ? [`${x0},0`, `${x0},${VB_H}`]
+      : [`${x0},0`, `${x0 + NOTCH},${mid}`, `${x0},${VB_H}`];
+  // clockwise: top-left → top-right → tip → bottom-right → bottom-left → (notch)
+  const pts = [
+    back[0],
+    `${x1 - NOTCH},0`,
+    `${x1},${mid}`,
+    `${x1 - NOTCH},${VB_H}`,
+    ...back.slice(1).reverse(),
+  ];
+  return pts.join(" ");
+}
+
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+const VIEWPORT = { once: true, margin: "-100px" } as const;
+const segDelay = (i: number) => 0.2 + i * 0.12;
+
 export default function AgileProcess() {
-  const [activeStep, setActiveStep] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
-  // Auto-advance every 4.5s; pauses while the user hovers or focuses the section
-  useEffect(() => {
-    if (isPaused) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const interval = setInterval(() => setActiveStep((prev) => (prev + 1) % steps.length), 4500);
-    return () => clearInterval(interval);
-  }, [isPaused]);
-
-  const listRef = useRef<HTMLOListElement>(null);
-  const fillRef = useRef<HTMLSpanElement>(null);
-
-  // Grow the stepper's progress line exactly to the active step's circle
-  // (measured from the DOM, so it stays aligned while descriptions expand/collapse)
-  useEffect(() => {
-    const list = listRef.current;
-    const fill = fillRef.current;
-    if (!list || !fill) return;
-    const sync = () => {
-      const item = list.querySelectorAll<HTMLLIElement>(":scope > li")[activeStep];
-      if (!item) return;
-      // circle centre = li top + button padding (8px) + half circle (20px); track starts at 20px
-      fill.style.height = `${Math.max(0, item.offsetTop + 8 + 20 - 20)}px`;
-    };
-    sync();
-    const ro = new ResizeObserver(sync);
-    ro.observe(list);
-    return () => ro.disconnect();
-  }, [activeStep]);
-  const arc = (activeStep / steps.length) * 100; // % of the orbit ring completed
-  const ActiveIcon = steps[activeStep].icon;
-
   return (
     <section
       id="agile"
-      className="relative isolate -mt-10 w-full overflow-hidden bg-[linear-gradient(180deg,#e8f4fc_0%,#eff7fd_55%,#eaf4fb_100%)] pt-30 pb-20 text-[#0B1739] sm:-mt-12 sm:pt-40 sm:pb-28"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={() => setIsPaused(false)}
+      className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#e8f4fc_0%,#eff7fd_55%,#eaf4fb_100%)] py-20 text-[#0B1739] sm:py-28"
     >
-      {/* Background: fine grid + soft glows (same language as the hero) */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(22,115,184,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(22,115,184,0.06)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_60%_60%_at_75%_55%,black,transparent)]" />
-        <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-sky-200/50 blur-[120px]" />
-      </div>
+      <AmbientBackground variant="ice" />
 
-      <Container>
-        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
-          {/* ───── Left: heading + stepper ───── */}
-          <div>
+      <MotionConfig reducedMotion="user">
+        <Container>
+          {/* ───── Split header ───── */}
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
             <SectionHeader
               tone="light"
               align="left"
@@ -127,155 +132,177 @@ export default function AgileProcess() {
               eyebrowIcon={Workflow}
               title={
                 <>
-                  Our Agile Process. <Highlight tone="light">Simple, Seamless, Streamlined</Highlight>
+                  Our Agile Process.{" "}
+                  <Highlight tone="light">
+                    Simple, Seamless, Streamlined
+                  </Highlight>
                 </>
               }
-              description="We follow a structured and agile development approach with project management planner to ensure the successful delivery of every project, focusing on quality, cost-optimization, transparency, and client satisfaction."
             />
+            <motion.p
+              {...reveal(2)}
+              className="max-w-md text-base leading-7 text-slate-600 lg:pb-2"
+            >
+              We follow a structured and agile development approach with project
+              management planner to ensure the successful delivery of every
+              project, focusing on quality, cost-optimization, transparency, and
+              client satisfaction.
+            </motion.p>
+          </div>
 
-            <ol ref={listRef} className="relative mt-10 space-y-1" aria-label="Process stages">
-              {/* Track + animated progress fill */}
-              <span aria-hidden className="absolute top-5 bottom-5 left-[19px] w-px bg-slate-200" />
-              <span
-                ref={fillRef}
+          {/* ───── Desktop: horizontal chevron pipeline ───── */}
+          <div className="mt-14 hidden sm:mt-16 lg:block">
+            {/* Pipeline band */}
+            <div
+              className="relative"
+              style={{ aspectRatio: `${VB_W} / ${VB_H}` }}
+            >
+              <svg
+                viewBox={`0 0 ${VB_W} ${VB_H}`}
+                className="absolute inset-0 h-full w-full drop-shadow-[0_14px_24px_rgba(11,23,57,0.12)]"
                 aria-hidden
-                className="absolute top-5 left-[19px] h-0 w-px bg-gradient-to-b from-[#1673b8] to-sky-400 transition-[height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-              />
+              >
+                {steps.map((step, i) => (
+                  <motion.polygon
+                    key={step.id}
+                    points={chevronPoints(i)}
+                    fill={FILLS[i]}
+                    initial={{ opacity: 0, x: -24 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={VIEWPORT}
+                    transition={{
+                      duration: 0.6,
+                      ease: EASE_OUT,
+                      delay: segDelay(i),
+                    }}
+                  />
+                ))}
+              </svg>
 
-              {steps.map((step, idx) => {
-                const isActive = idx === activeStep;
-                const isDone = idx < activeStep;
-                return (
-                  <motion.li key={step.id} {...reveal(idx)} className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setActiveStep(idx)}
-                      aria-current={isActive ? "step" : undefined}
+              {/* Icon + step label inside each chevron */}
+              <div className="absolute inset-0 grid grid-cols-6" aria-hidden>
+                {steps.map((step, i) => {
+                  const Icon = step.icon;
+                  return (
+                    <motion.div
+                      key={step.id}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={VIEWPORT}
+                      transition={{ duration: 0.5, delay: segDelay(i) + 0.25 }}
                       className={cn(
-                        "flex w-full cursor-pointer items-start gap-4 rounded-xl py-2 pr-3 text-left transition-colors duration-300",
-                        isActive ? "bg-white shadow-[0_10px_30px_-18px_rgba(11,23,57,0.35)] ring-1 ring-sky-100" : "hover:bg-white/60"
+                        "flex items-center justify-center gap-2.5 pr-4",
+                        i > 0 && "pl-5",
+                        ON_DARK[i] ? "text-white" : "text-[#0B1739]",
                       )}
                     >
-                      <span
-                        className={cn(
-                          "relative z-10 ml-px inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-all duration-300",
-                          isActive && "border-[#0B1739] bg-[#0B1739] text-white shadow-[0_8px_20px_-6px_rgba(11,23,57,0.5)]",
-                          isDone && "border-sky-300 bg-sky-50 text-[#1673b8]",
-                          !isActive && !isDone && "border-slate-200 bg-white text-slate-400"
-                        )}
-                      >
-                        {String(idx + 1).padStart(2, "0")}
+                      <Icon className="h-5 w-5 shrink-0" />
+                      <span className="font-mono text-sm font-semibold tracking-wide">
+                        {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span className="min-w-0 pt-2">
-                        <span
-                          className={cn(
-                            "block text-base font-semibold tracking-tight transition-colors",
-                            isActive ? "text-[#0B1739]" : "text-slate-500"
-                          )}
-                        >
-                          {step.title}
-                        </span>
-                        {/* Description expands for the active step */}
-                        <span
-                          className={cn(
-                            "grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                            isActive ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                          )}
-                        >
-                          <span className="overflow-hidden">
-                            <span className="block pt-1.5 pb-1 text-sm leading-relaxed text-slate-600">
-                              {step.description}
-                            </span>
-                          </span>
-                        </span>
-                      </span>
-                    </button>
-                  </motion.li>
-                );
-              })}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Stage text, one column per chevron */}
+            <ol
+              className="mt-9 grid grid-cols-6 gap-6"
+              aria-label="Process stages"
+            >
+              {steps.map((step, i) => (
+                <motion.li
+                  key={step.id}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={VIEWPORT}
+                  transition={{
+                    duration: 0.6,
+                    ease: EASE_OUT,
+                    delay: segDelay(i) + 0.35,
+                  }}
+                >
+                  <span
+                    aria-hidden
+                    className="block h-1 w-8 rounded-full"
+                    style={{ backgroundColor: FILLS[Math.max(i, 2)] }}
+                  />
+                  <h3 className="mt-4 text-base font-semibold tracking-tight text-[#0B1739] xl:text-lg">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                    {step.description}
+                  </p>
+                </motion.li>
+              ))}
             </ol>
           </div>
 
-          {/* ───── Right: orbit diagram ───── */}
-          <motion.div {...revealBlock(2)} className="flex justify-center">
-            <div className="relative aspect-square w-full max-w-[460px]">
-              {/* Ring + animated progress arc */}
-              <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full -rotate-90" aria-hidden>
-                <circle cx="50" cy="50" r="40" fill="none" stroke="#cfe6f5" strokeWidth="0.4" />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="40"
-                  fill="none"
-                  stroke="url(#agile-arc)"
-                  strokeWidth="0.8"
-                  strokeLinecap="round"
-                  pathLength={100}
-                  strokeDasharray={`${arc} 100`}
-                  className="transition-[stroke-dasharray] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-                />
-                <circle cx="50" cy="50" r="28" fill="none" stroke="#e3f1fa" strokeWidth="0.3" strokeDasharray="1 1.5" />
-                <defs>
-                  <linearGradient id="agile-arc" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor="#1673b8" />
-                    <stop offset="1" stopColor="#38bdf8" />
-                  </linearGradient>
-                </defs>
-              </svg>
-
-              {/* Stage nodes, placed on the ring with percentages (no JS measuring) */}
-              {steps.map((step, idx) => {
-                const Icon = step.icon;
-                const isActive = idx === activeStep;
-                const isDone = idx < activeStep;
-                const angle = ((idx * 360) / steps.length - 90) * (Math.PI / 180);
-                const left = 50 + 40 * Math.cos(angle);
-                const top = 50 + 40 * Math.sin(angle);
-                return (
-                  <motion.button
-                    key={step.id}
-                    type="button"
-                    onClick={() => setActiveStep(idx)}
-                    aria-label={step.title}
-                    initial={{ opacity: 0, scale: 0.6 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.35 + idx * 0.08 }}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer"
-                    style={{ left: `${left}%`, top: `${top}%` }}
+          {/* ───── Mobile & tablet: vertical chevron pipeline ───── */}
+          <ol
+            className="mt-12 grid gap-x-10 gap-y-3 sm:grid-cols-2 lg:hidden"
+            aria-label="Process stages"
+          >
+            {steps.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <motion.li
+                  key={step.id}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={VIEWPORT}
+                  transition={{
+                    duration: 0.6,
+                    ease: EASE_OUT,
+                    delay: 0.1 + (i % 2) * 0.1,
+                  }}
+                  className="flex gap-5 py-3"
+                >
+                  {/* Down-pointing chevron badge */}
+                  <span
+                    className="relative h-[4.5rem] w-14 shrink-0"
+                    aria-hidden
                   >
+                    <svg
+                      viewBox="0 0 56 72"
+                      className="absolute inset-0 h-full w-full drop-shadow-[0_8px_14px_rgba(11,23,57,0.12)]"
+                    >
+                      <polygon
+                        points={
+                          i === 0
+                            ? "0,0 56,0 56,56 28,72 0,56"
+                            : "0,0 28,14 56,0 56,56 28,72 0,56"
+                        }
+                        fill={FILLS[i]}
+                      />
+                    </svg>
                     <span
                       className={cn(
-                        "relative flex items-center justify-center rounded-2xl border transition-all duration-500",
-                        isActive
-                          ? "h-14 w-14 border-[#0B1739] bg-[#0B1739] text-white shadow-[0_14px_30px_-10px_rgba(11,23,57,0.55)] ring-4 ring-sky-200/70 sm:h-16 sm:w-16"
-                          : isDone
-                            ? "h-11 w-11 border-sky-200 bg-sky-50 text-[#1673b8] sm:h-12 sm:w-12"
-                            : "h-11 w-11 border-slate-200 bg-white text-slate-500 shadow-sm hover:border-sky-300 hover:text-[#1673b8] sm:h-12 sm:w-12"
+                        "absolute inset-x-0 top-[38%] flex -translate-y-1/2 flex-col items-center gap-0.5",
+                        ON_DARK[i] ? "text-white" : "text-[#0B1739]",
                       )}
                     >
-                      <Icon className={isActive ? "h-6 w-6" : "h-5 w-5"} />
+                      <Icon className="h-5 w-5" />
+                      <span className="font-mono text-[11px] font-semibold">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                     </span>
-                  </motion.button>
-                );
-              })}
-
-              {/* Centre: active stage */}
-              <div className="absolute inset-[24%] flex flex-col items-center justify-center rounded-full bg-white/80 text-center shadow-[0_20px_50px_-24px_rgba(11,23,57,0.35)] ring-1 ring-sky-100 backdrop-blur-sm">
-                <div key={steps[activeStep].id} className="animate-in fade-in zoom-in-95 px-4 duration-500">
-                  <ActiveIcon className="mx-auto h-6 w-6 text-[#1673b8]" />
-                  <p className="mt-2 font-mono text-[11px] tracking-[0.2em] text-slate-400 uppercase">
-                    Stage {String(activeStep + 1).padStart(2, "0")} / {String(steps.length).padStart(2, "0")}
-                  </p>
-                  <p className="mt-1 text-lg font-semibold tracking-tight text-[#0B1739] sm:text-xl">
-                    {steps[activeStep].title}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </Container>
+                  </span>
+                  <div className="min-w-0 pt-1">
+                    <h3 className="text-lg font-semibold tracking-tight text-[#0B1739]">
+                      {step.title}
+                    </h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
+                      {step.description}
+                    </p>
+                  </div>
+                </motion.li>
+              );
+            })}
+          </ol>
+        </Container>
+      </MotionConfig>
     </section>
   );
 }

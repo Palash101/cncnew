@@ -22,19 +22,23 @@ declare module "vanta/dist/vanta.net.min" {
   export default NET;
 }
 
-declare module "vanta/dist/vanta.clouds.min" {
+declare module "vanta/dist/vanta.birds.min" {
   type VantaEffect = { destroy: () => void; resize?: () => void };
-  type VantaCloudsOptions = {
+  type VantaBirdsOptions = {
     el: HTMLElement;
     THREE: unknown;
     backgroundColor?: number;
-    skyColor?: number;
-    cloudColor?: number;
-    cloudShadowColor?: number;
-    sunColor?: number;
-    sunGlareColor?: number;
-    sunlightColor?: number;
-    speed?: number;
+    backgroundAlpha?: number;
+    color1?: number;
+    color2?: number;
+    colorMode?: "lerp" | "variance" | "lerpGradient" | "varianceGradient";
+    birdSize?: number;
+    wingSpan?: number;
+    speedLimit?: number;
+    separation?: number;
+    alignment?: number;
+    cohesion?: number;
+    quantity?: number;
     scale?: number;
     scaleMobile?: number;
     mouseControls?: boolean;
@@ -43,6 +47,6 @@ declare module "vanta/dist/vanta.clouds.min" {
     minHeight?: number;
     minWidth?: number;
   };
-  const CLOUDS: (options: VantaCloudsOptions) => VantaEffect;
-  export default CLOUDS;
+  const BIRDS: (options: VantaBirdsOptions) => VantaEffect;
+  export default BIRDS;
 }

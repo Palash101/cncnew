@@ -24,6 +24,7 @@ import {
   revealBlock,
   SECTION_Y,
 } from "@/components/ui/section";
+import AmbientBackground from "@/components/ui/ambient-background";
 
 interface IndustryItem {
   id: string;
@@ -110,17 +111,14 @@ export default function IndustriesSection() {
     <section
       id="industries"
       className={cn(
-        // Continues the dark block from "What We Do"; rounded bottom edge overlaps the light Agile section
-        "relative isolate z-10 w-full overflow-hidden rounded-b-[28px] bg-[linear-gradient(180deg,#050d24_0%,#0B1739_30%,#081230_100%)] text-white shadow-[0_30px_60px_-20px_rgba(11,23,57,0.45)] sm:rounded-b-[40px]",
+        // Continues the dark block from "What We Do"
+        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#050d24_0%,#0B1739_30%,#081230_100%)] text-white",
         SECTION_Y
       )}
     >
       <TopHairline />
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 left-1/2 h-[24rem] w-[52rem] -translate-x-1/2 rounded-full bg-sky-500/15 blur-[120px]" />
-        <div className="absolute -right-40 bottom-0 h-[26rem] w-[26rem] rounded-full bg-cyan-400/10 blur-[120px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(125,211,252,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(125,211,252,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_60%_40%_at_50%_0%,black,transparent)]" />
-      </div>
+      <AmbientBackground variant="dark" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-[#050d24] to-transparent" />
 
       <Container>
         {/* Split header */}

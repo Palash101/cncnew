@@ -24,7 +24,7 @@ export default function Home() {
       */}
       <div className="relative">
         <HeroSection />
-        <div className="relative z-20 overflow-hidden rounded-[28px] shadow-[0_-24px_60px_-12px_rgba(11,23,57,0.35),0_30px_60px_-24px_rgba(11,23,57,0.4)] sm:rounded-[40px]">
+        <div className="relative z-10 overflow-hidden rounded-t-[28px] shadow-[0_-24px_60px_-12px_rgba(11,23,57,0.35)] sm:rounded-t-[40px]">
           <StatsSection />
         </div>
       </div>

@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Monitor, Server, Smartphone, Cloud, Cpu, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Container, SectionHeader, Highlight, TopHairline, revealCard, SECTION_Y } from "@/components/ui/section";
+import AmbientBackground from "@/components/ui/ambient-background";
 
 interface TechItem {
   name: string;
@@ -82,9 +83,7 @@ export default function TechStack() {
   return (
     <section className={cn("relative isolate w-full overflow-hidden bg-white text-[#0B1739]", SECTION_Y)}>
       <TopHairline tone="light" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/2 h-[22rem] w-[48rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-100/70 blur-[120px]" />
-      </div>
+      <AmbientBackground variant="white" />
 
       <Container>
         <SectionHeader

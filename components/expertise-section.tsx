@@ -23,6 +23,7 @@ import {
   revealCard,
   SECTION_Y,
 } from "@/components/ui/section";
+import AmbientBackground from "@/components/ui/ambient-background";
 
 interface ExpertiseItem {
   id: string;
@@ -107,16 +108,13 @@ export default function ExpertiseSection() {
     <section
       id="services"
       className={cn(
-        // Dark panel with a rounded top edge overlapping the light Solutions section above
-        "relative isolate z-10 -mt-10 w-full overflow-hidden rounded-t-[28px] bg-[linear-gradient(180deg,#0B1739_0%,#071028_55%,#050d24_100%)] text-white shadow-[0_-20px_50px_-24px_rgba(11,23,57,0.35)] sm:-mt-12 sm:rounded-t-[40px]",
+        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#0B1739_0%,#071028_55%,#050d24_100%)] text-white",
         SECTION_Y
       )}
     >
       <TopHairline />
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 h-[30rem] w-[30rem] translate-x-1/3 -translate-y-1/3 rounded-full bg-sky-500/10 blur-[120px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(125,211,252,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(125,211,252,0.045)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_50%_40%_at_85%_10%,black,transparent)]" />
-      </div>
+      <AmbientBackground variant="dark" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-[#050d24]" />
 
       <Container>
         {/* Header: title left, intro line right */}

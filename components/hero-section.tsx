@@ -30,11 +30,11 @@ const fadeUp: Variants = {
 export default function HeroSection() {
   const { openQuoteModal } = useQuoteModal();
   const sectionRef = useRef<HTMLElement>(null);
-  const cloudsRef = useRef<HTMLDivElement>(null);
+  const birdsRef = useRef<HTMLDivElement>(null);
   const [wordIndex, setWordIndex] = useState(0);
   const lenis = useLenis();
 
-  // Animated Vanta clouds background (lazy-loaded so it never blocks first paint)
+  // Animated Vanta birds background (lazy-loaded so it never blocks first paint)
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -42,15 +42,27 @@ export default function HeroSection() {
     let effect: { destroy: () => void } | null = null;
 
     const load = async () => {
-      const [{ default: CLOUDS }, THREE] = await Promise.all([
-        import("vanta/dist/vanta.clouds.min"),
+      const [{ default: BIRDS }, THREE] = await Promise.all([
+        import("vanta/dist/vanta.birds.min"),
         import("three"),
       ]);
-      if (cancelled || !cloudsRef.current) return;
+      if (cancelled || !birdsRef.current) return;
 
-      effect = CLOUDS({
-        el: cloudsRef.current,
+      effect = BIRDS({
+        el: birdsRef.current,
         THREE,
+        // Light sky to match the hero; birds in brand navy → sky blue
+        backgroundColor: 0xeaf7fc,
+        color1: 0x0b1739,
+        color2: 0x26a9dc,
+        colorMode: "lerpGradient",
+        birdSize: 1.1,
+        wingSpan: 26,
+        speedLimit: 4,
+        separation: 40,
+        alignment: 30,
+        cohesion: 25,
+        quantity: 3,
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
@@ -99,8 +111,8 @@ export default function HeroSection() {
       id="top"
       className="sticky top-0 z-0 isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-[#effaff] px-6 pt-28 pb-28 text-center text-[#0B1739]"
     >
-      {/* ───────── Background: Vanta clouds ───────── */}
-      <div ref={cloudsRef} aria-hidden className="absolute inset-0 -z-10" />
+      {/* ───────── Background: Vanta birds ───────── */}
+      <div ref={birdsRef} aria-hidden className="absolute inset-0 -z-10" />
 
       {/* ───────── Content (scroll-linked: moves up + fades while background stays) ───────── */}
       <motion.div

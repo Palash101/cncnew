@@ -30,7 +30,7 @@ const aiCapabilities: AiCapability[] = [
     icon: Bot,
     title: "Custom LLM & Chatbots",
     subtitle: "Enterprise Models",
-    imageUrl: "https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=600&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1676299081847-824916de030a?q=80&w=800&auto=format&fit=crop",
     description:
       "Train & deploy private conversational AI models on custom data with full enterprise data sovereignty.",
     highlights: ["Custom ChatGPT Chatbots", "Private Enterprise Sovereignty", "Multi-Turn Context & Memory"],
