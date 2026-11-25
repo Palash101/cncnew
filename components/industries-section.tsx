@@ -83,10 +83,54 @@ const industries: IndustryItem[] = [
   },
 ];
 
+// Two card colours, alternating: dark with light text, light with dark text
+const TONES = {
+  dark: {
+    card: "border border-sky-400/30 bg-c-deep-800 text-white",
+    picture: "bg-c-deep-700",
+    description: "text-slate-200",
+    link: "text-c-highlight",
+    art: undefined,
+  },
+  light: {
+    card: "bg-white text-c-ink",
+    picture: "bg-c-brand-100",
+    description: "text-slate-700",
+    link: "text-c-brand",
+    // Recolours the illustration for a light background
+    art: {
+      "--art-line": "var(--c-brand)",
+      "--art-detail": "var(--c-ink)",
+      "--art-wall": "var(--c-wash-100)",
+      "--art-wall-2": "#ffffff",
+      "--art-glass": "var(--c-brand-200)",
+      "--art-screen": "#ffffff",
+      "--art-lit": "var(--c-brand-300)",
+    } as React.CSSProperties,
+  },
+};
+
+/**
+ * Wide cards put the picture beside the text.
+ * Tablet: rows of 2 and 1. Desktop: rows of 3 and 2. Both keep the two colours alternating.
+ */
+function layout(i: number) {
+  const tabletWide = i % 3 === 2 || i === industries.length - 1;
+  const desktopWide = i % 5 >= 3;
+  return {
+    cell: cn(tabletWide && "sm:col-span-2", desktopWide ? "lg:col-span-3" : "lg:col-span-2"),
+    card: cn(tabletWide && "sm:flex-row", desktopWide ? "lg:flex-row" : "lg:flex-col"),
+    picture: cn(tabletWide && "sm:w-1/2 sm:shrink-0", desktopWide ? "lg:w-1/2 lg:shrink-0" : "lg:w-full"),
+    text: cn(tabletWide && "sm:justify-center sm:p-8", "lg:p-6"),
+    scene: desktopWide ? "lg:aspect-[152/130]" : undefined,
+  };
+}
+
 export default function IndustriesSection() {
   return (
     <section
       id="industries"
+      data-header="dark"
       className={cn(
         // Continues the dark block from "What We Do"
         "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-night)_0%,var(--c-ink)_30%,var(--c-panel)_100%)] text-white",
@@ -116,29 +160,39 @@ export default function IndustriesSection() {
           </motion.p>
         </div>
 
-        {/* Illustrated street: scenes touch, so each row shares one continuous road */}
-        <ul className="mt-14 grid grid-cols-2 gap-y-14 sm:mt-16 sm:gap-y-16 lg:grid-cols-5">
-          {industries.map((item, i) => (
-            <motion.li key={item.id} {...reveal(i % 5)}>
-              <a href={`#${item.id}`} className="group flex h-full flex-col rounded-lg outline-offset-4">
-                <IndustryScene id={item.id} index={i} />
+        <ul className="mt-12 grid gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-6 lg:gap-5">
+          {industries.map((item, i) => {
+            const tone = i % 2 === 0 ? TONES.dark : TONES.light;
+            const shape = layout(i);
+            return (
+              <motion.li key={item.id} {...reveal(i % 3)} className={shape.cell}>
+                <a
+                  href={`#${item.id}`}
+                  className={cn(
+                    "group flex h-full flex-col overflow-hidden rounded-2xl outline-offset-4 focus-visible:outline-2 focus-visible:outline-white",
+                    shape.card,
+                    tone.card
+                  )}
+                >
+                  <span style={tone.art} className={cn("flex items-end", shape.picture, tone.picture)}>
+                    <IndustryScene id={item.id} index={i} className={shape.scene} />
+                  </span>
 
-                <span className="flex flex-1 flex-col pt-6 pr-5 sm:pr-8">
-                  <span className="text-base font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-sky-200 sm:text-lg">
-                    {item.title}
+                  <span className={cn("flex flex-1 flex-col p-6", shape.text)}>
+                    <span className="text-xl leading-tight font-semibold tracking-[-0.02em]">{item.title}</span>
+                    <span className={cn("mt-2.5 text-[15px] leading-relaxed", tone.description)}>{item.description}</span>
+                    <span className={cn("mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold", tone.link)}>
+                      Explore More
+                      <ArrowUpRight
+                        aria-hidden
+                        className="h-4 w-4 transition-transform duration-300 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
+                      />
+                    </span>
                   </span>
-                  <span className="mt-2 text-sm leading-relaxed text-slate-300">{item.description}</span>
-                  <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-sm font-semibold text-sky-300 transition-colors duration-300 group-hover:text-white">
-                    Explore More
-                    <ArrowUpRight
-                      aria-hidden
-                      className="h-4 w-4 transition-transform duration-300 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
-                    />
-                  </span>
-                </span>
-              </a>
-            </motion.li>
-          ))}
+                </a>
+              </motion.li>
+            );
+          })}
         </ul>
       </Container>
     </section>

@@ -95,7 +95,7 @@
   --c-wash-100: #e8f4fc;
   --c-wash-50: #eff7fd;
   --c-wash-25: #f5f9fd;
-  /* Accent: highlights, glows, the hero orb */
+  /* Accent: highlights and glows */
   --c-highlight: #3cc8f5;
   --c-highlight-mid: #38bdf8;
   --c-highlight-soft: #8fe3ff;
@@ -183,7 +183,6 @@
 
   html {
     @apply font-sans;
-    scroll-padding-top: 6rem;
     /* Crisp, smooth text rendering across browsers */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

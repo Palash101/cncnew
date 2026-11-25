@@ -3,14 +3,23 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Monitor, Server, Smartphone, Cloud, Cpu, type LucideIcon } from "lucide-react";
-import { Container, SectionHeader, Highlight, TopHairline, reveal, SECTION_Y } from "@/components/ui/section";
+import {
+  Container,
+  Eyebrow,
+  Highlight,
+  TopHairline,
+  descriptionClass,
+  headingClass,
+  reveal,
+  revealHeading,
+} from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 
 interface TechItem {
   name: string;
   image: string;
-  /** The file has a light-grey box baked in: brighten it to match the white tile */
-  lift?: boolean;
+  /** The file has a light-grey box and wide margins baked in: lift the grey to white and enlarge the mark ("clean" = no enlarging) */
+  boxed?: true | "clean";
 }
 
 interface CategoryRow {
@@ -28,7 +37,7 @@ const techCategories: CategoryRow[] = [
     items: [
       { name: "React Js", image: "/frontend/react.png" },
       { name: "Next Js", image: "/frontend/nextjs.png" },
-      { name: "Vue JS", image: "/frontend/vue.webp", lift: true },
+      { name: "Vue JS", image: "/frontend/vue.webp", boxed: true },
       { name: "Angular Js", image: "/frontend/angular.png" },
       { name: "HTML5", image: "/frontend/html.png" },
       { name: "CSS 3", image: "/frontend/css.png" },
@@ -60,7 +69,7 @@ const techCategories: CategoryRow[] = [
       { name: "Android", image: "/mobile framework/android.png" },
       { name: "Flutter", image: "/mobile framework/flutter.png" },
       { name: "Kotlin", image: "/mobile framework/Kotlin_icon.webp" },
-      { name: "React Native", image: "/mobile framework/react native.png", lift: true },
+      { name: "React Native", image: "/mobile framework/react native.png", boxed: "clean" },
     ],
   },
   {
@@ -70,8 +79,8 @@ const techCategories: CategoryRow[] = [
     items: [
       { name: "Azure", image: "/cloud devops/azure.png" },
       { name: "AWS", image: "/cloud devops/aws-icon.webp" },
-      { name: "Google Cloud", image: "/cloud devops/google cloud.webp", lift: true },
-      { name: "Docker", image: "/cloud devops/docker.png", lift: true },
+      { name: "Google Cloud", image: "/cloud devops/google cloud.webp", boxed: true },
+      { name: "Docker", image: "/cloud devops/docker.png", boxed: true },
       { name: "Bitbucket", image: "/cloud devops/bit bucket.png" },
       { name: "Github", image: "/cloud devops/github.png" },
       { name: "Gitlab", image: "/cloud devops/git lab.png" },
@@ -80,73 +89,94 @@ const techCategories: CategoryRow[] = [
   },
 ];
 
+// The stack, top to bottom: what people touch first, what everything runs on last.
+// Same pale-to-navy progression as the process section; the last layer meets the footer.
+const LAYERS = [
+  { id: "frontend", header: "light", surface: "bg-c-brand-100 text-c-ink", tile: "bg-c-brand text-white", muted: "text-slate-700" },
+  { id: "mobile", header: "light", surface: "bg-c-brand-200 text-c-ink", tile: "bg-c-brand text-white", muted: "text-slate-700" },
+  { id: "backend", header: "dark", surface: "bg-c-brand text-white", tile: "bg-white text-c-brand", muted: "text-white" },
+  { id: "cloud", header: "dark", surface: "bg-c-ink text-white", tile: "bg-c-highlight text-c-ink", muted: "text-slate-300" },
+];
+
 export default function TechStack() {
   return (
-    <section
-      id="technology"
-      className={cn("relative isolate w-full overflow-hidden bg-white text-c-ink", SECTION_Y)}
-    >
+    <section id="technology" data-header="light" className="relative isolate w-full overflow-hidden bg-white text-c-ink">
       <TopHairline tone="light" />
 
-      <Container>
-        <SectionHeader
-          tone="light"
-          eyebrow="Technology"
-          eyebrowIcon={Cpu}
-          title={
-            <>
-              Our <Highlight tone="light">Technology Stack</Highlight>
-            </>
-          }
-          description="Empowering enterprise applications with modern, battle-tested technologies."
-        />
+      <Container className="pt-20 pb-14 sm:pt-28 sm:pb-16">
+        <motion.div {...reveal(0)} className="mb-6">
+          <Eyebrow icon={Cpu} tone="light">
+            Technology
+          </Eyebrow>
+        </motion.div>
+        <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
+          <motion.h2 {...revealHeading(1)} className={headingClass("light")}>
+            Our <Highlight tone="light">Technology Stack</Highlight>
+          </motion.h2>
+          <motion.p {...reveal(2)} className={cn(descriptionClass("light"), "max-w-xl")}>
+            Empowering enterprise applications with modern, battle-tested technologies.
+          </motion.p>
+        </div>
+      </Container>
 
-        {/* One plain card per category */}
-        <div className="mt-12 grid gap-5 sm:mt-14 lg:grid-cols-2 lg:gap-6">
-          {techCategories.map((category) => {
-            const Icon = category.icon;
-            return (
+      {/* Each layer is a full-width sheet that overlaps the one above it */}
+      {LAYERS.map((layer, i) => {
+        const category = techCategories.find((c) => c.id === layer.id);
+        if (!category) return null;
+        const Icon = category.icon;
+        const last = i === LAYERS.length - 1;
+        return (
+          <div
+            key={layer.id}
+            data-header={layer.header}
+            className={cn(
+              "relative rounded-t-[28px] shadow-[0_-18px_40px_-24px_color-mix(in_srgb,var(--c-ink)_45%,transparent)] sm:rounded-t-[40px]",
+              i > 0 && "-mt-8 sm:-mt-10",
+              layer.surface,
+            )}
+          >
+            <Container className={cn("pt-9 sm:pt-12", last ? "pb-14 sm:pb-20" : "pb-[4.25rem] sm:pb-[5.5rem]")}>
               <motion.div
-                key={category.id}
                 {...reveal(0)}
-                className="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 sm:p-7"
+                className="grid gap-7 lg:grid-cols-[14.5rem_minmax(0,1fr)] lg:items-center lg:gap-12"
               >
-                <div className="flex items-center gap-3.5">
-                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-c-brand text-white">
-                    <Icon aria-hidden className="h-5 w-5" />
+                <div className="flex items-center gap-4">
+                  <span
+                    className={cn("inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl", layer.tile)}
+                  >
+                    <Icon aria-hidden className="h-6 w-6" strokeWidth={1.9} />
                   </span>
                   <div>
-                    <h3 className="text-lg leading-tight font-semibold tracking-tight">{category.title}</h3>
-                    <p className="mt-1 text-sm text-slate-600">{category.items.length} technologies</p>
+                    <h3 className="text-xl leading-tight font-semibold tracking-[-0.02em]">{category.title}</h3>
+                    <p className={cn("mt-1 text-sm", layer.muted)}>{category.items.length} technologies</p>
                   </div>
                 </div>
 
-                <ul className="mt-6 grid grid-cols-3 gap-2.5 sm:grid-cols-4 sm:gap-3">
+                <ul className="grid grid-cols-4 gap-x-2 gap-y-6 md:grid-cols-8 md:gap-x-3">
                   {category.items.map((tech) => (
-                    <li
-                      key={tech.name}
-                      className="flex flex-col items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-1.5 py-4"
-                    >
-                      <span className="flex h-10 w-10 items-center justify-center">
+                    <li key={tech.name} className="flex flex-col items-center gap-2.5">
+                      <span className="flex h-15 w-15 items-center justify-center overflow-hidden rounded-2xl bg-white p-3 shadow-[0_8px_20px_-10px_color-mix(in_srgb,var(--c-ink)_50%,transparent)] sm:h-[4.25rem] sm:w-[4.25rem] sm:p-3.5">
                         <Image
                           src={tech.image}
                           alt=""
-                          width={40}
-                          height={40}
-                          className={cn("h-full w-full object-contain", tech.lift && "brightness-110")}
+                          width={48}
+                          height={48}
+                          className={cn(
+                            "h-full w-full object-contain",
+                            tech.boxed && "contrast-[1.28]",
+                            tech.boxed === true && "scale-125",
+                          )}
                         />
                       </span>
-                      <span className="text-center text-[13px] leading-tight font-medium text-slate-700">
-                        {tech.name}
-                      </span>
+                      <span className="text-center text-xs leading-tight font-medium sm:text-[13px]">{tech.name}</span>
                     </li>
                   ))}
                 </ul>
               </motion.div>
-            );
-          })}
-        </div>
-      </Container>
+            </Container>
+          </div>
+        );
+      })}
     </section>
   );
 }

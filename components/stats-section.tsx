@@ -44,7 +44,7 @@ function CountUp({ to }: { to: number }) {
  */
 export default function StatsSection() {
   return (
-    <section className="relative isolate w-full overflow-hidden bg-c-ink text-white">
+    <section id="about" data-header="dark" className="relative isolate w-full overflow-hidden bg-c-ink text-white">
       <StatsBackground />
 
       <MotionConfig reducedMotion="user">

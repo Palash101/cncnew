@@ -58,7 +58,7 @@ export default function Footer() {
   const { openQuoteModal } = useQuoteModal();
 
   return (
-    <footer className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-ink)_0%,var(--c-panel)_45%,var(--color-slate-950)_100%)] text-slate-300">
+    <footer data-header="dark" className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-ink)_0%,var(--c-panel)_45%,var(--color-slate-950)_100%)] text-slate-300">
       <TopHairline />
 
       {/* Background: soft glows */}
@@ -68,7 +68,7 @@ export default function Footer() {
       </div>
 
       {/* ───────── CTA strip (part of the footer, no card) ───────── */}
-      <div id="contact" className="scroll-mt-10">
+      <div id="contact" className="scroll-mt-16">
         <Container className="py-12 sm:py-14">
           <motion.div
             {...reveal(0)}

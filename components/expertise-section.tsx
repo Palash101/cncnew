@@ -111,6 +111,7 @@ export default function ExpertiseSection() {
   return (
     <section
       id="services"
+      data-header="dark"
       className={cn(
         "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-ink)_0%,var(--c-panel)_55%,var(--c-night)_100%)] text-white",
         SECTION_Y

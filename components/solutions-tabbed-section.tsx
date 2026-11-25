@@ -39,6 +39,7 @@ export default function SolutionsTabbedSection() {
   return (
     <section
       id="projects"
+      data-header="light"
       className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-wash-50)_0%,var(--c-wash-25)_100%)] py-20 text-c-ink sm:py-28"
     >
       <div id="work" />

@@ -1,247 +1,219 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X, ArrowRight } from "lucide-react";
-import { motion, AnimatePresence, useMotionValueEvent, useScroll } from "motion/react";
+import { useMotionValueEvent, useScroll } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useQuoteModal } from "@/context/quote-modal-context";
 
 const NAV_LINKS = [
   { href: "/#services", id: "services", label: "Services" },
+  { href: "/#industries", id: "industries", label: "Industries" },
+  { href: "/#technology", id: "technology", label: "Technology" },
   { href: "/#projects", id: "projects", label: "Our Work" },
   { href: "/#about", id: "about", label: "About Us" },
-  { href: "/#careers", id: "careers", label: "Careers" },
+  { href: "/#contact", id: "contact", label: "Contact" },
 ];
 
-// Distance (px) the user must scroll before the floating bar expands to full width
+type Tone = "dark" | "light";
+
+// Height of the bar in px (h-[72px]); its middle decides which section it is sitting on
+const BAR_HEIGHT = 72;
+// Distance (px) the user must scroll before the bar gets its own background
 const SCROLL_THRESHOLD = 24;
+
+/** Same two colour combinations as the industry cards */
+const TONES: Record<Tone, { bar: string; link: string; active: string; cta: string; toggle: string; line: string }> = {
+  dark: {
+    bar: "border-white/10 bg-c-ink/95",
+    link: "text-white hover:text-c-highlight",
+    active: "text-c-highlight",
+    cta: "bg-white text-c-ink hover:bg-slate-200 focus-visible:outline-white",
+    toggle: "text-white hover:bg-white/10 focus-visible:outline-white",
+    line: "border-white/10",
+  },
+  light: {
+    bar: "border-slate-200 bg-white/95",
+    link: "text-c-ink hover:text-c-brand",
+    active: "text-c-brand",
+    cta: "bg-c-ink text-white hover:bg-c-ink-hover focus-visible:outline-c-ink",
+    toggle: "text-c-ink hover:bg-slate-100 focus-visible:outline-c-ink",
+    line: "border-slate-200",
+  },
+};
 
 export default function Navbar() {
   const { openQuoteModal } = useQuoteModal();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hovered, setHovered] = useState<string | null>(null);
+  const [sectionTone, setSectionTone] = useState<Tone>("dark");
   const [activeId, setActiveId] = useState<string | null>(null);
 
+  const sync = useCallback(() => {
+    setScrolled(window.scrollY > SCROLL_THRESHOLD);
+
+    // Match the section behind the bar; nested areas come later in the page, so the last hit wins
+    let tone: Tone = "dark";
+    document.querySelectorAll<HTMLElement>("[data-header]").forEach((el) => {
+      const { top, bottom } = el.getBoundingClientRect();
+      if (top <= BAR_HEIGHT / 2 && bottom > BAR_HEIGHT / 2) tone = el.dataset.header === "light" ? "light" : "dark";
+    });
+    setSectionTone(tone);
+
+    // Highlight the link of the section around the middle of the screen
+    const middle = window.innerHeight * 0.45;
+    const current = NAV_LINKS.find(({ id }) => {
+      const rect = document.getElementById(id)?.getBoundingClientRect();
+      return rect && rect.top <= middle && rect.bottom > middle;
+    });
+    setActiveId(window.scrollY < 200 ? null : (current?.id ?? null));
+  }, []);
+
   const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", sync);
 
-  useMotionValueEvent(scrollY, "change", (y) => {
-    setScrolled(y > SCROLL_THRESHOLD);
-  });
-
-  // Sync initial state when the page loads already scrolled (refresh / anchor link)
+  // First paint (refresh or anchor link can start mid-page) and window resizes
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setScrolled(window.scrollY > SCROLL_THRESHOLD));
-    return () => cancelAnimationFrame(frame);
-  }, []);
-
-  // Highlight the link of the section currently in view
-  useEffect(() => {
-    const sections = NAV_LINKS.map((l) => document.getElementById(l.id)).filter(
-      (el): el is HTMLElement => el !== null
-    );
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveId(entry.target.id);
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px" }
-    );
-    sections.forEach((s) => observer.observe(s));
-
-    const clearAtTop = () => {
-      if (window.scrollY < 200) setActiveId(null);
-    };
-    window.addEventListener("scroll", clearAtTop, { passive: true });
-
+    const frame = requestAnimationFrame(sync);
+    window.addEventListener("resize", sync);
     return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", clearAtTop);
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", sync);
     };
-  }, []);
+  }, [sync]);
 
-  // Close mobile menu with Escape
+  // Close the mobile menu with Escape, or when the screen grows to the desktop layout
   useEffect(() => {
-    if (!mobileMenuOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileMenuOpen(false);
+    if (!menuOpen) return;
+    const desktop = window.matchMedia("(min-width: 64rem)");
+    const close = () => setMenuOpen(false);
+    const onKey = (event: KeyboardEvent) => event.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [mobileMenuOpen]);
+    desktop.addEventListener("change", close);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", close);
+    };
+  }, [menuOpen]);
 
-  const highlighted = hovered ?? activeId;
+  const tone = TONES[sectionTone];
+  const isDark = sectionTone === "dark";
+  // Over the hero the bar is see-through, so header and hero read as one
+  const solid = scrolled || menuOpen;
+
+  const linkClass = (id: string) => cn("transition-colors", activeId === id ? tone.active : tone.link);
 
   return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-50"
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300",
+        solid ? cn("backdrop-blur-md", tone.bar) : "border-transparent bg-transparent"
+      )}
     >
-      {/*
-        At the top: a floating, rounded glass bar (keeps the logo readable over the hero).
-        On scroll: it smoothly stretches into a full-width bar pinned to the top.
-      */}
-      <div
-        className={cn(
-          "relative mx-auto w-full overflow-hidden border backdrop-blur-xl backdrop-saturate-150",
-          "transition-[max-width,margin,border-radius,background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          scrolled
-            ? "mt-0 max-w-[100vw] rounded-none border-x-transparent border-t-transparent border-b-slate-200/70 bg-white/85 shadow-[0_8px_30px_-12px_color-mix(in_srgb,var(--c-ink)_18%,transparent)]"
-            : "mt-3 max-w-[min(1200px,calc(100%-24px))] rounded-2xl border-white/80 bg-white/90 shadow-[0_10px_40px_-12px_color-mix(in_srgb,var(--c-ink)_25%,transparent)] ring-1 ring-c-ink/5",
-          mobileMenuOpen && !scrolled && "bg-white/95"
-        )}
-      >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
-          {/* Logo */}
-          <Link
-            href="/"
-            className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-90"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <Image
-                src="/craft and code logo.png"
-                alt="Craft and Code Logo"
-                width={180}
-                height={48}
-                priority
-                sizes="180px"
-                className="h-10 w-auto object-contain"
-              />
-          </Link>
+      <div className="mx-auto flex h-[72px] w-full max-w-6xl items-center justify-between gap-6 px-6 sm:px-8">
+        {/* Logo: white on dark, original colours on light. The file has empty margins, hence the negative one. */}
+        <Link href="/" aria-label="Craft and Code, home" className="-ml-4 shrink-0" onClick={() => setMenuOpen(false)}>
+          <Image
+            src="/craft and code logo.png"
+            alt=""
+            width={208}
+            height={48}
+            priority
+            sizes="208px"
+            className={cn("h-12 w-auto object-contain transition-[filter] duration-300", isDark && "brightness-0 invert")}
+          />
+        </Link>
 
-          {/* Desktop Navigation */}
-          <nav
-            className="hidden items-center gap-1 md:flex"
-            onMouseLeave={() => setHovered(null)}
+        {/* Desktop navigation */}
+        <nav aria-label="Main" className="hidden items-center lg:flex">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.id}
+              href={link.href}
+              aria-current={activeId === link.id ? "location" : undefined}
+              className={cn(
+                "relative px-3.5 py-2 text-[15px] font-semibold whitespace-nowrap xl:px-4",
+                "after:absolute after:inset-x-3.5 after:bottom-0.5 after:h-0.5 after:rounded-full after:bg-current xl:after:inset-x-4",
+                activeId === link.id ? "after:opacity-100" : "after:opacity-0",
+                linkClass(link.id)
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => openQuoteModal()}
+            className={cn(
+              "hidden h-11 cursor-pointer items-center gap-2 rounded-xl px-5 text-[15px] font-semibold whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:inline-flex",
+              tone.cta
+            )}
           >
-            {NAV_LINKS.map((link) => {
-              const isActive = activeId === link.id;
-              return (
+            Get a Quote
+            <ArrowRight aria-hidden className="h-4 w-4" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            className={cn(
+              "-mr-2.5 inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl transition-colors focus-visible:outline-2 lg:hidden",
+              tone.toggle
+            )}
+          >
+            {menuOpen ? <X aria-hidden className="h-6 w-6" /> : <Menu aria-hidden className="h-6 w-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile and tablet menu */}
+      {menuOpen && (
+        <nav
+          id="mobile-menu"
+          aria-label="Main"
+          data-lenis-prevent
+          className={cn("max-h-[calc(100svh-72px)] overflow-y-auto border-t lg:hidden", tone.line)}
+        >
+          <ul className="mx-auto max-w-6xl px-6 pt-2 pb-6 sm:px-8">
+            {NAV_LINKS.map((link) => (
+              <li key={link.id} className={cn("border-b", tone.line)}>
                 <Link
-                  key={link.id}
                   href={link.href}
-                  onMouseEnter={() => setHovered(link.id)}
-                  className={cn(
-                    "relative rounded-full px-4 py-2 text-sm font-semibold tracking-tight transition-colors",
-                    isActive ? "text-sky-700" : "text-c-ink hover:text-sky-700"
-                  )}
+                  onClick={() => setMenuOpen(false)}
+                  aria-current={activeId === link.id ? "location" : undefined}
+                  className={cn("flex h-14 items-center text-lg font-semibold", linkClass(link.id))}
                 >
-                  {highlighted === link.id && (
-                    <motion.span
-                      layoutId="nav-pill"
-                      className="absolute inset-0 -z-10 rounded-full bg-sky-100/80 ring-1 ring-sky-200/70"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
                   {link.label}
                 </Link>
-              );
-            })}
-          </nav>
-
-          {/* CTA + Mobile Toggle */}
-          <div className="flex items-center gap-2">
-            <motion.button
-              type="button"
-              onClick={() => openQuoteModal()}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="group relative hidden cursor-pointer items-center overflow-hidden rounded-full bg-c-ink px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-c-ink/25 sm:inline-flex"
-            >
-              {/* Shine sweep */}
-              <span className="pointer-events-none absolute inset-y-0 -left-full w-1/2 skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-all duration-700 group-hover:left-[130%]" />
-              <span className="absolute inset-0 bg-gradient-to-r from-sky-500 to-indigo-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <span className="relative flex items-center">
+              </li>
+            ))}
+            <li className="pt-5 sm:hidden">
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  openQuoteModal();
+                }}
+                className={cn(
+                  "inline-flex h-13 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-base font-semibold",
+                  tone.cta
+                )}
+              >
                 Get a Quote
-                <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </span>
-            </motion.button>
-
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((o) => !o)}
-              className="relative inline-flex cursor-pointer items-center justify-center rounded-full p-2 text-c-ink transition-colors hover:bg-slate-900/5 md:hidden"
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileMenuOpen}
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={mobileMenuOpen ? "close" : "open"}
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.18 }}
-                  className="block"
-                >
-                  {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                </motion.span>
-              </AnimatePresence>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence initial={false}>
-          {mobileMenuOpen && (
-            <motion.div
-              key="mobile-menu"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="overflow-hidden md:hidden"
-            >
-              <nav className="mx-auto flex max-w-6xl flex-col gap-1 border-t border-slate-200/70 px-6 pb-5 pt-3 sm:px-8">
-                {NAV_LINKS.map((link, i) => (
-                  <motion.div
-                    key={link.id}
-                    initial={{ x: -12, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.25, delay: 0.05 + i * 0.05 }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={cn(
-                        "flex items-center justify-between rounded-xl px-3 py-3 text-base font-semibold tracking-tight transition-colors",
-                        activeId === link.id
-                          ? "bg-sky-50 text-sky-700"
-                          : "text-c-ink hover:bg-slate-50 hover:text-sky-700"
-                      )}
-                    >
-                      {link.label}
-                      <ArrowRight className="h-4 w-4 opacity-40" />
-                    </Link>
-                  </motion.div>
-                ))}
-
-                <motion.div
-                  initial={{ y: 8, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.25, delay: 0.05 + NAV_LINKS.length * 0.05 }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      openQuoteModal();
-                    }}
-                    className="mt-3 inline-flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-c-ink to-blue-900 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-c-ink/25"
-                  >
-                    Get a Quote
-                    <ArrowRight className="ml-1.5 h-4 w-4" />
-                  </button>
-                </motion.div>
-              </nav>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.header>
+                <ArrowRight aria-hidden className="h-5 w-5" />
+              </button>
+            </li>
+          </ul>
+        </nav>
+      )}
+    </header>
   );
 }

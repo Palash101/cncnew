@@ -1,23 +1,25 @@
 /* ─────────────────────────────────────────────────────────────
    Industries section: one scene per industry, showing the technology
    we build for it (taken from each industry's description).
-   Every scene is 200 wide with the data line at the same height, so scenes
-   placed side by side with no gap form one connected system.
+   Every scene is 200 wide with the data line at the same height.
    Static SVG from fixed values; the parent's `group` hover lights the screens.
    ───────────────────────────────────────────────────────────── */
 
-const SKY = "var(--c-highlight-mid)";
-const ICE = "var(--c-highlight-200)";
-const WALL = "var(--c-deep-800)";
-const WALL_2 = "var(--c-deep-650)";
-const GLASS = "var(--c-deep-500)";
-const DEEP = "var(--c-deep-900)";
+import { cn } from "@/lib/utils";
+
+// Dark-card colours by default; a light card overrides the --art-* variables
+const SKY = "var(--art-line, var(--c-highlight-mid))";
+const ICE = "var(--art-detail, var(--c-highlight-200))";
+const WALL = "var(--art-wall, var(--c-deep-800))";
+const WALL_2 = "var(--art-wall-2, var(--c-deep-650))";
+const GLASS = "var(--art-glass, var(--c-deep-500))";
+const DEEP = "var(--art-screen, var(--c-deep-900))";
 const GROUND = 148;
 
 /** Size of each drawing inside its scene; smaller = more space between neighbours */
 const SCALE = 0.8;
 
-const LIGHT = "transition-[fill] duration-500 group-hover:fill-c-deep-400";
+const LIGHT = "transition-[fill] duration-500 group-hover:fill-[var(--art-lit,var(--c-deep-400))]";
 
 type Box = { x: number; y: number; w: number; h: number };
 
@@ -440,9 +442,15 @@ const SCENES: Record<string, React.ReactNode> = {
 const SPECKS = [[14, 22], [40, 10], [62, 26], [88, 8], [124, 16], [150, 8], [172, 24], [190, 12], [10, 62], [192, 78]];
 const PLUSES = [[12, 44], [190, 44]];
 
-export default function IndustryScene({ id, index }: { id: string; index: number }) {
+export default function IndustryScene({ id, index, className }: { id: string; index: number; className?: string }) {
   return (
-    <svg viewBox="0 18 200 146" aria-hidden className="block h-auto w-full overflow-visible">
+    <svg
+      viewBox="0 34 200 130"
+      // A narrower box crops the empty sides instead of shrinking the drawing
+      preserveAspectRatio="xMidYMax slice"
+      aria-hidden
+      className={cn("block aspect-[200/130] h-auto w-full", className)}
+    >
       <ellipse cx="100" cy="104" rx="78" ry="48" fill={SKY} fillOpacity="0.045" />
       {SPECKS.map(([x, y], i) => (
         <circle key={i} cx={(x + index * 37) % 200} cy={y} r={i % 3 ? 0.6 : 0.9} fill={ICE} fillOpacity="0.5" />
@@ -463,12 +471,12 @@ export default function IndustryScene({ id, index }: { id: string; index: number
         {SCENES[id]}
       </g>
 
-      {/* Data line: full width, so neighbouring systems join up */}
+      {/* Data line: runs edge to edge of the card's picture area */}
       <path d={`M-0.6 ${GROUND + 0.5}H200.6`} stroke={SKY} strokeOpacity="0.8" strokeWidth="1.2" />
       <path d={`M-0.6 ${GROUND + 10}H200.6`} stroke={SKY} strokeOpacity="0.35" strokeWidth="0.8" />
       <path d={`M16 ${GROUND + 10}h14M38 ${GROUND + 10}h6M52 ${GROUND + 10}h22M126 ${GROUND + 10}h8M142 ${GROUND + 10}h20M170 ${GROUND + 10}h10`} stroke={SKY} strokeOpacity="0.85" strokeWidth="2" strokeLinecap="round" />
       <path d={`M100 ${GROUND + 0.5}v6`} stroke={SKY} strokeOpacity="0.8" />
-      <circle cx="100" cy={GROUND + 10} r="3.6" fill="var(--c-ink)" stroke={ICE} strokeWidth="1.2" />
+      <circle cx="100" cy={GROUND + 10} r="3.6" fill={DEEP} stroke={ICE} strokeWidth="1.2" />
       <circle cx="100" cy={GROUND + 10} r="1.2" fill={ICE} />
     </svg>
   );

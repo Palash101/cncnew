@@ -117,6 +117,7 @@ export default function AgileProcess() {
   return (
     <section
       id="agile"
+      data-header="light"
       className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-wash-100)_0%,var(--c-wash-50)_55%,var(--c-wash-100)_100%)] py-20 text-c-ink sm:py-28"
     >
       <AmbientBackground variant="ice" />

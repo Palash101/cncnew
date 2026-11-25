@@ -23,7 +23,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       options={{
         lerp: 0.09,
         wheelMultiplier: 1,
-        anchors: { offset: -80 },
+        anchors: true, // sections have their own top padding, so no extra offset
         stopInertiaOnNavigate: true,
       }}
     >
