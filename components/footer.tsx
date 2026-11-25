@@ -58,7 +58,7 @@ export default function Footer() {
   const { openQuoteModal } = useQuoteModal();
 
   return (
-    <footer className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#0B1739_0%,#071028_45%,#020617_100%)] text-slate-300">
+    <footer className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-ink)_0%,var(--c-panel)_45%,var(--color-slate-950)_100%)] text-slate-300">
       <TopHairline />
 
       {/* Background: soft glows */}
@@ -106,7 +106,7 @@ export default function Footer() {
               </div>
               <button
                 type="submit"
-                className="inline-flex h-12 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-semibold text-[#0B1739] transition-colors hover:bg-sky-100"
+                className="inline-flex h-12 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-semibold text-c-ink transition-colors hover:bg-sky-100"
               >
                 Get Started
                 <Send className="h-4 w-4" />
@@ -207,7 +207,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-white hover:bg-white hover:text-[#0B1739]"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-white hover:bg-white hover:text-c-ink"
                 >
                   <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden>
                     <path d={s.path} />

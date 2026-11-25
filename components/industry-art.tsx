@@ -6,18 +6,18 @@
    Static SVG from fixed values; the parent's `group` hover lights the screens.
    ───────────────────────────────────────────────────────────── */
 
-const SKY = "#38bdf8";
-const ICE = "#bae6fd";
-const WALL = "#0b2450";
-const WALL_2 = "#103266";
-const GLASS = "#1c4f8d";
-const DEEP = "#071a3c";
+const SKY = "var(--c-highlight-mid)";
+const ICE = "var(--c-highlight-200)";
+const WALL = "var(--c-deep-800)";
+const WALL_2 = "var(--c-deep-650)";
+const GLASS = "var(--c-deep-500)";
+const DEEP = "var(--c-deep-900)";
 const GROUND = 148;
 
 /** Size of each drawing inside its scene; smaller = more space between neighbours */
 const SCALE = 0.8;
 
-const LIGHT = "transition-[fill] duration-500 group-hover:fill-[#2f7fc4]";
+const LIGHT = "transition-[fill] duration-500 group-hover:fill-c-deep-400";
 
 type Box = { x: number; y: number; w: number; h: number };
 
@@ -468,7 +468,7 @@ export default function IndustryScene({ id, index }: { id: string; index: number
       <path d={`M-0.6 ${GROUND + 10}H200.6`} stroke={SKY} strokeOpacity="0.35" strokeWidth="0.8" />
       <path d={`M16 ${GROUND + 10}h14M38 ${GROUND + 10}h6M52 ${GROUND + 10}h22M126 ${GROUND + 10}h8M142 ${GROUND + 10}h20M170 ${GROUND + 10}h10`} stroke={SKY} strokeOpacity="0.85" strokeWidth="2" strokeLinecap="round" />
       <path d={`M100 ${GROUND + 0.5}v6`} stroke={SKY} strokeOpacity="0.8" />
-      <circle cx="100" cy={GROUND + 10} r="3.6" fill="#0B1739" stroke={ICE} strokeWidth="1.2" />
+      <circle cx="100" cy={GROUND + 10} r="3.6" fill="var(--c-ink)" stroke={ICE} strokeWidth="1.2" />
       <circle cx="100" cy={GROUND + 10} r="1.2" fill={ICE} />
     </svg>
   );

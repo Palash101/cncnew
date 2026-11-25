@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import JsonLd from "@/components/json-ld";
 import SmoothScroll from "@/components/smooth-scroll";
+import ThemePreview from "@/components/theme-preview/theme-preview"; // TEMPORARY: colour testing
+import ThemeScript from "@/components/theme-preview/theme-script"; // TEMPORARY: colour testing
 import "./globals.css";
+import "@/components/theme-preview/theme-preview.css"; // TEMPORARY: colour testing
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -89,11 +92,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning // TEMPORARY: colour testing sets attributes before hydration
       className={`${plusJakartaSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
+        <ThemeScript /> {/* TEMPORARY: colour testing */}
         <JsonLd />
         <SmoothScroll>{children}</SmoothScroll>
+        <ThemePreview /> {/* TEMPORARY: colour testing */}
       </body>
     </html>
   );

@@ -154,7 +154,7 @@ export default function QuoteModal() {
                 <Sparkles className="h-3.5 w-3.5 text-sky-600" />
                 <span>Tell Us About Your Idea</span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0B1739] tracking-tight">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-c-ink tracking-tight">
                 Request a Custom Quote
               </h3>
               <p className="mt-1.5 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
@@ -173,7 +173,7 @@ export default function QuoteModal() {
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4 shadow-inner">
                     <CheckCircle2 className="h-10 w-10" />
                   </div>
-                  <h4 className="text-2xl font-bold text-[#0B1739]">
+                  <h4 className="text-2xl font-bold text-c-ink">
                     Inquiry Submitted Successfully!
                   </h4>
                   <p className="mt-2 text-sm text-slate-600 max-w-md leading-relaxed">
@@ -181,7 +181,7 @@ export default function QuoteModal() {
                   </p>
                   <button
                     onClick={handleReset}
-                    className="mt-7 inline-flex items-center justify-center rounded-2xl bg-[#0B1739] hover:bg-[#152052] px-8 py-3 text-sm font-bold text-white transition-all shadow-lg cursor-pointer"
+                    className="mt-7 inline-flex items-center justify-center rounded-2xl bg-c-ink hover:bg-c-ink-hover px-8 py-3 text-sm font-bold text-white transition-all shadow-lg cursor-pointer"
                   >
                     Done
                   </button>
@@ -203,7 +203,7 @@ export default function QuoteModal() {
                           placeholder="Alex Morgan"
                           value={formData.fullName}
                           onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-[#0B1739] placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
+                          className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-c-ink placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
                         />
                       </div>
                     </div>
@@ -221,7 +221,7 @@ export default function QuoteModal() {
                           placeholder="alex@company.com"
                           value={formData.email}
                           onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-[#0B1739] placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
+                          className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-c-ink placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
                         />
                       </div>
                     </div>
@@ -241,7 +241,7 @@ export default function QuoteModal() {
                           placeholder="+1 (555) 000-0000"
                           value={formData.phone}
                           onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-[#0B1739] placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
+                          className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-c-ink placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
                         />
                       </div>
                     </div>
@@ -258,7 +258,7 @@ export default function QuoteModal() {
                           placeholder="Acme Corp"
                           value={formData.company}
                           onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-[#0B1739] placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
+                          className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-c-ink placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
                         />
                       </div>
                     </div>
@@ -273,7 +273,7 @@ export default function QuoteModal() {
                       name="service"
                       value={formData.service}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-[#0B1739] focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
+                      className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-c-ink focus:bg-white focus:border-sky-600 focus:outline-none transition-all"
                     >
                       {SERVICES.map((srv) => (
                         <option key={srv} value={srv}>
@@ -296,7 +296,7 @@ export default function QuoteModal() {
                           onClick={() => setFormData((prev) => ({ ...prev, budget: b }))}
                           className={`rounded-xl px-3 py-2 text-xs font-semibold border transition-all cursor-pointer ${
                             formData.budget === b
-                              ? "bg-[#0B1739] text-white border-[#0B1739] shadow-sm"
+                              ? "bg-c-ink text-white border-c-ink shadow-sm"
                               : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
                           }`}
                         >
@@ -320,7 +320,7 @@ export default function QuoteModal() {
                         placeholder="Briefly describe your goals, timeline, or key feature requirements..."
                         value={formData.message}
                         onChange={handleChange}
-                        className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-[#0B1739] placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all resize-none"
+                        className="w-full rounded-xl border border-slate-300 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-c-ink placeholder-slate-400 focus:bg-white focus:border-sky-600 focus:outline-none transition-all resize-none"
                       />
                     </div>
                   </div>
@@ -330,7 +330,7 @@ export default function QuoteModal() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#0B1739] hover:bg-[#152052] px-6 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-[#0B1739]/20 disabled:opacity-50 cursor-pointer"
+                      className="w-full inline-flex items-center justify-center gap-2.5 rounded-2xl bg-c-ink hover:bg-c-ink-hover px-6 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-c-ink/20 disabled:opacity-50 cursor-pointer"
                     >
                       {isSubmitting ? (
                         <>

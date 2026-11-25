@@ -89,13 +89,13 @@ export default function IndustriesSection() {
       id="industries"
       className={cn(
         // Continues the dark block from "What We Do"
-        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#050d24_0%,#0B1739_30%,#081230_100%)] text-white",
+        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-night)_0%,var(--c-ink)_30%,var(--c-panel)_100%)] text-white",
         SECTION_Y
       )}
     >
       <TopHairline />
       <AmbientBackground variant="dark" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-[#050d24] to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-c-night to-transparent" />
 
       <Container>
         {/* Split header */}

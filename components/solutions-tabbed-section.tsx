@@ -39,7 +39,7 @@ export default function SolutionsTabbedSection() {
   return (
     <section
       id="projects"
-      className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#eef6fc_0%,#f5f9fd_100%)] py-20 text-[#0B1739] sm:py-28"
+      className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-wash-50)_0%,var(--c-wash-25)_100%)] py-20 text-c-ink sm:py-28"
     >
       <div id="work" />
       {/* Ambient glows */}
@@ -63,7 +63,7 @@ export default function SolutionsTabbedSection() {
           <div
             role="tablist"
             aria-label="Solutions"
-            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1.5 shadow-[0_10px_30px_-18px_rgba(11,23,57,0.35)]"
+            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1.5 shadow-[0_10px_30px_-18px_color-mix(in_srgb,var(--c-ink)_35%,transparent)]"
           >
             {TABS.map((tab) => {
               const Icon = tab.icon;
@@ -77,13 +77,13 @@ export default function SolutionsTabbedSection() {
                   onClick={() => setActiveTab(tab.id)}
                   className={cn(
                     "relative inline-flex cursor-pointer items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-300 sm:px-7",
-                    isActive ? "text-white" : "text-slate-500 hover:text-[#0B1739]"
+                    isActive ? "text-white" : "text-slate-500 hover:text-c-ink"
                   )}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="solutions-tab"
-                      className="absolute inset-0 rounded-full bg-[#0B1739] shadow-[0_8px_20px_-8px_rgba(11,23,57,0.6)]"
+                      className="absolute inset-0 rounded-full bg-c-ink shadow-[0_8px_20px_-8px_color-mix(in_srgb,var(--c-ink)_60%,transparent)]"
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}

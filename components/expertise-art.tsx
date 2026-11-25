@@ -6,8 +6,8 @@
    Static SVG from fixed values: server and client render the same.
    ───────────────────────────────────────────────────────────── */
 
-const SKY = "#38bdf8";
-const ICE = "#bae6fd";
+const SKY = "var(--c-highlight-mid)";
+const ICE = "var(--c-highlight-200)";
 
 const CX = 445;
 const CY = 140;
@@ -105,8 +105,8 @@ export function CircuitBackground({ className }: { className?: string }) {
           <stop offset="1" stopColor={SKY} stopOpacity="0" />
         </radialGradient>
         <linearGradient id="exp-chip" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#17508c" />
-          <stop offset="1" stopColor="#0b2550" />
+          <stop offset="0" stopColor="var(--c-deep-500)" />
+          <stop offset="1" stopColor="var(--c-deep-800)" />
         </linearGradient>
       </defs>
 
@@ -114,7 +114,7 @@ export function CircuitBackground({ className }: { className?: string }) {
       <g fill="none" stroke={SKY}>
         <path d={ALL_TRACES} strokeOpacity="0.36" strokeWidth="0.9" strokeLinejoin="round" />
         {PADS.map(([x, y]) => (
-          <circle key={`${x}-${y}`} cx={x} cy={y} r="2.6" strokeOpacity="0.7" strokeWidth="0.9" fill="#0a1a40" />
+          <circle key={`${x}-${y}`} cx={x} cy={y} r="2.6" strokeOpacity="0.7" strokeWidth="0.9" fill="var(--c-deep-900)" />
         ))}
         {VIAS.map(([x, y]) => (
           <g key={`${x}-${y}`}>
@@ -127,7 +127,7 @@ export function CircuitBackground({ className }: { className?: string }) {
         ))}
         {MINI_CHIPS.map(({ x, y, w, h }) => (
           <g key={`${x}-${y}`}>
-            <rect x={x} y={y} width={w} height={h} rx="2.5" fill="#0d2a58" strokeOpacity="0.55" strokeWidth="0.8" />
+            <rect x={x} y={y} width={w} height={h} rx="2.5" fill="var(--c-deep-700)" strokeOpacity="0.55" strokeWidth="0.8" />
             <path
               d={Array.from({ length: Math.floor((w - 4) / 6) }, (_, n) => `M${x + 5 + n * 6} ${y}v-4M${x + 5 + n * 6} ${y + h}v4`).join("")}
               strokeOpacity="0.5"
@@ -154,7 +154,7 @@ export function CircuitBackground({ className }: { className?: string }) {
       <circle cx={CX} cy={CY} r="125" fill="url(#exp-chip-glow)" />
       <path d={CHIP_PINS} stroke={ICE} strokeOpacity="0.7" strokeWidth="2" />
       <rect x={CX - HALF} y={CY - HALF} width={HALF * 2} height={HALF * 2} rx="9" fill="url(#exp-chip)" stroke={SKY} strokeOpacity="0.9" strokeWidth="1.2" />
-      <rect x={CX - 38} y={CY - 38} width="76" height="76" rx="5" fill="#081b3f" stroke={SKY} strokeOpacity="0.5" strokeWidth="0.8" />
+      <rect x={CX - 38} y={CY - 38} width="76" height="76" rx="5" fill="var(--c-deep-900)" stroke={SKY} strokeOpacity="0.5" strokeWidth="0.8" />
       <circle cx={CX - 43} cy={CY + 43} r="2" fill={ICE} fillOpacity="0.8" />
       <path d={CORE_LINKS} stroke={SKY} strokeOpacity="0.45" strokeWidth="0.6" fill="none" />
       {CORE.flat().map((n) => (
@@ -172,7 +172,7 @@ export function CircuitBackground({ className }: { className?: string }) {
    Hidden on phones and from 1024-1151px, where the title needs the room.
    ───────────────────────────────────────────────────────────── */
 
-const TILE = "#0d2a58";
+const TILE = "var(--c-deep-700)";
 const CORNER =
   "pointer-events-none absolute top-6 right-[68px] hidden [&_*]:[vector-effect:non-scaling-stroke] opacity-80 transition-opacity duration-500 group-hover:opacity-100 sm:block lg:hidden min-[72rem]:block";
 
@@ -195,7 +195,7 @@ function GenerativeCorner() {
       {/* The generated page */}
       <circle cx="138" cy="45" r="40" fill={SKY} fillOpacity="0.08" />
       <rect x="108" y="14" width="60" height="60" rx="5" fill={TILE} stroke={SKY} strokeOpacity="0.8" strokeWidth="0.9" />
-      <rect x="114" y="20" width="26" height="19" rx="2" fill="#123f78" stroke={SKY} strokeOpacity="0.5" strokeWidth="0.7" />
+      <rect x="114" y="20" width="26" height="19" rx="2" fill="var(--c-deep-600)" stroke={SKY} strokeOpacity="0.5" strokeWidth="0.7" />
       <path d="M116 36l6-8l5 6l3-4l7 6z" fill={SKY} fillOpacity="0.75" />
       <circle cx="133" cy="25.5" r="2" fill={ICE} />
       <path d="M146 23h16M146 29h12M146 35h14M114 47h48M114 54h42M114 61h30" stroke={SKY} strokeOpacity="0.8" strokeWidth="1.2" strokeLinecap="round" />
@@ -255,7 +255,7 @@ function AgenticCorner() {
 
       {/* Human check */}
       <circle cx="136" cy="45" r="40" fill={SKY} fillOpacity="0.08" />
-      <path d="M136 28l13 4.5v10.5c0 9-5.5 14.5-13 17.5c-7.5-3-13-8.5-13-17.5V32.5z" fill="#123f78" stroke={ICE} strokeOpacity="0.9" strokeWidth="1" strokeLinejoin="round" />
+      <path d="M136 28l13 4.5v10.5c0 9-5.5 14.5-13 17.5c-7.5-3-13-8.5-13-17.5V32.5z" fill="var(--c-deep-600)" stroke={ICE} strokeOpacity="0.9" strokeWidth="1" strokeLinejoin="round" />
       <path d="M130 44l4.5 4.5l8-9" fill="none" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       {[
         [136, 10],

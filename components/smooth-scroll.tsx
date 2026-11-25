@@ -136,9 +136,9 @@ function ScrollIndicator() {
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
         className={cn(
-          "absolute top-1 right-[3px] rounded-full bg-[#0B1739]/35 transition-[opacity,width,background-color] duration-300 ease-out will-change-transform",
-          expanded ? "w-[7px] bg-[#0B1739]/55" : "w-[4px]",
-          dragging && "bg-[#0B1739]/70",
+          "absolute top-1 right-[3px] rounded-full bg-c-ink/35 transition-[opacity,width,background-color] duration-300 ease-out will-change-transform",
+          expanded ? "w-[7px] bg-c-ink/55" : "w-[4px]",
+          dragging && "bg-c-ink/70",
           visible ? "pointer-events-auto cursor-grab opacity-100" : "opacity-0",
           dragging && "cursor-grabbing"
         )}

@@ -1,0 +1,113 @@
+/*
+ * TEMPORARY: colour-combination testing. Delete this folder once a combination is chosen.
+ *
+ * Every entry keeps the lightness of the original colour and only swaps hue and strength,
+ * so text contrast stays close to the current design in every combination. The --t-*
+ * values are set on <html> by theme-store.ts.
+ */
+html[data-palette] {
+  --c-ink: oklch(0.2171 calc(0.0682 * var(--t-base-c)) calc(266.19 + var(--t-base-h)));
+  --c-ink-hover: oklch(0.2677 calc(0.0922 * var(--t-base-c)) calc(269.73 + var(--t-base-h)));
+  --c-night: oklch(0.1604 calc(0.044 * var(--t-base-c)) calc(265.32 + var(--t-base-h)));
+  --c-panel: oklch(0.187 calc(0.0497 * var(--t-base-c)) calc(262.81 + var(--t-base-h)));
+  --c-deep-900: oklch(0.2254 calc(0.0703 * var(--t-base-c)) calc(260.77 + var(--t-base-h)));
+  --c-deep-800: oklch(0.2704 calc(0.0867 * var(--t-base-c)) calc(260.77 + var(--t-base-h)));
+  --c-deep-700: oklch(0.2929 calc(0.0901 * var(--t-base-c)) calc(259.47 + var(--t-base-h)));
+  --c-deep-650: oklch(0.3252 calc(0.0997 * var(--t-base-c)) calc(259.01 + var(--t-base-h)));
+  --c-deep-600: oklch(0.3715 calc(0.1087 * var(--t-base-c)) calc(256.41 + var(--t-base-h)));
+  --c-deep-500: oklch(0.4282 calc(0.116 * var(--t-base-c)) calc(255.41 + var(--t-base-h)));
+  --c-deep-400: oklch(0.5813 calc(0.131 * var(--t-base-c)) calc(248.43 + var(--t-base-h)));
+  --c-brand: oklch(0.5404 calc(0.1345 * var(--t-primary-c)) calc(247.35 + var(--t-primary-h)));
+  --c-brand-400: oklch(0.6497 calc(0.1245 * var(--t-primary-c)) calc(242.06 + var(--t-primary-h)));
+  --c-brand-300: oklch(0.7899 calc(0.0838 * var(--t-primary-c)) calc(237.31 + var(--t-primary-h)));
+  --c-brand-200: oklch(0.8855 calc(0.0478 * var(--t-primary-c)) calc(235.68 + var(--t-primary-h)));
+  --c-brand-100: oklch(0.9387 calc(0.0259 * var(--t-primary-c)) calc(235.35 + var(--t-primary-h)));
+  --c-wash-100: oklch(0.9605 calc(0.0167 * var(--t-primary-c)) calc(236.69 + var(--t-primary-h)));
+  --c-wash-50: oklch(0.9719 calc(0.0117 * var(--t-primary-c)) calc(239.9 + var(--t-primary-h)));
+  --c-wash-25: oklch(0.9802 calc(0.0068 * var(--t-primary-c)) calc(247.89 + var(--t-primary-h)));
+  --c-highlight: oklch(0.7784 calc(0.1312 * var(--t-accent-c)) calc(224.37 + var(--t-accent-h)));
+  --c-highlight-mid: oklch(0.7535 calc(0.139 * var(--t-accent-c)) calc(232.66 + var(--t-accent-h)));
+  --c-highlight-soft: oklch(0.8721 calc(0.0902 * var(--t-accent-c)) calc(221.23 + var(--t-accent-h)));
+  --c-highlight-200: oklch(0.9014 calc(0.0555 * var(--t-accent-c)) calc(230.9 + var(--t-accent-h)));
+  --c-beam: oklch(0.6799 calc(0.1774 * var(--t-accent-c)) calc(224.37 + var(--t-accent-h)));
+  --c-glow: oklch(0.6847 calc(0.1479 * var(--t-accent-c)) calc(237.32 + var(--t-accent-h)));
+
+  /* Tailwind ramps used across the site */
+  --color-sky-50: oklch(0.977 calc(0.013 * var(--t-primary-c)) calc(236.62 + var(--t-primary-h)));
+  --color-sky-100: oklch(0.951 calc(0.026 * var(--t-primary-c)) calc(236.82 + var(--t-primary-h)));
+  --color-sky-200: oklch(0.901 calc(0.058 * var(--t-accent-c)) calc(230.9 + var(--t-accent-h)));
+  --color-sky-300: oklch(0.828 calc(0.111 * var(--t-accent-c)) calc(230.32 + var(--t-accent-h)));
+  --color-sky-400: oklch(0.746 calc(0.16 * var(--t-accent-c)) calc(232.66 + var(--t-accent-h)));
+  --color-sky-500: oklch(0.685 calc(0.169 * var(--t-primary-c)) calc(237.32 + var(--t-primary-h)));
+  --color-sky-600: oklch(0.588 calc(0.158 * var(--t-primary-c)) calc(241.97 + var(--t-primary-h)));
+  --color-sky-700: oklch(0.5 calc(0.134 * var(--t-primary-c)) calc(242.75 + var(--t-primary-h)));
+  --color-sky-800: oklch(0.443 calc(0.11 * var(--t-primary-c)) calc(240.79 + var(--t-primary-h)));
+  --color-sky-900: oklch(0.391 calc(0.09 * var(--t-primary-c)) calc(240.88 + var(--t-primary-h)));
+  --color-sky-950: oklch(0.293 calc(0.066 * var(--t-primary-c)) calc(243.16 + var(--t-primary-h)));
+  --color-cyan-50: oklch(0.984 calc(0.019 * var(--t-accent-c)) calc(200.87 + var(--t-accent-h)));
+  --color-cyan-100: oklch(0.956 calc(0.045 * var(--t-accent-c)) calc(203.39 + var(--t-accent-h)));
+  --color-cyan-200: oklch(0.917 calc(0.08 * var(--t-accent-c)) calc(205.04 + var(--t-accent-h)));
+  --color-cyan-300: oklch(0.865 calc(0.127 * var(--t-accent-c)) calc(207.08 + var(--t-accent-h)));
+  --color-cyan-400: oklch(0.789 calc(0.154 * var(--t-accent-c)) calc(211.53 + var(--t-accent-h)));
+  --color-cyan-500: oklch(0.715 calc(0.143 * var(--t-accent-c)) calc(215.22 + var(--t-accent-h)));
+  --color-cyan-600: oklch(0.609 calc(0.126 * var(--t-accent-c)) calc(221.72 + var(--t-accent-h)));
+  --color-cyan-700: oklch(0.52 calc(0.105 * var(--t-accent-c)) calc(223.13 + var(--t-accent-h)));
+  --color-cyan-800: oklch(0.45 calc(0.085 * var(--t-accent-c)) calc(224.28 + var(--t-accent-h)));
+  --color-cyan-900: oklch(0.398 calc(0.07 * var(--t-accent-c)) calc(227.39 + var(--t-accent-h)));
+  --color-cyan-950: oklch(0.302 calc(0.056 * var(--t-accent-c)) calc(229.69 + var(--t-accent-h)));
+  --color-blue-50: oklch(0.97 calc(0.014 * var(--t-primary-c)) calc(254.6 + var(--t-primary-h)));
+  --color-blue-100: oklch(0.932 calc(0.032 * var(--t-primary-c)) calc(255.59 + var(--t-primary-h)));
+  --color-blue-200: oklch(0.882 calc(0.059 * var(--t-primary-c)) calc(254.13 + var(--t-primary-h)));
+  --color-blue-300: oklch(0.809 calc(0.105 * var(--t-primary-c)) calc(251.81 + var(--t-primary-h)));
+  --color-blue-400: oklch(0.707 calc(0.165 * var(--t-primary-c)) calc(254.62 + var(--t-primary-h)));
+  --color-blue-500: oklch(0.623 calc(0.214 * var(--t-primary-c)) calc(259.81 + var(--t-primary-h)));
+  --color-blue-600: oklch(0.546 calc(0.245 * var(--t-primary-c)) calc(262.88 + var(--t-primary-h)));
+  --color-blue-700: oklch(0.488 calc(0.243 * var(--t-primary-c)) calc(264.38 + var(--t-primary-h)));
+  --color-blue-800: oklch(0.424 calc(0.199 * var(--t-primary-c)) calc(265.64 + var(--t-primary-h)));
+  --color-blue-900: oklch(0.379 calc(0.146 * var(--t-primary-c)) calc(265.52 + var(--t-primary-h)));
+  --color-blue-950: oklch(0.282 calc(0.091 * var(--t-primary-c)) calc(267.94 + var(--t-primary-h)));
+  --color-indigo-50: oklch(0.962 calc(0.018 * var(--t-primary-c)) calc(272.31 + var(--t-primary-h)));
+  --color-indigo-100: oklch(0.93 calc(0.034 * var(--t-primary-c)) calc(272.79 + var(--t-primary-h)));
+  --color-indigo-200: oklch(0.87 calc(0.065 * var(--t-primary-c)) calc(274.04 + var(--t-primary-h)));
+  --color-indigo-300: oklch(0.785 calc(0.115 * var(--t-primary-c)) calc(274.71 + var(--t-primary-h)));
+  --color-indigo-400: oklch(0.673 calc(0.182 * var(--t-primary-c)) calc(276.94 + var(--t-primary-h)));
+  --color-indigo-500: oklch(0.585 calc(0.233 * var(--t-primary-c)) calc(277.12 + var(--t-primary-h)));
+  --color-indigo-600: oklch(0.511 calc(0.262 * var(--t-primary-c)) calc(276.97 + var(--t-primary-h)));
+  --color-indigo-700: oklch(0.457 calc(0.24 * var(--t-primary-c)) calc(277.02 + var(--t-primary-h)));
+  --color-indigo-800: oklch(0.398 calc(0.195 * var(--t-primary-c)) calc(277.37 + var(--t-primary-h)));
+  --color-indigo-900: oklch(0.359 calc(0.144 * var(--t-primary-c)) calc(278.7 + var(--t-primary-h)));
+  --color-indigo-950: oklch(0.257 calc(0.09 * var(--t-primary-c)) calc(281.29 + var(--t-primary-h)));
+  --color-slate-50: oklch(0.984 calc(0.003 * var(--t-base-c)) calc(247.86 + var(--t-base-h)));
+  --color-slate-100: oklch(0.968 calc(0.007 * var(--t-base-c)) calc(247.9 + var(--t-base-h)));
+  --color-slate-200: oklch(0.929 calc(0.013 * var(--t-base-c)) calc(255.51 + var(--t-base-h)));
+  --color-slate-300: oklch(0.869 calc(0.022 * var(--t-base-c)) calc(252.89 + var(--t-base-h)));
+  --color-slate-400: oklch(0.704 calc(0.04 * var(--t-base-c)) calc(256.79 + var(--t-base-h)));
+  --color-slate-500: oklch(0.554 calc(0.046 * var(--t-base-c)) calc(257.42 + var(--t-base-h)));
+  --color-slate-600: oklch(0.446 calc(0.043 * var(--t-base-c)) calc(257.28 + var(--t-base-h)));
+  --color-slate-700: oklch(0.372 calc(0.044 * var(--t-base-c)) calc(257.29 + var(--t-base-h)));
+  --color-slate-800: oklch(0.279 calc(0.041 * var(--t-base-c)) calc(260.03 + var(--t-base-h)));
+  --color-slate-900: oklch(0.208 calc(0.042 * var(--t-base-c)) calc(265.75 + var(--t-base-h)));
+  --color-slate-950: oklch(0.129 calc(0.042 * var(--t-base-c)) calc(264.69 + var(--t-base-h)));
+  --color-purple-50: oklch(0.977 calc(0.014 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-100: oklch(0.946 calc(0.033 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-200: oklch(0.902 calc(0.063 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-300: oklch(0.827 calc(0.119 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-400: oklch(0.714 calc(0.203 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-500: oklch(0.627 calc(0.265 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-600: oklch(0.558 calc(0.288 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-700: oklch(0.496 calc(0.265 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-800: oklch(0.438 calc(0.218 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-900: oklch(0.381 calc(0.176 * var(--t-accent-c)) var(--t-tertiary));
+  --color-purple-950: oklch(0.291 calc(0.149 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-50: oklch(0.977 calc(0.017 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-100: oklch(0.952 calc(0.037 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-200: oklch(0.903 calc(0.076 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-300: oklch(0.833 calc(0.145 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-400: oklch(0.74 calc(0.238 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-500: oklch(0.667 calc(0.295 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-600: oklch(0.591 calc(0.293 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-700: oklch(0.518 calc(0.253 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-800: oklch(0.452 calc(0.211 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-900: oklch(0.401 calc(0.17 * var(--t-accent-c)) var(--t-tertiary));
+  --color-fuchsia-950: oklch(0.293 calc(0.136 * var(--t-accent-c)) var(--t-tertiary));
+}

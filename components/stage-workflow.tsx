@@ -145,7 +145,7 @@ export default function StageWorkflow() {
 
   return (
     <section
-      className="w-full bg-[#0B1739] py-20 sm:py-28 text-white overflow-hidden"
+      className="w-full bg-c-ink py-20 sm:py-28 text-white overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => {
         setIsPaused(false);
@@ -204,7 +204,7 @@ export default function StageWorkflow() {
                   onClick={() => handleStageClick(idx)}
                   className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl font-extrabold text-base sm:text-lg transition-all duration-300 cursor-pointer ${
                     isActive
-                      ? "border-2 border-purple-500 bg-slate-900 text-white shadow-[0_0_20px_rgba(168,85,247,0.6)] ring-4 ring-purple-500/30 scale-110"
+                      ? "border-2 border-purple-500 bg-slate-900 text-white shadow-[0_0_20px_color-mix(in_srgb,var(--color-purple-500)_60%,transparent)] ring-4 ring-purple-500/30 scale-110"
                       : isPast
                       ? "border-2 border-purple-500/80 bg-slate-900 text-purple-300"
                       : "border border-slate-700 bg-slate-900/90 text-slate-400 hover:border-slate-500 hover:text-white"
@@ -219,7 +219,7 @@ export default function StageWorkflow() {
         </div>
 
         {/* Stage Content Card Container */}
-        <div className="rounded-2xl border border-slate-700/60 bg-[#131F42] p-6 sm:p-10 shadow-2xl transition-all duration-500">
+        <div className="rounded-2xl border border-slate-700/60 bg-c-ink-hover p-6 sm:p-10 shadow-2xl transition-all duration-500">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             {/* Left Column: Stage Info & Bullets */}
             <div className="lg:col-span-6 flex flex-col justify-center">

@@ -91,8 +91,8 @@ export default function Navbar() {
           "relative mx-auto w-full overflow-hidden border backdrop-blur-xl backdrop-saturate-150",
           "transition-[max-width,margin,border-radius,background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
           scrolled
-            ? "mt-0 max-w-[100vw] rounded-none border-x-transparent border-t-transparent border-b-slate-200/70 bg-white/85 shadow-[0_8px_30px_-12px_rgba(11,23,57,0.18)]"
-            : "mt-3 max-w-[min(1200px,calc(100%-24px))] rounded-2xl border-white/80 bg-white/90 shadow-[0_10px_40px_-12px_rgba(11,23,57,0.25)] ring-1 ring-[#0B1739]/5",
+            ? "mt-0 max-w-[100vw] rounded-none border-x-transparent border-t-transparent border-b-slate-200/70 bg-white/85 shadow-[0_8px_30px_-12px_color-mix(in_srgb,var(--c-ink)_18%,transparent)]"
+            : "mt-3 max-w-[min(1200px,calc(100%-24px))] rounded-2xl border-white/80 bg-white/90 shadow-[0_10px_40px_-12px_color-mix(in_srgb,var(--c-ink)_25%,transparent)] ring-1 ring-c-ink/5",
           mobileMenuOpen && !scrolled && "bg-white/95"
         )}
       >
@@ -128,7 +128,7 @@ export default function Navbar() {
                   onMouseEnter={() => setHovered(link.id)}
                   className={cn(
                     "relative rounded-full px-4 py-2 text-sm font-semibold tracking-tight transition-colors",
-                    isActive ? "text-sky-700" : "text-[#0B1739] hover:text-sky-700"
+                    isActive ? "text-sky-700" : "text-c-ink hover:text-sky-700"
                   )}
                 >
                   {highlighted === link.id && (
@@ -151,7 +151,7 @@ export default function Navbar() {
               onClick={() => openQuoteModal()}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="group relative hidden cursor-pointer items-center overflow-hidden rounded-full bg-[#0B1739] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#0B1739]/25 sm:inline-flex"
+              className="group relative hidden cursor-pointer items-center overflow-hidden rounded-full bg-c-ink px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-c-ink/25 sm:inline-flex"
             >
               {/* Shine sweep */}
               <span className="pointer-events-none absolute inset-y-0 -left-full w-1/2 skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-all duration-700 group-hover:left-[130%]" />
@@ -165,7 +165,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen((o) => !o)}
-              className="relative inline-flex cursor-pointer items-center justify-center rounded-full p-2 text-[#0B1739] transition-colors hover:bg-slate-900/5 md:hidden"
+              className="relative inline-flex cursor-pointer items-center justify-center rounded-full p-2 text-c-ink transition-colors hover:bg-slate-900/5 md:hidden"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileMenuOpen}
             >
@@ -211,7 +211,7 @@ export default function Navbar() {
                         "flex items-center justify-between rounded-xl px-3 py-3 text-base font-semibold tracking-tight transition-colors",
                         activeId === link.id
                           ? "bg-sky-50 text-sky-700"
-                          : "text-[#0B1739] hover:bg-slate-50 hover:text-sky-700"
+                          : "text-c-ink hover:bg-slate-50 hover:text-sky-700"
                       )}
                     >
                       {link.label}
@@ -231,7 +231,7 @@ export default function Navbar() {
                       setMobileMenuOpen(false);
                       openQuoteModal();
                     }}
-                    className="mt-3 inline-flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-[#0B1739] to-[#1e3a8a] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#0B1739]/25"
+                    className="mt-3 inline-flex w-full cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-c-ink to-blue-900 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-c-ink/25"
                   >
                     Get a Quote
                     <ArrowRight className="ml-1.5 h-4 w-4" />

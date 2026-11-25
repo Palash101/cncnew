@@ -80,12 +80,12 @@ const GAP = 6;
 
 // Progressive tone: pale ice → brand blue → navy
 const FILLS = [
-  "#dbeefa",
-  "#bcdff5",
-  "#86c3ea",
-  "#3d97d4",
-  "#1673b8",
-  "#0B1739",
+  "var(--c-brand-100)",
+  "var(--c-brand-200)",
+  "var(--c-brand-300)",
+  "var(--c-brand-400)",
+  "var(--c-brand)",
+  "var(--c-ink)",
 ];
 const ON_DARK = [false, false, false, true, true, true];
 
@@ -117,7 +117,7 @@ export default function AgileProcess() {
   return (
     <section
       id="agile"
-      className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#e8f4fc_0%,#eff7fd_55%,#eaf4fb_100%)] py-20 text-[#0B1739] sm:py-28"
+      className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-wash-100)_0%,var(--c-wash-50)_55%,var(--c-wash-100)_100%)] py-20 text-c-ink sm:py-28"
     >
       <AmbientBackground variant="ice" />
 
@@ -159,7 +159,7 @@ export default function AgileProcess() {
             >
               <svg
                 viewBox={`0 0 ${VB_W} ${VB_H}`}
-                className="absolute inset-0 h-full w-full drop-shadow-[0_14px_24px_rgba(11,23,57,0.12)]"
+                className="absolute inset-0 h-full w-full drop-shadow-[0_14px_24px_color-mix(in_srgb,var(--c-ink)_12%,transparent)]"
                 aria-hidden
               >
                 {steps.map((step, i) => (
@@ -193,7 +193,7 @@ export default function AgileProcess() {
                       className={cn(
                         "flex items-center justify-center gap-2.5 pr-4",
                         i > 0 && "pl-5",
-                        ON_DARK[i] ? "text-white" : "text-[#0B1739]",
+                        ON_DARK[i] ? "text-white" : "text-c-ink",
                       )}
                     >
                       <Icon className="h-5 w-5 shrink-0" />
@@ -228,7 +228,7 @@ export default function AgileProcess() {
                     className="block h-1 w-8 rounded-full"
                     style={{ backgroundColor: FILLS[Math.max(i, 2)] }}
                   />
-                  <h3 className="mt-4 text-base font-semibold tracking-tight text-[#0B1739] xl:text-lg">
+                  <h3 className="mt-4 text-base font-semibold tracking-tight text-c-ink xl:text-lg">
                     {step.title}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-slate-600">
@@ -266,7 +266,7 @@ export default function AgileProcess() {
                   >
                     <svg
                       viewBox="0 0 56 72"
-                      className="absolute inset-0 h-full w-full drop-shadow-[0_8px_14px_rgba(11,23,57,0.12)]"
+                      className="absolute inset-0 h-full w-full drop-shadow-[0_8px_14px_color-mix(in_srgb,var(--c-ink)_12%,transparent)]"
                     >
                       <polygon
                         points={
@@ -280,7 +280,7 @@ export default function AgileProcess() {
                     <span
                       className={cn(
                         "absolute inset-x-0 top-[38%] flex -translate-y-1/2 flex-col items-center gap-0.5",
-                        ON_DARK[i] ? "text-white" : "text-[#0B1739]",
+                        ON_DARK[i] ? "text-white" : "text-c-ink",
                       )}
                     >
                       <Icon className="h-5 w-5" />
@@ -290,7 +290,7 @@ export default function AgileProcess() {
                     </span>
                   </span>
                   <div className="min-w-0 pt-1">
-                    <h3 className="text-lg font-semibold tracking-tight text-[#0B1739]">
+                    <h3 className="text-lg font-semibold tracking-tight text-c-ink">
                       {step.title}
                     </h3>
                     <p className="mt-1.5 text-sm leading-relaxed text-slate-600">

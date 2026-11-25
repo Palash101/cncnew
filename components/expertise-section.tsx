@@ -112,13 +112,13 @@ export default function ExpertiseSection() {
     <section
       id="services"
       className={cn(
-        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#0B1739_0%,#071028_55%,#050d24_100%)] text-white",
+        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-ink)_0%,var(--c-panel)_55%,var(--c-night)_100%)] text-white",
         SECTION_Y
       )}
     >
       <TopHairline />
       <AmbientBackground variant="dark" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-[#050d24]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-c-night" />
 
       <Container>
         {/* Header: title left, intro line right */}
@@ -144,14 +144,14 @@ export default function ExpertiseSection() {
           {/* Lead capability */}
           <motion.article
             {...revealCard(0)}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-sky-400/20 bg-[linear-gradient(160deg,rgba(22,115,184,0.3)_0%,rgba(8,18,48,0.9)_55%)] p-7 transition-colors duration-300 hover:border-sky-400/45 sm:p-9 lg:col-span-7 lg:row-span-2"
+            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-sky-400/20 bg-[linear-gradient(160deg,color-mix(in_srgb,var(--c-brand)_30%,transparent)_0%,color-mix(in_srgb,var(--c-panel)_90%,transparent)_55%)] p-7 transition-colors duration-300 hover:border-sky-400/45 sm:p-9 lg:col-span-7 lg:row-span-2"
           >
             {/* Background drawing: takes no space, and is masked out where the text is
                 (top area + the right margin stay visible) */}
             <CircuitBackground className="pointer-events-none absolute inset-0 h-full w-full opacity-85 transition-opacity duration-500 [mask-image:linear-gradient(to_bottom,black_22%,transparent_44%),linear-gradient(to_left,black_0%,transparent_6%)] group-hover:opacity-100 lg:[mask-image:linear-gradient(to_bottom,black_30%,transparent_52%),linear-gradient(to_left,black_3%,transparent_12%)]" />
 
             <div className="relative flex items-start justify-between">
-              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-400/40 bg-[#134173] text-sky-200">
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-400/40 bg-c-deep-600 text-sky-200">
                 <LeadIcon className="h-7 w-7" />
               </span>
               <span className="font-mono text-xs text-sky-300/70">01 / Core</span>
@@ -171,7 +171,7 @@ export default function ExpertiseSection() {
               <motion.article
                 key={item.id}
                 {...revealCard(i + 1)}
-                className="group relative overflow-hidden rounded-2xl border border-sky-400/15 bg-[linear-gradient(160deg,rgba(22,115,184,0.3)_0%,rgba(8,18,48,0.9)_55%)] p-6 transition-colors duration-300 hover:border-sky-400/40 sm:p-7 lg:col-span-5"
+                className="group relative overflow-hidden rounded-2xl border border-sky-400/15 bg-[linear-gradient(160deg,color-mix(in_srgb,var(--c-brand)_30%,transparent)_0%,color-mix(in_srgb,var(--c-panel)_90%,transparent)_55%)] p-6 transition-colors duration-300 hover:border-sky-400/40 sm:p-7 lg:col-span-5"
               >
                 <Background />
                 <div className="relative flex items-center gap-4">

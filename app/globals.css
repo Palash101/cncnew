@@ -5,6 +5,31 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-c-ink: var(--c-ink);
+  --color-c-ink-hover: var(--c-ink-hover);
+  --color-c-night: var(--c-night);
+  --color-c-panel: var(--c-panel);
+  --color-c-deep-900: var(--c-deep-900);
+  --color-c-deep-800: var(--c-deep-800);
+  --color-c-deep-700: var(--c-deep-700);
+  --color-c-deep-650: var(--c-deep-650);
+  --color-c-deep-600: var(--c-deep-600);
+  --color-c-deep-500: var(--c-deep-500);
+  --color-c-deep-400: var(--c-deep-400);
+  --color-c-brand: var(--c-brand);
+  --color-c-brand-400: var(--c-brand-400);
+  --color-c-brand-300: var(--c-brand-300);
+  --color-c-brand-200: var(--c-brand-200);
+  --color-c-brand-100: var(--c-brand-100);
+  --color-c-wash-100: var(--c-wash-100);
+  --color-c-wash-50: var(--c-wash-50);
+  --color-c-wash-25: var(--c-wash-25);
+  --color-c-highlight: var(--c-highlight);
+  --color-c-highlight-mid: var(--c-highlight-mid);
+  --color-c-highlight-soft: var(--c-highlight-soft);
+  --color-c-highlight-200: var(--c-highlight-200);
+  --color-c-beam: var(--c-beam);
+  --color-c-glow: var(--c-glow);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -46,6 +71,38 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ───────── Brand colours. Every brand colour on the site comes from here ───────── */
+:root {
+  /* Base: dark backgrounds, navy text, artwork panels */
+  --c-ink: #0b1739;
+  --c-ink-hover: #152052;
+  --c-night: #050c20;
+  --c-panel: #071229;
+  --c-deep-900: #071a3c;
+  --c-deep-800: #0b2450;
+  --c-deep-700: #0d2a58;
+  --c-deep-650: #103266;
+  --c-deep-600: #123f78;
+  --c-deep-500: #1c4f8d;
+  --c-deep-400: #2f7fc4;
+  /* Primary: buttons, icons, links, pale section tints */
+  --c-brand: #1673b8;
+  --c-brand-400: #3d97d4;
+  --c-brand-300: #86c3ea;
+  --c-brand-200: #bcdff5;
+  --c-brand-100: #dbeefa;
+  --c-wash-100: #e8f4fc;
+  --c-wash-50: #eff7fd;
+  --c-wash-25: #f5f9fd;
+  /* Accent: highlights, glows, the hero beam */
+  --c-highlight: #3cc8f5;
+  --c-highlight-mid: #38bdf8;
+  --c-highlight-soft: #8fe3ff;
+  --c-highlight-200: #bae6fd;
+  --c-beam: #1a9dff;
+  --c-glow: #0ea5e9;
 }
 
 :root {
@@ -223,7 +280,7 @@
 }
 
 .card-sheen-light {
-  --sheen: rgba(56, 189, 248, 0.12);
+  --sheen: color-mix(in srgb, var(--c-highlight-mid) 12%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

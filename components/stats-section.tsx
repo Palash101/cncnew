@@ -40,11 +40,11 @@ function CountUp({ to }: { to: number }) {
  * Company introduction & statistics.
  * Colour-blocked split: statement on brand navy; the numbers sit on one huge deep-blue curve
  * (a planet's edge) that bleeds off the screen. Right half on desktop, lower half on phones.
- * The curve's blues are mixes of the two brand colours, #0B1739 and #1673b8.
+ * The curve's blues sit between the base and primary brand colours.
  */
 export default function StatsSection() {
   return (
-    <section className="relative isolate w-full overflow-hidden bg-[#0B1739] text-white">
+    <section className="relative isolate w-full overflow-hidden bg-c-ink text-white">
       <StatsBackground />
 
       <MotionConfig reducedMotion="user">
@@ -55,7 +55,7 @@ export default function StatsSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1.1, ease: EASE }}
-            className="absolute top-1/2 left-1/2 aspect-square w-[max(1400px,100vw)] -translate-y-1/2 rounded-full bg-[linear-gradient(100deg,#114074_0%,#0e3160_22%,#0c2549_50%)] shadow-[0_0_0_4px_#1673b8,-24px_0_90px_-10px_rgba(38,169,220,0.4)]"
+            className="absolute top-1/2 left-1/2 aspect-square w-[max(1400px,100vw)] -translate-y-1/2 rounded-full bg-[linear-gradient(100deg,var(--c-deep-600)_0%,var(--c-deep-650)_22%,var(--c-deep-800)_50%)] shadow-[0_0_0_4px_var(--c-brand),-24px_0_90px_-10px_color-mix(in_srgb,var(--c-glow)_40%,transparent)]"
           />
         </div>
 
@@ -83,7 +83,7 @@ export default function StatsSection() {
               {/* Phone / tablet curve: full-bleed, rising from below */}
               <div
                 aria-hidden
-                className="absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 rounded-t-[50%_56px] bg-[linear-gradient(180deg,#114074_0%,#0e3160_40%,#0c2549_100%)] shadow-[0_-4px_0_#1673b8,0_-24px_70px_-10px_rgba(38,169,220,0.4)] lg:hidden"
+                className="absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 rounded-t-[50%_56px] bg-[linear-gradient(180deg,var(--c-deep-600)_0%,var(--c-deep-650)_40%,var(--c-deep-800)_100%)] shadow-[0_-4px_0_var(--c-brand),0_-24px_70px_-10px_color-mix(in_srgb,var(--c-glow)_40%,transparent)] lg:hidden"
               />
 
               <ul className="grid grid-cols-2">

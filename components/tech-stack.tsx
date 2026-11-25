@@ -84,7 +84,7 @@ export default function TechStack() {
   return (
     <section
       id="technology"
-      className={cn("relative isolate w-full overflow-hidden bg-white text-[#0B1739]", SECTION_Y)}
+      className={cn("relative isolate w-full overflow-hidden bg-white text-c-ink", SECTION_Y)}
     >
       <TopHairline tone="light" />
 
@@ -112,7 +112,7 @@ export default function TechStack() {
                 className="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 sm:p-7"
               >
                 <div className="flex items-center gap-3.5">
-                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1673b8] text-white">
+                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-c-brand text-white">
                     <Icon aria-hidden className="h-5 w-5" />
                   </span>
                   <div>

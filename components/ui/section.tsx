@@ -107,7 +107,7 @@ export function Eyebrow({
       {Icon ? (
         <Icon className={cn("h-3.5 w-3.5", tone === "dark" ? "text-sky-400" : "text-sky-500")} />
       ) : (
-        <span className="h-1.5 w-1.5 rounded-full bg-sky-500 shadow-[0_0_10px_#38bdf8]" />
+        <span className="h-1.5 w-1.5 rounded-full bg-sky-500 shadow-[0_0_10px_var(--c-highlight-mid)]" />
       )}
       {children}
       {/* Light sheen passing over the badge */}
@@ -130,7 +130,7 @@ export function Highlight({ children, tone = "dark" }: { children: React.ReactNo
         "animate-text-shimmer bg-clip-text text-transparent",
         tone === "dark"
           ? "bg-gradient-to-r from-sky-300 via-blue-400 to-sky-300"
-          : "bg-gradient-to-r from-[#1673b8] via-[#38bdf8] to-[#1673b8]"
+          : "bg-gradient-to-r from-c-brand via-c-highlight-mid to-c-brand"
       )}
     >
       {children}
@@ -142,14 +142,14 @@ export function Highlight({ children, tone = "dark" }: { children: React.ReactNo
 export const headingClass = (tone: Tone = "dark") =>
   cn(
     "text-[2rem] leading-[1.1] font-semibold tracking-[-0.035em] sm:text-5xl md:text-[52px]",
-    tone === "dark" ? "text-white" : "text-[#0B1739]"
+    tone === "dark" ? "text-white" : "text-c-ink"
   );
 
 /** Smaller heading for sub-sections inside a section */
 export const subheadingClass = (tone: Tone = "dark") =>
   cn(
     "text-2xl leading-tight font-semibold tracking-[-0.03em] sm:text-3xl",
-    tone === "dark" ? "text-white" : "text-[#0B1739]"
+    tone === "dark" ? "text-white" : "text-c-ink"
   );
 
 export const descriptionClass = (tone: Tone = "dark") =>
@@ -224,8 +224,8 @@ export const cardClass = (tone: Tone = "dark") =>
   cn(
     "card-sheen group relative rounded-2xl border transition-all duration-300 ease-out",
     tone === "dark"
-      ? "border-white/10 bg-white/[0.03] hover:-translate-y-1 hover:border-sky-400/40 hover:bg-white/[0.06] hover:shadow-[0_20px_50px_-24px_rgba(14,165,233,0.45)]"
-      : "card-sheen-light border-slate-200/80 bg-white shadow-[0_8px_30px_-18px_rgba(11,23,57,0.15)] hover:-translate-y-1 hover:border-sky-200 hover:shadow-[0_20px_45px_-20px_rgba(22,115,184,0.3)]"
+      ? "border-white/10 bg-white/[0.03] hover:-translate-y-1 hover:border-sky-400/40 hover:bg-white/[0.06] hover:shadow-[0_20px_50px_-24px_color-mix(in_srgb,var(--c-glow)_45%,transparent)]"
+      : "card-sheen-light border-slate-200/80 bg-white shadow-[0_8px_30px_-18px_color-mix(in_srgb,var(--c-ink)_15%,transparent)] hover:-translate-y-1 hover:border-sky-200 hover:shadow-[0_20px_45px_-20px_color-mix(in_srgb,var(--c-brand)_30%,transparent)]"
   );
 
 /** Thin line along a section's top edge, with a short light beam travelling across it */
@@ -241,7 +241,7 @@ export function TopHairline({ tone = "dark" }: { tone?: Tone }) {
       <div
         className={cn(
           "animate-line-sweep absolute inset-y-0 left-0 w-1/5 bg-gradient-to-r from-transparent to-transparent",
-          tone === "dark" ? "via-sky-200" : "via-[#1673b8]"
+          tone === "dark" ? "via-sky-200" : "via-c-brand"
         )}
       />
     </div>
@@ -250,4 +250,4 @@ export function TopHairline({ tone = "dark" }: { tone?: Tone }) {
 
 /** Shared light card surface for the AI + project showcase */
 export const showcaseCard =
-  "group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_14px_40px_-26px_rgba(11,23,57,0.35)] transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-sky-200 hover:shadow-[0_28px_60px_-30px_rgba(22,115,184,0.45)] motion-reduce:hover:translate-y-0";
+  "group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_14px_40px_-26px_color-mix(in_srgb,var(--c-ink)_35%,transparent)] transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-sky-200 hover:shadow-[0_28px_60px_-30px_color-mix(in_srgb,var(--c-brand)_45%,transparent)] motion-reduce:hover:translate-y-0";

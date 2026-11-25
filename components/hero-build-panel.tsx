@@ -80,12 +80,12 @@ export default function HeroBuildPanel({ ref, paused }: { ref?: Ref<HTMLDivEleme
   return (
     <div
       ref={ref}
-      className="relative w-full overflow-hidden rounded-t-[28px] border border-b-0 border-sky-300/25 bg-[#071229] px-5 pt-5 pb-5 text-left sm:px-7 sm:pt-6"
+      className="relative w-full overflow-hidden rounded-t-[28px] border border-b-0 border-sky-300/25 bg-c-panel px-5 pt-5 pb-5 text-left sm:px-7 sm:pt-6"
     >
       {/* Light soaking in from the beam above */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgba(60,200,245,0.22),transparent)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,color-mix(in_srgb,var(--c-highlight)_22%,transparent),transparent)]"
       />
 
       <div className="relative flex items-baseline justify-between gap-4">
@@ -104,7 +104,7 @@ export default function HeroBuildPanel({ ref, paused }: { ref?: Ref<HTMLDivEleme
         />
         <motion.span
           aria-hidden
-          className="absolute top-[23px] left-[15px] w-0.5 origin-top bg-[#3cc8f5] shadow-[0_0_12px_#3cc8f5]"
+          className="absolute top-[23px] left-[15px] w-0.5 origin-top bg-c-highlight shadow-[0_0_12px_var(--c-highlight)]"
           style={{ height: ROW * (STAGES.length - 1) }}
           initial={false}
           animate={{ scaleY: Math.min(1, Math.max(0, active) / (STAGES.length - 1)) }}
@@ -120,10 +120,10 @@ export default function HeroBuildPanel({ ref, paused }: { ref?: Ref<HTMLDivEleme
               <span
                 className={cn(
                   "relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-500",
-                  isDone && "border-[#3cc8f5] bg-[#3cc8f5] text-[#071229]",
+                  isDone && "border-c-highlight bg-c-highlight text-c-panel",
                   isActive &&
-                    "border-[#3cc8f5] bg-[#0d2a4a] text-[#8fe3ff] shadow-[0_0_18px_rgba(60,200,245,0.7)]",
-                  !isDone && !isActive && "border-white/15 bg-[#0b1a36] text-slate-400",
+                    "border-c-highlight bg-c-deep-700 text-c-highlight-soft shadow-[0_0_18px_color-mix(in_srgb,var(--c-highlight)_70%,transparent)]",
+                  !isDone && !isActive && "border-white/15 bg-c-deep-900 text-slate-400",
                 )}
               >
                 <Icon aria-hidden className="h-4 w-4" strokeWidth={2.25} />
@@ -141,7 +141,7 @@ export default function HeroBuildPanel({ ref, paused }: { ref?: Ref<HTMLDivEleme
                       animateOn="view"
                       sequential
                       speed={38}
-                      encryptedClassName="text-[#3cc8f5]"
+                      encryptedClassName="text-c-highlight"
                     />
                   ) : (
                     stage.title
@@ -168,7 +168,7 @@ export default function HeroBuildPanel({ ref, paused }: { ref?: Ref<HTMLDivEleme
           logoHeight={44}
           gap={14}
           fadeOut
-          fadeOutColor="#071229"
+          fadeOutColor="var(--c-panel)"
           ariaLabel="Technologies we work with"
         />
       </div>

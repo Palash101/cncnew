@@ -19,6 +19,7 @@ import Magnet from "@/components/react-bits/Magnet";
 import RotatingText from "@/components/react-bits/RotatingText";
 import ShinyText from "@/components/react-bits/ShinyText";
 import StarBorder from "@/components/react-bits/StarBorder";
+import { useThemeColor } from "@/components/theme-preview/theme-store"; // TEMPORARY: colour testing
 import { EASE } from "@/components/ui/section";
 import { useQuoteModal } from "@/context/quote-modal-context";
 
@@ -36,6 +37,10 @@ const fadeUp: Variants = {
 
 export default function HeroSection() {
   const { openQuoteModal } = useQuoteModal();
+  // Canvas and WebGL components need plain hex values
+  const beamColor = useThemeColor("--c-beam", "#1a9dff");
+  const highlightColor = useThemeColor("--c-highlight", "#3cc8f5");
+  const badgeColor = useThemeColor("--c-highlight-200", "#b9dcf2");
   const sectionRef = useRef<HTMLElement>(null);
   const beamRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -91,7 +96,7 @@ export default function HeroSection() {
     <section
       ref={sectionRef}
       id="top"
-      className="sticky top-0 z-0 isolate flex min-h-[max(100svh,640px)] flex-col overflow-hidden bg-[#050c20] text-white"
+      className="sticky top-0 z-0 isolate flex min-h-[max(100svh,640px)] flex-col overflow-hidden bg-c-night text-white"
     >
       {/* ───────── React Bits LaserFlow: a beam that lands on the panel ───────── */}
       <div
@@ -103,7 +108,7 @@ export default function HeroSection() {
           <LaserFlow
             surfaceRef={panelRef}
             beamPosition={beam.x}
-            color="#1a9dff"
+            color={beamColor}
             intensity={1.35}
             beamWidth={1.3}
             flare={1.25}
@@ -137,8 +142,8 @@ export default function HeroSection() {
               variants={fadeUp}
               className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-2 text-sm font-semibold"
             >
-              <span className="h-2 w-2 rounded-full bg-[#3cc8f5] shadow-[0_0_10px_#3cc8f5]" />
-              <ShinyText text="Design · Technology · Growth" color="#b9dcf2" shineColor="#ffffff" speed={3} />
+              <span className="h-2 w-2 rounded-full bg-c-highlight shadow-[0_0_10px_var(--c-highlight)]" />
+              <ShinyText text="Design · Technology · Growth" color={badgeColor} shineColor="#ffffff" speed={3} />
             </motion.p>
 
             <motion.h1
@@ -151,7 +156,7 @@ export default function HeroSection() {
                   animateOn="view"
                   sequential
                   speed={42}
-                  encryptedClassName="text-[#3cc8f5]"
+                  encryptedClassName="text-c-highlight"
                 />
               </span>
               <RotatingText
@@ -162,7 +167,7 @@ export default function HeroSection() {
                 transition={{ duration: 0.35, ease: EASE }}
                 rotationInterval={3400}
                 auto={!covered && !reduceMotion}
-                mainClassName="justify-center whitespace-nowrap pb-[0.12em] text-[#3cc8f5] lg:justify-start"
+                mainClassName="justify-center whitespace-nowrap pb-[0.12em] text-c-highlight lg:justify-start"
               />
             </motion.h1>
 
@@ -182,10 +187,10 @@ export default function HeroSection() {
                 <StarBorder
                   onClick={() => openQuoteModal()}
                   color="#ffffff"
-                  trailColor="#3cc8f5"
-                  backgroundColor="#3cc8f5"
+                  trailColor={highlightColor}
+                  backgroundColor="var(--c-highlight)"
                   borderColor="rgba(255,255,255,0.45)"
-                  textColor="#071229"
+                  textColor="var(--c-panel)"
                   radius={14}
                   thickness={1.5}
                   className="group h-14 w-full px-7! text-base font-bold! whitespace-nowrap sm:w-auto"

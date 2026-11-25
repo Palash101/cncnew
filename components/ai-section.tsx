@@ -63,7 +63,7 @@ const aiCapabilities: AiCapability[] = [
 
 export default function AiSection() {
   return (
-    <div className="w-full text-[#0B1739]">
+    <div className="w-full text-c-ink">
       <Container>
         {/* Sub-header */}
         <motion.h3 {...revealHeading(0)} className={cn(subheadingClass("light"), "mb-8 text-center sm:mb-10")}>
@@ -78,7 +78,7 @@ export default function AiSection() {
               <motion.article key={item.id} {...revealCard(idx)} className={showcaseCard}>
                 {/* Preview: image, or a "live engine" screen for Wisper */}
                 {item.isWisper ? (
-                  <div className="relative flex aspect-[16/10] w-full flex-col justify-between overflow-hidden bg-[radial-gradient(ellipse_at_50%_65%,rgba(56,189,248,0.18),transparent_70%),#0B1739] p-5">
+                  <div className="relative flex aspect-[16/10] w-full flex-col justify-between overflow-hidden bg-[radial-gradient(ellipse_at_50%_65%,color-mix(in_srgb,var(--c-highlight-mid)_18%,transparent),transparent_70%),var(--c-ink)] p-5">
                     <div className="flex items-center justify-between">
                       <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider text-sky-300 uppercase">
                         <span className="h-2 w-2 rounded-full bg-sky-400" />
@@ -110,7 +110,7 @@ export default function AiSection() {
                       sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05] motion-reduce:transition-none"
                     />
-                    <span className="absolute top-3.5 left-3.5 rounded-md bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-[#0B1739] shadow-sm backdrop-blur-sm">
+                    <span className="absolute top-3.5 left-3.5 rounded-md bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-c-ink shadow-sm backdrop-blur-sm">
                       {item.subtitle}
                     </span>
                   </div>
@@ -119,10 +119,10 @@ export default function AiSection() {
                 {/* Body */}
                 <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-center gap-3">
-                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sky-200 bg-sky-50 text-[#1673b8]">
+                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sky-200 bg-sky-50 text-c-brand">
                       <Icon className="h-5 w-5" />
                     </span>
-                    <h4 className="text-lg font-semibold tracking-tight text-[#0B1739]">{item.title}</h4>
+                    <h4 className="text-lg font-semibold tracking-tight text-c-ink">{item.title}</h4>
                   </div>
 
                   <p className="mt-3 mb-auto text-sm leading-relaxed text-slate-600">{item.description}</p>
@@ -130,7 +130,7 @@ export default function AiSection() {
                   <ul className="mt-5 flex flex-col gap-2 border-t border-slate-200/80 pt-4">
                     {item.highlights.map((point) => (
                       <li key={point} className="flex items-center gap-2 text-sm text-slate-700">
-                        <CircleCheck className="h-4 w-4 shrink-0 text-[#1673b8]" />
+                        <CircleCheck className="h-4 w-4 shrink-0 text-c-brand" />
                         <span>{point}</span>
                       </li>
                     ))}
