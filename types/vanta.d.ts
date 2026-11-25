@@ -22,23 +22,19 @@ declare module "vanta/dist/vanta.net.min" {
   export default NET;
 }
 
-declare module "vanta/dist/vanta.birds.min" {
+declare module "vanta/dist/vanta.cells.min" {
   type VantaEffect = { destroy: () => void; resize?: () => void };
-  type VantaBirdsOptions = {
+  type VantaCellsOptions = {
     el: HTMLElement;
     THREE: unknown;
-    backgroundColor?: number;
-    backgroundAlpha?: number;
     color1?: number;
     color2?: number;
-    colorMode?: "lerp" | "variance" | "lerpGradient" | "varianceGradient";
-    birdSize?: number;
-    wingSpan?: number;
-    speedLimit?: number;
-    separation?: number;
-    alignment?: number;
-    cohesion?: number;
-    quantity?: number;
+    backgroundColor?: number;
+    amplitudeFactor?: number;
+    ringFactor?: number;
+    rotationFactor?: number;
+    size?: number;
+    speed?: number;
     scale?: number;
     scaleMobile?: number;
     mouseControls?: boolean;
@@ -47,6 +43,6 @@ declare module "vanta/dist/vanta.birds.min" {
     minHeight?: number;
     minWidth?: number;
   };
-  const BIRDS: (options: VantaBirdsOptions) => VantaEffect;
-  export default BIRDS;
+  const CELLS: (options: VantaCellsOptions) => VantaEffect;
+  export default CELLS;
 }
