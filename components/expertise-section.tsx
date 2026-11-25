@@ -24,6 +24,7 @@ import {
   SECTION_Y,
 } from "@/components/ui/section";
 import AmbientBackground from "@/components/ui/ambient-background";
+import { AgenticBackground, CircuitBackground, GenerativeBackground } from "@/components/expertise-art";
 
 interface ExpertiseItem {
   id: string;
@@ -98,6 +99,9 @@ const expertiseItems: ExpertiseItem[] = [
   },
 ];
 
+// Background drawings for cards 02 and 03, in order
+const FEATURED_BACKGROUNDS = [GenerativeBackground, AgenticBackground];
+
 export default function ExpertiseSection() {
   // First three = flagship AI capabilities (featured); the rest = supporting capabilities
   const [lead, ...featuredRest] = expertiseItems.slice(0, 3);
@@ -140,21 +144,14 @@ export default function ExpertiseSection() {
           {/* Lead capability */}
           <motion.article
             {...revealCard(0)}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-sky-400/20 bg-[linear-gradient(160deg,rgba(22,115,184,0.22)_0%,rgba(8,18,48,0.9)_55%)] p-7 transition-colors duration-300 hover:border-sky-400/45 sm:p-9 lg:col-span-7 lg:row-span-2"
+            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-sky-400/20 bg-[linear-gradient(160deg,rgba(22,115,184,0.3)_0%,rgba(8,18,48,0.9)_55%)] p-7 transition-colors duration-300 hover:border-sky-400/45 sm:p-9 lg:col-span-7 lg:row-span-2"
           >
-            {/* Decorative concentric rings */}
-            <div aria-hidden className="pointer-events-none absolute -right-20 -bottom-20 h-80 w-80">
-              {[320, 240, 160].map((d) => (
-                <span
-                  key={d}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-sky-300/10 transition-colors duration-500 group-hover:border-sky-300/20"
-                  style={{ width: d, height: d }}
-                />
-              ))}
-            </div>
+            {/* Background drawing: takes no space, and is masked out where the text is
+                (top area + the right margin stay visible) */}
+            <CircuitBackground className="pointer-events-none absolute inset-0 h-full w-full opacity-85 transition-opacity duration-500 [mask-image:linear-gradient(to_bottom,black_22%,transparent_44%),linear-gradient(to_left,black_0%,transparent_6%)] group-hover:opacity-100 lg:[mask-image:linear-gradient(to_bottom,black_30%,transparent_52%),linear-gradient(to_left,black_3%,transparent_12%)]" />
 
             <div className="relative flex items-start justify-between">
-              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-400/35 bg-sky-400/15 text-sky-200">
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-400/40 bg-[#134173] text-sky-200">
                 <LeadIcon className="h-7 w-7" />
               </span>
               <span className="font-mono text-xs text-sky-300/70">01 / Core</span>
@@ -169,20 +166,22 @@ export default function ExpertiseSection() {
           {/* Two more featured */}
           {featuredRest.map((item, i) => {
             const Icon = item.icon;
+            const Background = FEATURED_BACKGROUNDS[i];
             return (
               <motion.article
                 key={item.id}
                 {...revealCard(i + 1)}
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors duration-300 hover:border-sky-400/35 hover:bg-white/[0.05] sm:p-7 lg:col-span-5"
+                className="group relative overflow-hidden rounded-2xl border border-sky-400/15 bg-[linear-gradient(160deg,rgba(22,115,184,0.3)_0%,rgba(8,18,48,0.9)_55%)] p-6 transition-colors duration-300 hover:border-sky-400/40 sm:p-7 lg:col-span-5"
               >
-                <div className="flex items-center gap-4">
+                <Background />
+                <div className="relative flex items-center gap-4">
                   <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-sky-400/30 bg-sky-400/10 text-sky-300">
                     <Icon className="h-5 w-5" />
                   </span>
                   <h3 className="text-xl font-semibold tracking-tight text-white">{item.title}</h3>
-                  <span className="ml-auto font-mono text-xs text-slate-500">0{i + 2}</span>
+                  <span className="ml-auto font-mono text-xs text-slate-400">0{i + 2}</span>
                 </div>
-                <p className="mt-4 text-sm leading-relaxed text-slate-400 sm:text-[15px]">{item.description}</p>
+                <p className="relative mt-4 text-sm leading-relaxed text-slate-300 sm:text-[15px]">{item.description}</p>
               </motion.article>
             );
           })}

@@ -38,12 +38,13 @@ function CountUp({ to }: { to: number }) {
 
 /**
  * Company introduction & statistics.
- * Colour-blocked split: statement on navy; the numbers sit on one huge brand-blue curve
+ * Colour-blocked split: statement on brand navy; the numbers sit on one huge deep-blue curve
  * (a planet's edge) that bleeds off the screen. Right half on desktop, lower half on phones.
+ * The curve's blues are mixes of the two brand colours, #0B1739 and #1673b8.
  */
 export default function StatsSection() {
   return (
-    <section className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,#0B1739_0%,#0d1f4a_100%)] text-white">
+    <section className="relative isolate w-full overflow-hidden bg-[#0B1739] text-white">
       <StatsBackground />
 
       <MotionConfig reducedMotion="user">
@@ -54,7 +55,7 @@ export default function StatsSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1.1, ease: EASE }}
-            className="absolute top-1/2 left-1/2 aspect-square w-[max(1400px,100vw)] -translate-y-1/2 rounded-full bg-[linear-gradient(100deg,#1673b8_0%,#1462a3_22%,#124f93_50%)] shadow-[-30px_0_90px_-20px_rgba(56,189,248,0.45),inset_2px_0_0_rgba(186,230,253,0.55)]"
+            className="absolute top-1/2 left-1/2 aspect-square w-[max(1400px,100vw)] -translate-y-1/2 rounded-full bg-[linear-gradient(100deg,#114074_0%,#0e3160_22%,#0c2549_50%)] shadow-[0_0_0_4px_#1673b8,-24px_0_90px_-10px_rgba(38,169,220,0.4)]"
           />
         </div>
 
@@ -82,7 +83,7 @@ export default function StatsSection() {
               {/* Phone / tablet curve: full-bleed, rising from below */}
               <div
                 aria-hidden
-                className="absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 rounded-t-[50%_56px] bg-[linear-gradient(180deg,#1673b8_0%,#124f93_70%)] shadow-[0_-20px_60px_-20px_rgba(56,189,248,0.45),inset_0_2px_0_rgba(186,230,253,0.5)] lg:hidden"
+                className="absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 rounded-t-[50%_56px] bg-[linear-gradient(180deg,#114074_0%,#0e3160_40%,#0c2549_100%)] shadow-[0_-4px_0_#1673b8,0_-24px_70px_-10px_rgba(38,169,220,0.4)] lg:hidden"
               />
 
               <ul className="grid grid-cols-2">
@@ -93,18 +94,18 @@ export default function StatsSection() {
                       key={stat.label}
                       {...reveal(i)}
                       className={cn(
-                        "border-white/25",
+                        "border-white/15",
                         i % 2 === 0 ? "pr-5 sm:pr-8" : "border-l pl-5 sm:pl-8",
                         i < 2 ? "pb-9 lg:pb-12" : "border-t pt-9 lg:pt-12"
                       )}
                     >
-                      <Icon aria-hidden className="h-6 w-6 text-sky-200" strokeWidth={1.75} />
+                      <Icon aria-hidden className="h-6 w-6 text-sky-400" strokeWidth={1.75} />
                       <p className="mt-4 text-5xl leading-none font-semibold tracking-[-0.04em] tabular-nums sm:text-6xl xl:text-7xl">
                         <CountUp to={stat.value} />
-                        <span className="text-sky-200">+</span>
+                        <span className="text-sky-400">+</span>
                       </p>
                       <p className="mt-4 text-base font-semibold sm:text-lg">{stat.label}</p>
-                      <p className="mt-1 text-sm leading-relaxed text-sky-50">{stat.description}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-slate-300">{stat.description}</p>
                     </motion.li>
                   );
                 })}
