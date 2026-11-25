@@ -12,9 +12,8 @@ import {
   useTransform,
   type Variants,
 } from "motion/react";
-import HeroBuildPanel from "@/components/hero-build-panel";
+import HeroOrb from "@/components/hero-orb";
 import DecryptedText from "@/components/react-bits/DecryptedText";
-import LaserFlow from "@/components/react-bits/LaserFlow";
 import Magnet from "@/components/react-bits/Magnet";
 import RotatingText from "@/components/react-bits/RotatingText";
 import ShinyText from "@/components/react-bits/ShinyText";
@@ -37,43 +36,27 @@ const fadeUp: Variants = {
 
 export default function HeroSection() {
   const { openQuoteModal } = useQuoteModal();
-  // Canvas and WebGL components need plain hex values
-  const beamColor = useThemeColor("--c-beam", "#1a9dff");
+  // Canvas components need plain hex values
   const highlightColor = useThemeColor("--c-highlight", "#3cc8f5");
   const badgeColor = useThemeColor("--c-highlight-200", "#b9dcf2");
   const sectionRef = useRef<HTMLElement>(null);
-  const beamRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const [covered, setCovered] = useState(false);
-  // Where the beam falls (0 to 1) and its render scale; known once the layout is measured
-  const [beam, setBeam] = useState<{ x: number; dpr: number } | null>(null);
 
   // How far the hero is taller than the screen (phones): it scrolls that far before pinning
   const overflow = useMotionValue(0);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const stage = beamRef.current;
-    const panel = panelRef.current;
-    if (!section || !stage || !panel) return;
+    if (!section) return;
 
     const measure = () => {
       const extra = Math.max(0, section.offsetHeight - window.innerHeight);
       overflow.set(extra);
       section.style.top = `${-extra}px`;
-      // Aim the beam at the middle of the panel
-      const b = stage.getBoundingClientRect();
-      const p = panel.getBoundingClientRect();
-      if (!b.width) return;
-      const x = Math.round(((p.left + p.width / 2 - b.left) / b.width) * 1000) / 1000;
-      // The light is soft, so large screens render it smaller to stay smooth on integrated GPUs
-      const dpr = Math.round(Math.min(1, Math.max(0.5, 900 / b.width)) * 100) / 100;
-      setBeam((prev) => (prev && prev.x === x && prev.dpr === dpr ? prev : { x, dpr }));
     };
     const observer = new ResizeObserver(measure);
     observer.observe(section);
-    observer.observe(panel);
     window.addEventListener("resize", measure);
     return () => {
       observer.disconnect();
@@ -98,39 +81,17 @@ export default function HeroSection() {
       id="top"
       className="sticky top-0 z-0 isolate flex min-h-[max(100svh,640px)] flex-col overflow-hidden bg-c-night text-white"
     >
-      {/* ───────── React Bits LaserFlow: a beam that lands on the panel ───────── */}
+      {/* Soft light behind the orb */}
       <div
-        ref={beamRef}
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[570px] [mask-image:linear-gradient(to_bottom,transparent,black_22%)] lg:h-full lg:[mask-image:none]"
-      >
-        {beam && (
-          <LaserFlow
-            surfaceRef={panelRef}
-            beamPosition={beam.x}
-            color={beamColor}
-            intensity={1.35}
-            beamWidth={1.3}
-            flare={1.25}
-            spread={1.3}
-            spill={0.75}
-            fog={0.3}
-            dust={1.6}
-            streaks={1.8}
-            pulse={1.5}
-            speed={1.4}
-            dots={0.4}
-            dpr={beam.dpr}
-            paused={covered}
-          />
-        )}
-      </div>
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_88%,color-mix(in_srgb,var(--c-brand)_32%,transparent),transparent_46%)] lg:bg-[radial-gradient(circle_at_76%_52%,color-mix(in_srgb,var(--c-brand)_34%,transparent),transparent_44%)]"
+      />
 
       <div className="mx-auto grid w-full max-w-[1248px] flex-1 grid-cols-1 px-6 lg:grid-cols-[minmax(0,1.16fr)_minmax(0,0.84fr)] lg:gap-12">
         {/* ───────── Copy (scroll-linked: moves up + fades) ───────── */}
         <motion.div
           style={{ y: contentY, opacity: contentOpacity }}
-          className="flex flex-col justify-center pt-32 pb-40 will-change-transform lg:pt-28 lg:pb-16"
+          className="flex flex-col justify-center pt-32 pb-10 will-change-transform lg:pt-28 lg:pb-16"
         >
           <motion.div
             variants={container}
@@ -214,9 +175,9 @@ export default function HeroSection() {
           </motion.div>
         </motion.div>
 
-        {/* ───────── Panel the beam lands on, rising from the bottom edge ───────── */}
-        <div className="mx-auto flex w-full max-w-md min-w-0 flex-col justify-end lg:max-w-none">
-          <HeroBuildPanel ref={panelRef} paused={covered} />
+        {/* ───────── Orb ───────── */}
+        <div className="flex items-center justify-center pb-14 lg:pt-20 lg:pb-0">
+          <HeroOrb paused={covered} />
         </div>
       </div>
     </section>

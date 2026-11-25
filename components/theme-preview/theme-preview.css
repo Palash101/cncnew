@@ -29,7 +29,6 @@ html[data-palette] {
   --c-highlight-mid: oklch(0.7535 calc(0.139 * var(--t-accent-c)) calc(232.66 + var(--t-accent-h)));
   --c-highlight-soft: oklch(0.8721 calc(0.0902 * var(--t-accent-c)) calc(221.23 + var(--t-accent-h)));
   --c-highlight-200: oklch(0.9014 calc(0.0555 * var(--t-accent-c)) calc(230.9 + var(--t-accent-h)));
-  --c-beam: oklch(0.6799 calc(0.1774 * var(--t-accent-c)) calc(224.37 + var(--t-accent-h)));
   --c-glow: oklch(0.6847 calc(0.1479 * var(--t-accent-c)) calc(237.32 + var(--t-accent-h)));
 
   /* Tailwind ramps used across the site */

@@ -28,7 +28,6 @@
   --color-c-highlight-mid: var(--c-highlight-mid);
   --color-c-highlight-soft: var(--c-highlight-soft);
   --color-c-highlight-200: var(--c-highlight-200);
-  --color-c-beam: var(--c-beam);
   --color-c-glow: var(--c-glow);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -96,12 +95,11 @@
   --c-wash-100: #e8f4fc;
   --c-wash-50: #eff7fd;
   --c-wash-25: #f5f9fd;
-  /* Accent: highlights, glows, the hero beam */
+  /* Accent: highlights, glows, the hero orb */
   --c-highlight: #3cc8f5;
   --c-highlight-mid: #38bdf8;
   --c-highlight-soft: #8fe3ff;
   --c-highlight-200: #bae6fd;
-  --c-beam: #1a9dff;
   --c-glow: #0ea5e9;
 }
 
