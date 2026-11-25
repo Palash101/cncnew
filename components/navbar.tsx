@@ -92,8 +92,8 @@ export default function Navbar() {
           "transition-[max-width,margin,border-radius,background-color,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
           scrolled
             ? "mt-0 max-w-[100vw] rounded-none border-x-transparent border-t-transparent border-b-slate-200/70 bg-white/85 shadow-[0_8px_30px_-12px_rgba(11,23,57,0.18)]"
-            : "mt-3 max-w-[min(1200px,calc(100%-24px))] rounded-2xl border-white/80 bg-white/70 shadow-[0_10px_40px_-12px_rgba(11,23,57,0.25)] ring-1 ring-[#0B1739]/5",
-          mobileMenuOpen && !scrolled && "bg-white/90"
+            : "mt-3 max-w-[min(1200px,calc(100%-24px))] rounded-2xl border-white/80 bg-white/90 shadow-[0_10px_40px_-12px_rgba(11,23,57,0.25)] ring-1 ring-[#0B1739]/5",
+          mobileMenuOpen && !scrolled && "bg-white/95"
         )}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">

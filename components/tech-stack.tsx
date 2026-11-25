@@ -3,13 +3,14 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Monitor, Server, Smartphone, Cloud, Cpu, type LucideIcon } from "lucide-react";
+import { Container, SectionHeader, Highlight, TopHairline, reveal, SECTION_Y } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
-import { Container, SectionHeader, Highlight, TopHairline, revealCard, SECTION_Y } from "@/components/ui/section";
-import AmbientBackground from "@/components/ui/ambient-background";
 
 interface TechItem {
   name: string;
-  image?: string;
+  image: string;
+  /** The file has a light-grey box baked in: brighten it to match the white tile */
+  lift?: boolean;
 }
 
 interface CategoryRow {
@@ -27,7 +28,7 @@ const techCategories: CategoryRow[] = [
     items: [
       { name: "React Js", image: "/frontend/react.png" },
       { name: "Next Js", image: "/frontend/nextjs.png" },
-      { name: "Vue JS", image: "/frontend/vue.webp" },
+      { name: "Vue JS", image: "/frontend/vue.webp", lift: true },
       { name: "Angular Js", image: "/frontend/angular.png" },
       { name: "HTML5", image: "/frontend/html.png" },
       { name: "CSS 3", image: "/frontend/css.png" },
@@ -59,7 +60,7 @@ const techCategories: CategoryRow[] = [
       { name: "Android", image: "/mobile framework/android.png" },
       { name: "Flutter", image: "/mobile framework/flutter.png" },
       { name: "Kotlin", image: "/mobile framework/Kotlin_icon.webp" },
-      { name: "React Native", image: "/mobile framework/react native.png" },
+      { name: "React Native", image: "/mobile framework/react native.png", lift: true },
     ],
   },
   {
@@ -69,8 +70,8 @@ const techCategories: CategoryRow[] = [
     items: [
       { name: "Azure", image: "/cloud devops/azure.png" },
       { name: "AWS", image: "/cloud devops/aws-icon.webp" },
-      { name: "Google Cloud", image: "/cloud devops/google cloud.webp" },
-      { name: "Docker", image: "/cloud devops/docker.png" },
+      { name: "Google Cloud", image: "/cloud devops/google cloud.webp", lift: true },
+      { name: "Docker", image: "/cloud devops/docker.png", lift: true },
       { name: "Bitbucket", image: "/cloud devops/bit bucket.png" },
       { name: "Github", image: "/cloud devops/github.png" },
       { name: "Gitlab", image: "/cloud devops/git lab.png" },
@@ -81,9 +82,11 @@ const techCategories: CategoryRow[] = [
 
 export default function TechStack() {
   return (
-    <section className={cn("relative isolate w-full overflow-hidden bg-white text-[#0B1739]", SECTION_Y)}>
+    <section
+      id="technology"
+      className={cn("relative isolate w-full overflow-hidden bg-white text-[#0B1739]", SECTION_Y)}
+    >
       <TopHairline tone="light" />
-      <AmbientBackground variant="white" />
 
       <Container>
         <SectionHeader
@@ -98,58 +101,42 @@ export default function TechStack() {
           description="Empowering enterprise applications with modern, battle-tested technologies."
         />
 
-        {/* Ecosystem: one row per category */}
-        <div className="mt-14 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_20px_60px_-36px_rgba(11,23,57,0.25)] sm:mt-16">
-          {techCategories.map((category, rowIdx) => {
+        {/* One plain card per category */}
+        <div className="mt-12 grid gap-5 sm:mt-14 lg:grid-cols-2 lg:gap-6">
+          {techCategories.map((category) => {
             const Icon = category.icon;
             return (
               <motion.div
                 key={category.id}
-                {...revealCard(rowIdx)}
-                className={cn(
-                  "grid gap-5 p-5 sm:p-7 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10 lg:p-8",
-                  rowIdx > 0 && "border-t border-slate-200/80",
-                  rowIdx % 2 === 1 && "bg-slate-50/50"
-                )}
+                {...reveal(0)}
+                className="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 sm:p-7"
               >
-                {/* Category label */}
-                <div className="flex items-center gap-3.5 lg:flex-col lg:items-start lg:gap-4">
-                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-sky-200 bg-sky-50 text-[#1673b8]">
-                    <Icon className="h-5 w-5" />
+                <div className="flex items-center gap-3.5">
+                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1673b8] text-white">
+                    <Icon aria-hidden className="h-5 w-5" />
                   </span>
                   <div>
-                    <h3 className="text-base font-semibold tracking-tight text-[#0B1739] sm:text-lg">
-                      {category.title}
-                    </h3>
-                    <p className="mt-0.5 text-xs font-medium text-slate-500">
-                      {category.items.length} technologies
-                    </p>
+                    <h3 className="text-lg leading-tight font-semibold tracking-tight">{category.title}</h3>
+                    <p className="mt-1 text-sm text-slate-600">{category.items.length} technologies</p>
                   </div>
                 </div>
 
-                {/* Logo tiles */}
-                <ul className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 sm:gap-3 xl:grid-cols-8">
+                <ul className="mt-6 grid grid-cols-3 gap-2.5 sm:grid-cols-4 sm:gap-3">
                   {category.items.map((tech) => (
                     <li
                       key={tech.name}
-                      className="group flex flex-col items-center justify-center gap-2.5 rounded-xl border border-slate-200/80 bg-white px-2 py-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-[0_12px_28px_-16px_rgba(22,115,184,0.45)] motion-reduce:hover:translate-y-0"
+                      className="flex flex-col items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-1.5 py-4"
                     >
-                      <span className="relative flex h-9 w-9 items-center justify-center">
-                        {tech.image ? (
-                          <Image
-                            src={tech.image}
-                            alt=""
-                            width={36}
-                            height={36}
-                            className="max-h-9 max-w-9 object-contain transition-transform duration-300 group-hover:scale-110"
-                          />
-                        ) : (
-                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600 uppercase">
-                            {tech.name.substring(0, 2)}
-                          </span>
-                        )}
+                      <span className="flex h-10 w-10 items-center justify-center">
+                        <Image
+                          src={tech.image}
+                          alt=""
+                          width={40}
+                          height={40}
+                          className={cn("h-full w-full object-contain", tech.lift && "brightness-110")}
+                        />
                       </span>
-                      <span className="w-full truncate text-center text-xs font-semibold text-slate-700 group-hover:text-[#0B1739]">
+                      <span className="text-center text-[13px] leading-tight font-medium text-slate-700">
                         {tech.name}
                       </span>
                     </li>

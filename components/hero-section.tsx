@@ -2,20 +2,27 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronDown } from "lucide-react";
-import { motion, useScroll, useTransform, type Variants } from "motion/react";
-import { useLenis } from "lenis/react";
-import { cn } from "@/lib/utils";
+import { ArrowDown, ArrowRight } from "lucide-react";
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type Variants,
+} from "motion/react";
+import HeroBuildPanel from "@/components/hero-build-panel";
+import DecryptedText from "@/components/react-bits/DecryptedText";
+import LaserFlow from "@/components/react-bits/LaserFlow";
+import Magnet from "@/components/react-bits/Magnet";
+import RotatingText from "@/components/react-bits/RotatingText";
+import ShinyText from "@/components/react-bits/ShinyText";
+import StarBorder from "@/components/react-bits/StarBorder";
+import { EASE } from "@/components/ui/section";
 import { useQuoteModal } from "@/context/quote-modal-context";
 
-const WORDS = [
-  "DIGITAL REALITY",
-  "ENTERPRISE SOLUTIONS",
-  "HIGH-IMPACT SOFTWARE",
-  "FUTURE PRODUCTS",
-];
-
-const EASE = [0.22, 1, 0.36, 1] as const;
+const WORDS = ["Digital Reality", "Enterprise Solutions", "High-Impact Software", "Future Products"];
 
 const container: Variants = {
   hidden: {},
@@ -30,188 +37,183 @@ const fadeUp: Variants = {
 export default function HeroSection() {
   const { openQuoteModal } = useQuoteModal();
   const sectionRef = useRef<HTMLElement>(null);
-  const cellsRef = useRef<HTMLDivElement>(null);
-  const [wordIndex, setWordIndex] = useState(0);
-  const lenis = useLenis();
+  const beamRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const [covered, setCovered] = useState(false);
+  // Where the beam falls (0 to 1) and its render scale; known once the layout is measured
+  const [beam, setBeam] = useState<{ x: number; dpr: number } | null>(null);
 
-  // Animated Vanta cells background (lazy-loaded so it never blocks first paint)
+  // How far the hero is taller than the screen (phones): it scrolls that far before pinning
+  const overflow = useMotionValue(0);
+
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const section = sectionRef.current;
+    const stage = beamRef.current;
+    const panel = panelRef.current;
+    if (!section || !stage || !panel) return;
 
-    let cancelled = false;
-    let effect: { destroy: () => void } | null = null;
-
-    const load = async () => {
-      const [{ default: CELLS }, THREE] = await Promise.all([
-        import("vanta/dist/vanta.cells.min"),
-        import("three"),
-      ]);
-      if (cancelled || !cellsRef.current) return;
-
-      effect = CELLS({
-        el: cellsRef.current,
-        THREE,
-        // Brand-blue cells blending into light sky
-        color1: 0x1673b8,
-        color2: 0xbfe3f6,
-        backgroundColor: 0xeaf7fc,
-        size: 1.8,
-        speed: 0.7,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.0,
-        minWidth: 200.0,
-      });
+    const measure = () => {
+      const extra = Math.max(0, section.offsetHeight - window.innerHeight);
+      overflow.set(extra);
+      section.style.top = `${-extra}px`;
+      // Aim the beam at the middle of the panel
+      const b = stage.getBoundingClientRect();
+      const p = panel.getBoundingClientRect();
+      if (!b.width) return;
+      const x = Math.round(((p.left + p.width / 2 - b.left) / b.width) * 1000) / 1000;
+      // The light is soft, so large screens render it smaller to stay smooth on integrated GPUs
+      const dpr = Math.round(Math.min(1, Math.max(0.5, 900 / b.width)) * 100) / 100;
+      setBeam((prev) => (prev && prev.x === x && prev.dpr === dpr ? prev : { x, dpr }));
     };
-
-    void load();
+    const observer = new ResizeObserver(measure);
+    observer.observe(section);
+    observer.observe(panel);
+    window.addEventListener("resize", measure);
     return () => {
-      cancelled = true;
-      effect?.destroy();
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
     };
-  }, []);
+  }, [overflow]);
 
-  // Rotating headline word
-  useEffect(() => {
-    const id = window.setInterval(
-      () => setWordIndex((i) => (i + 1) % WORDS.length),
-      3400,
-    );
-    return () => window.clearInterval(id);
-  }, []);
-
-  const scrollToNext = () => {
-    const el = sectionRef.current;
-    if (!el) return;
-    // Hero is sticky, so scroll until the next section fully covers it
-    const top = (el.parentElement?.offsetTop ?? 0) + el.offsetHeight;
-    if (lenis) lenis.scrollTo(top, { duration: 1.2 });
-    else window.scrollTo({ top, behavior: "smooth" });
-  };
-
-  const prevIndex = (wordIndex - 1 + WORDS.length) % WORDS.length;
-
-  // The section is sticky (background stays put); only the text scrolls away
+  // The hero is sticky: only the copy moves away while the next section slides over it
   const { scrollY } = useScroll();
-  const contentY = useTransform(scrollY, [0, 700], [0, -260]);
-  const contentOpacity = useTransform(scrollY, [0, 450], [1, 0]);
-  const contentScale = useTransform(scrollY, [0, 700], [1, 0.94]);
-  const cueOpacity = useTransform(scrollY, [0, 120], [1, 0]);
+  const pinnedScroll = useTransform([scrollY, overflow], ([y, extra]: number[]) => Math.max(0, y - extra));
+  const contentY = useTransform(pinnedScroll, [0, 700], [0, -220]);
+  const contentOpacity = useTransform(pinnedScroll, [0, 450], [1, 0]);
+
+  // Stop all hero animation once the next section fully covers it
+  useMotionValueEvent(scrollY, "change", (y) => {
+    setCovered(y >= (sectionRef.current?.offsetHeight ?? Infinity));
+  });
 
   return (
     <section
       ref={sectionRef}
       id="top"
-      className="sticky top-0 z-0 isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-[#effaff] px-6 pt-28 pb-28 text-center text-[#0B1739]"
+      className="sticky top-0 z-0 isolate flex min-h-[max(100svh,640px)] flex-col overflow-hidden bg-[#050c20] text-white"
     >
-      {/* ───────── Background: Vanta cells ───────── */}
-      <div ref={cellsRef} aria-hidden className="absolute inset-0 -z-10" />
-      {/* Soft light wash behind the text: cells stay vivid at the edges, headline stays readable */}
+      {/* ───────── React Bits LaserFlow: a beam that lands on the panel ───────── */}
       <div
+        ref={beamRef}
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_48%_42%_at_50%_50%,rgba(240,249,255,0.82),rgba(240,249,255,0.35)_60%,transparent_85%)]"
-      />
-
-      {/* ───────── Content (scroll-linked: moves up + fades while background stays) ───────── */}
-      <motion.div
-        style={{ y: contentY, opacity: contentOpacity, scale: contentScale }}
-        className="relative flex w-full max-w-6xl flex-col items-center will-change-transform"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[570px] [mask-image:linear-gradient(to_bottom,transparent,black_22%)] lg:h-full lg:[mask-image:none]"
       >
+        {beam && (
+          <LaserFlow
+            surfaceRef={panelRef}
+            beamPosition={beam.x}
+            color="#1a9dff"
+            intensity={1.35}
+            beamWidth={1.3}
+            flare={1.25}
+            spread={1.3}
+            spill={0.75}
+            fog={0.3}
+            dust={1.6}
+            streaks={1.8}
+            pulse={1.5}
+            speed={1.4}
+            dots={0.4}
+            dpr={beam.dpr}
+            paused={covered}
+          />
+        )}
+      </div>
+
+      <div className="mx-auto grid w-full max-w-[1248px] flex-1 grid-cols-1 px-6 lg:grid-cols-[minmax(0,1.16fr)_minmax(0,0.84fr)] lg:gap-12">
+        {/* ───────── Copy (scroll-linked: moves up + fades) ───────── */}
         <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="relative flex w-full max-w-6xl flex-col items-center"
+          style={{ y: contentY, opacity: contentOpacity }}
+          className="flex flex-col justify-center pt-32 pb-40 will-change-transform lg:pt-28 lg:pb-16"
         >
           <motion.div
-            variants={fadeUp}
-            className="mb-8 inline-flex items-center gap-2 rounded-full border border-sky-300/50 bg-white/50 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.24em] text-sky-800 shadow-sm backdrop-blur-sm sm:text-[11px]"
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="flex flex-col items-center text-center lg:items-start lg:text-left"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-sky-500 shadow-[0_0_10px_#38bdf8]" />
-            Design · Technology · Growth
-          </motion.div>
-
-          <motion.h1
-            variants={fadeUp}
-            className="text-[2.6rem] font-semibold leading-[1.08] tracking-[-0.04em] text-[#0B1739] sm:text-6xl md:text-7xl lg:text-[88px]"
-          >
-            <span className="block">Transforming Ideas into</span>
-
-            {/* All words share one grid cell, so the layout never jumps */}
-            <span className="mt-2 grid text-[1.9rem] tracking-[-0.03em] sm:mt-3 sm:text-5xl md:text-6xl lg:text-[72px]">
-              {WORDS.map((word, i) => {
-                const isActive = i === wordIndex;
-                return (
-                  <motion.span
-                    key={word}
-                    initial={false}
-                    animate={{
-                      opacity: isActive ? 1 : 0,
-                      y: isActive ? "0%" : i === prevIndex ? "-40%" : "40%",
-                      filter: isActive ? "blur(0px)" : "blur(6px)",
-                    }}
-                    transition={{ duration: 0.55, ease: EASE }}
-                    aria-hidden={!isActive}
-                    className={cn(
-                      "bg-gradient-to-r from-[#1673b8] via-[#26a9dc] to-[#1673b8] bg-clip-text pb-2 text-transparent [grid-area:1/1]",
-                      !isActive && "pointer-events-none select-none",
-                    )}
-                  >
-                    {word}
-                  </motion.span>
-                );
-              })}
-            </span>
-          </motion.h1>
-
-          <motion.p
-            variants={fadeUp}
-            className="mt-7 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg md:text-xl md:leading-8"
-          >
-            Accelerating growth for ambitious brands with technology, experience
-            &amp; innovation for over a decade.
-          </motion.p>
-
-          <motion.div
-            variants={fadeUp}
-            className="mt-9 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row"
-          >
-            <button
-              type="button"
-              onClick={() => openQuoteModal()}
-              className="group inline-flex h-14 w-full cursor-pointer items-center justify-center rounded-xl bg-[#0B1739] px-7 text-base font-semibold text-white shadow-[0_14px_30px_rgba(11,23,57,0.2)] transition-all hover:-translate-y-1 hover:bg-[#152752] hover:shadow-[0_18px_36px_rgba(11,23,57,0.25)] sm:w-auto"
+            <motion.p
+              variants={fadeUp}
+              className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-2 text-sm font-semibold"
             >
-              Tell us about your idea
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </button>
-            <Link
-              href="/#projects"
-              className="inline-flex h-14 w-full items-center justify-center rounded-xl border border-[#0B1739]/20 bg-white/50 px-7 text-base font-semibold text-[#0B1739] backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white/85 sm:w-auto"
+              <span className="h-2 w-2 rounded-full bg-[#3cc8f5] shadow-[0_0_10px_#3cc8f5]" />
+              <ShinyText text="Design · Technology · Growth" color="#b9dcf2" shineColor="#ffffff" speed={3} />
+            </motion.p>
+
+            <motion.h1
+              variants={fadeUp}
+              className="text-[clamp(1.25rem,min(8.1vw,11svh),3.5rem)] leading-[1.08] font-bold tracking-[-0.045em] lg:text-[min(4.7vw,10.5svh,3.95rem)]"
             >
-              View our work
-            </Link>
+              <span className="block whitespace-nowrap">
+                <DecryptedText
+                  text="Transforming Ideas into"
+                  animateOn="view"
+                  sequential
+                  speed={42}
+                  encryptedClassName="text-[#3cc8f5]"
+                />
+              </span>
+              <RotatingText
+                texts={WORDS}
+                effect="blur"
+                splitBy="characters"
+                staggerDuration={0.012}
+                transition={{ duration: 0.35, ease: EASE }}
+                rotationInterval={3400}
+                auto={!covered && !reduceMotion}
+                mainClassName="justify-center whitespace-nowrap pb-[0.12em] text-[#3cc8f5] lg:justify-start"
+              />
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp}
+              className="mt-4 max-w-xl text-base leading-7 text-slate-200 sm:text-lg sm:leading-8"
+            >
+              Accelerating growth for ambitious brands with technology, experience &amp; innovation for over a
+              decade.
+            </motion.p>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-8 flex w-full flex-col items-center gap-4 sm:w-auto sm:flex-row"
+            >
+              <Magnet wrapperClassName="w-full sm:w-auto" padding={60} maxOffset={10}>
+                <StarBorder
+                  onClick={() => openQuoteModal()}
+                  color="#ffffff"
+                  trailColor="#3cc8f5"
+                  backgroundColor="#3cc8f5"
+                  borderColor="rgba(255,255,255,0.45)"
+                  textColor="#071229"
+                  radius={14}
+                  thickness={1.5}
+                  className="group h-14 w-full px-7! text-base font-bold! whitespace-nowrap sm:w-auto"
+                >
+                  Tell us about your idea
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </StarBorder>
+              </Magnet>
+              <Link
+                href="/#projects"
+                className="group inline-flex h-14 w-full items-center justify-center rounded-[14px] border border-white/25 bg-white/5 px-7 text-base font-bold whitespace-nowrap text-white transition-colors hover:border-white/60 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto"
+              >
+                View our work
+                <ArrowDown className="ml-2 h-5 w-5 transition-transform group-hover:translate-y-0.5" />
+              </Link>
+            </motion.div>
+
+            <motion.p variants={fadeUp} className="mt-6 max-w-sm text-sm leading-6 text-slate-300">
+              Share your requirements and our lead technical architects will get back to you within 24 hours.
+            </motion.p>
           </motion.div>
         </motion.div>
-      </motion.div>
 
-      {/* Scroll cue */}
-      <motion.div
-        style={{ opacity: cueOpacity }}
-        className="absolute bottom-7 left-1/2 -translate-x-1/2"
-      >
-        <motion.button
-          type="button"
-          onClick={scrollToNext}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.1, duration: 0.6 }}
-          className="flex cursor-pointer flex-col items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500 transition-colors hover:text-[#0B1739]"
-        >
-          <span>Scroll to explore</span>
-          <ChevronDown className="h-4 w-4 animate-bounce text-sky-600" />
-        </motion.button>
-      </motion.div>
+        {/* ───────── Panel the beam lands on, rising from the bottom edge ───────── */}
+        <div className="mx-auto flex w-full max-w-md min-w-0 flex-col justify-end lg:max-w-none">
+          <HeroBuildPanel ref={panelRef} paused={covered} />
+        </div>
+      </div>
     </section>
   );
 }

@@ -27,7 +27,8 @@ export const fadeUp: Variants = {
 
 /** Headings: text rises out of a mask ("wipe-up" reveal) */
 export const maskUp: Variants = {
-  hidden: { opacity: 0, y: 36, clipPath: "inset(0% 0% 100% 0%)" },
+  // Not a full 100% clip: a zero-height box never counts as "in view", so the heading would stay hidden
+  hidden: { opacity: 0, y: 36, clipPath: "inset(0% 0% 80% 0%)" },
   show: (i: number = 0) => ({
     opacity: 1,
     y: 0,
