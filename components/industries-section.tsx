@@ -117,13 +117,13 @@ export default function IndustriesSection() {
         </div>
 
         {/* Illustrated street: scenes touch, so each row shares one continuous road */}
-        <ul className="mt-14 grid grid-cols-2 gap-y-12 sm:mt-16 sm:gap-y-14 lg:grid-cols-5">
+        <ul className="mt-14 grid grid-cols-2 gap-y-14 sm:mt-16 sm:gap-y-16 lg:grid-cols-5">
           {industries.map((item, i) => (
             <motion.li key={item.id} {...reveal(i % 5)}>
               <a href={`#${item.id}`} className="group flex h-full flex-col rounded-lg outline-offset-4">
                 <IndustryScene id={item.id} index={i} />
 
-                <span className="flex flex-1 flex-col pt-4 pr-4 sm:pr-6">
+                <span className="flex flex-1 flex-col pt-6 pr-5 sm:pr-8">
                   <span className="text-base font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-sky-200 sm:text-lg">
                     {item.title}
                   </span>
