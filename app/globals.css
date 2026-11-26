@@ -280,7 +280,40 @@
   --sheen: color-mix(in srgb, var(--c-highlight-mid) 12%, transparent);
 }
 
+/* Hero copy: rises into place on load (CSS only, so it never waits for JavaScript) */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+
+.animate-hero-rise {
+  animation: hero-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Hero scroll cue: a dot falling through the outline */
+@keyframes scroll-cue {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.animate-scroll-cue {
+  animation: scroll-cue 2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .animate-hero-rise,
+  .animate-scroll-cue,
   .animate-text-shimmer,
   .animate-badge-shine,
   .animate-line-sweep {
