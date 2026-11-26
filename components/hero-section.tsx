@@ -3,12 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { useMotionValueEvent, useScroll } from "motion/react";
+import { useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
 import Aurora from "@/components/react-bits/Aurora";
+import RotatingText from "@/components/react-bits/RotatingText";
 import { useThemeColor } from "@/components/theme-preview/theme-store"; // TEMPORARY: colour testing
 import { useQuoteModal } from "@/context/quote-modal-context";
 
+const WORDS = ["Digital Reality", "Enterprise Solutions", "High-Impact Software", "Future Products"];
+
 export default function HeroSection() {
+  const reduceMotion = useReducedMotion();
   const { openQuoteModal } = useQuoteModal();
   const sectionRef = useRef<HTMLElement>(null);
   const [covered, setCovered] = useState(false);
@@ -67,7 +71,17 @@ export default function HeroSection() {
 
       <h1 className="mt-5 text-[clamp(1.5rem,min(8.4vw,12svh),5.25rem)] leading-[1.06] font-bold tracking-[-0.04em]">
         <span className="block whitespace-nowrap">Transforming Ideas into</span>
-        <span className="block text-c-highlight">Digital Reality</span>
+        {/* Rotating second line (React Bits RotatingText) */}
+        <RotatingText
+          texts={WORDS}
+          auto={!reduceMotion && !covered}
+          rotationInterval={3200}
+          staggerDuration={0.025}
+          staggerFrom="first"
+          transition={{ type: "spring", damping: 30, stiffness: 400 }}
+          mainClassName="justify-center whitespace-nowrap text-c-highlight"
+          splitLevelClassName="overflow-hidden pb-[0.12em] -mb-[0.12em]"
+        />
       </h1>
 
       <p className="mt-6 max-w-2xl text-base leading-7 text-slate-200 sm:text-lg sm:leading-8">
