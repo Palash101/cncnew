@@ -1,15 +1,41 @@
 "use client";
 
-import Image from "next/image";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Cpu } from "lucide-react";
-import { motion, MotionConfig, type Variants } from "motion/react";
-import SpotlightCard from "@/components/react-bits/SpotlightCard";
+import {
+  IconBrandAndroid,
+  IconBrandAngular,
+  IconBrandApple,
+  IconBrandAws,
+  IconBrandAzure,
+  IconBrandBitbucket,
+  IconBrandCSharp,
+  IconBrandCss3,
+  IconBrandDocker,
+  IconBrandFlutter,
+  IconBrandGithub,
+  IconBrandGitlab,
+  IconBrandGolang,
+  IconBrandGoogle,
+  IconBrandHtml5,
+  IconBrandKotlin,
+  IconBrandNextjs,
+  IconBrandNodejs,
+  IconBrandPhp,
+  IconBrandPython,
+  IconBrandReact,
+  IconBrandReactNative,
+  IconBrandVue,
+  IconBrandWebflow,
+  IconBrandWordpress,
+  type Icon,
+} from "@tabler/icons-react";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
+import ShapeGrid from "@/components/react-bits/ShapeGrid";
 import {
   Container,
-  EASE,
   Eyebrow,
   Highlight,
-  SECTION_Y,
   descriptionClass,
   headingClass,
   reveal,
@@ -86,40 +112,226 @@ const techCategories: CategoryRow[] = [
   },
 ];
 
-// One continuous field, read left to right: what people touch first, what everything runs on last
+// One continuous sequence: what people touch first, what everything runs on last
 const ORDER = ["frontend", "mobile", "backend", "cloud"];
 const TECHNOLOGIES = ORDER.flatMap((id) => techCategories.find((c) => c.id === id)?.items ?? []);
 
-const field: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.028, delayChildren: 0.15 } },
-};
-const mark: Variants = {
-  hidden: { opacity: 0, y: 12, scale: 0.94 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: EASE } },
+/**
+ * One-colour marks. Most are outline brand icons; the four brands the icon set lacks use the
+ * project's own logo file as a silhouette (those files have transparent backgrounds).
+ */
+const MARKS: Record<string, Icon | string> = {
+  "React Js": IconBrandReact,
+  "Next Js": IconBrandNextjs,
+  "Vue JS": IconBrandVue,
+  "Angular Js": IconBrandAngular,
+  HTML5: IconBrandHtml5,
+  "CSS 3": IconBrandCss3,
+  Wordpress: IconBrandWordpress,
+  Webflow: IconBrandWebflow,
+  "Node Js": IconBrandNodejs,
+  ".Net": "/backend/dot net.webp",
+  Java: "/backend/java.png",
+  Python: IconBrandPython,
+  "C#": IconBrandCSharp,
+  PHP: IconBrandPhp,
+  "Go-Lang": IconBrandGolang,
+  Odoo: "/Odoo.png",
+  iOS: IconBrandApple,
+  Android: IconBrandAndroid,
+  Flutter: IconBrandFlutter,
+  Kotlin: IconBrandKotlin,
+  "React Native": IconBrandReactNative,
+  Azure: IconBrandAzure,
+  AWS: IconBrandAws,
+  "Google Cloud": IconBrandGoogle,
+  Docker: IconBrandDocker,
+  Bitbucket: IconBrandBitbucket,
+  Github: IconBrandGithub,
+  Gitlab: IconBrandGitlab,
+  Sharepoint: "/cloud devops/SharePoint_.webp",
 };
 
-// The surface behind the cells is what shows through the 1px gaps: those are the grid lines
-const LINES = {
-  "--spotlight-card-surface": "color-mix(in srgb, var(--c-ink) 13%, #fff)",
-  "--spotlight-card-border": "color-mix(in srgb, var(--c-ink) 14%, #fff)",
-  "--spotlight-card-shadow": "0 30px 60px -44px color-mix(in srgb, var(--c-ink) 45%, transparent)",
-} as React.CSSProperties;
+function Mark({ name, className }: { name: string; className?: string }) {
+  const mark = MARKS[name];
+  if (typeof mark === "string") {
+    const image = `url("${encodeURI(mark)}")`;
+    return (
+      <span
+        className={cn("block bg-current", className)}
+        style={{ maskImage: image, WebkitMaskImage: image, maskSize: "contain", maskRepeat: "no-repeat", maskPosition: "center" }}
+      />
+    );
+  }
+  const Glyph = mark;
+  return <Glyph className={className} stroke={1.5} />;
+}
+
+/* ── the neon colour as plain numbers (the canvas cannot read CSS variables) ── */
+
+const FALLBACK_RGB = "22, 115, 184";
+let cachedKey = "";
+let cachedRgb = FALLBACK_RGB;
+
+function readNeon() {
+  const root = document.documentElement;
+  const key = `${root.dataset.palette ?? ""}|${root.getAttribute("style") ?? ""}`;
+  if (key === cachedKey) return cachedRgb;
+  cachedKey = key;
+  const probe = document.createElement("span");
+  probe.style.color = "var(--c-brand)";
+  document.body.appendChild(probe);
+  const color = getComputedStyle(probe).color;
+  probe.remove();
+  const context = document.createElement("canvas").getContext("2d");
+  if (context) {
+    context.fillStyle = color;
+    context.fillRect(0, 0, 1, 1);
+    cachedRgb = Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3)).join(", ");
+  }
+  return cachedRgb;
+}
+
+// The colour-testing panel announces palette changes with this event
+const watchNeon = (onChange: () => void) => {
+  window.addEventListener("cnc-theme-preview", onChange);
+  return () => window.removeEventListener("cnc-theme-preview", onChange);
+};
+
+const MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+const prefersStill = () => window.matchMedia(MOTION_QUERY).matches;
+const watchMotion = (onChange: () => void) => {
+  const query = window.matchMedia(MOTION_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+};
+
+/* ── honeycomb geometry: identical to ShapeGrid's hexagon layout, so marks land in its cells ── */
+
+const SQRT3 = Math.sqrt(3);
+const ROWS = 4;
+
+type Slot = { x: number; y: number };
+
+function honeycomb(width: number) {
+  const cell = width < 480 ? 76 : width < 900 ? 92 : width < 1700 ? 104 : 116; // height of one hexagon
+  const radius = cell / SQRT3;
+  const stepX = radius * 1.5;
+  const slots: Slot[] = [];
+  // Whole cells only: skip the half cells on the left and right edges
+  for (let i = 1; i * stepX + radius <= width; i++) {
+    for (let row = 0; row < ROWS; row++) {
+      slots.push({ x: i * stepX, y: (i % 2 === 1 ? cell / 2 : cell) + row * cell });
+    }
+  }
+  return { cell, slots, height: (ROWS + 0.5) * cell };
+}
+
+/** Which technology (by index) each cell holds; null = an empty cell */
+function firstFill(slotCount: number) {
+  const fill: (number | null)[] = Array(slotCount).fill(null);
+  // Most cells lit, but never the whole list: some cells stay empty and the marks keep changing
+  const lit = Math.min(24, Math.max(3, Math.round(slotCount * 0.62)));
+  // Spread the first marks evenly instead of bunching them in the first columns
+  for (let n = 0; n < lit; n++) fill[Math.floor(((n + 0.5) * slotCount) / lit)] = n;
+  return { fill, next: lit % TECHNOLOGIES.length };
+}
+
+/** The marks: every beat one goes dark and another lights up in a different empty cell */
+function Marks({ slots, cell, still }: { slots: Slot[]; cell: number; still: boolean }) {
+  const [state, setState] = useState(() => firstFill(slots.length));
+  const live = useRef(state);
+
+  useEffect(() => {
+    live.current = state;
+  }, [state]);
+
+  useEffect(() => {
+    const beat = window.setInterval(
+      () => {
+        const { fill, next } = live.current;
+        const lit = fill.flatMap((tech, slot) => (tech === null ? [] : [slot]));
+        const empty = fill.flatMap((tech, slot) => (tech === null ? [slot] : []));
+        if (!lit.length || !empty.length) return;
+        const leaving = lit[Math.floor(Math.random() * lit.length)];
+        const arriving = empty[Math.floor(Math.random() * empty.length)];
+        // Next technology in line that is not already on screen, so every one gets its turn
+        let tech = next;
+        while (fill.includes(tech)) tech = (tech + 1) % TECHNOLOGIES.length;
+        const updated = [...fill];
+        updated[leaving] = null;
+        updated[arriving] = tech;
+        setState({ fill: updated, next: (tech + 1) % TECHNOLOGIES.length });
+      },
+      still ? 2600 : 850,
+    );
+    return () => window.clearInterval(beat);
+  }, [still]);
+
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 text-c-brand">
+      {slots.map((slot, i) => {
+        const tech = state.fill[i] === null ? null : TECHNOLOGIES[state.fill[i] as number];
+        return (
+          <div
+            key={i}
+            style={{ left: slot.x, top: slot.y, width: cell * 0.86 }}
+            className="absolute flex -translate-x-1/2 -translate-y-1/2 justify-center"
+          >
+            <AnimatePresence>
+              {tech && (
+                <motion.div
+                  key={tech.name}
+                  initial={{ opacity: 0 }}
+                  // A tube striking: on, dip, on. Leaving is the same in reverse
+                  animate={{ opacity: still ? 1 : [0, 1, 0.2, 1, 0.65, 1] }}
+                  exit={{ opacity: still ? 0 : [1, 0.25, 0.8, 0] }}
+                  transition={{ duration: still ? 0.8 : 0.75, ease: "linear" }}
+                  className="absolute top-1/2 flex -translate-y-1/2 flex-col items-center gap-1.5 [filter:drop-shadow(0_0_5px_color-mix(in_srgb,var(--c-highlight)_90%,transparent))_drop-shadow(0_0_14px_color-mix(in_srgb,var(--c-highlight)_55%,transparent))]"
+                >
+                  <Mark name={tech.name} className={cell < 90 ? "h-6 w-6" : "h-8 w-8"} />
+                  <span className="text-center text-[9px] leading-none font-semibold tracking-[0.06em] whitespace-nowrap uppercase sm:text-[10px]">
+                    {tech.name}
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 /**
- * Technology stack, on white: one connected field instead of a panel per discipline.
- * Every logo sits in the same ruled grid (10 × 3 on desktop down to 3 × 10 on phones, so all
- * of them are always on screen), and the last cell closes the grid with the total.
- *
- * Motion (React Bits SpotlightCard): a soft brand-coloured light lives in the grid lines.
- * It drifts slowly on its own, follows the cursor on pointer devices, and stays still for
- * reduced motion. The logos themselves never move after their staggered entrance, except a
- * small lift on hover. Cells stay pure white: several logo files have a white box baked in,
- * which would show on any tinted cell.
+ * Technology stack: one neon honeycomb at the site's content width, with no panel or
+ * background of its own.
+ * React Bits ShapeGrid draws the hexagon lattice in the brand colour: faint lines, cells that
+ * flare up on their own and a glowing trail under the cursor. The technologies are one-colour
+ * marks with their names inside the cells, in the same colour as the light. Only some cells are lit
+ * at a time; every beat one mark flickers out and the next technology flickers on in another
+ * empty cell, so the whole list passes through.
+ * Reduced motion: the lattice holds still and marks change with a slow plain fade.
+ * The full list is always present as text for screen readers.
  */
 export default function TechStack() {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  const neon = useSyncExternalStore(watchNeon, readNeon, () => FALLBACK_RGB);
+  const still = useSyncExternalStore(watchMotion, prefersStill, () => false);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const observer = new ResizeObserver(([entry]) => setWidth(Math.round(entry.contentRect.width)));
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  const comb = honeycomb(width || 1088);
+
   return (
-    <section id="technology" data-header="light" className={cn("relative w-full bg-white text-c-ink", SECTION_Y)}>
+    <section id="technology" data-header="light" className="relative w-full overflow-hidden bg-white pt-20 pb-10 text-c-ink sm:pt-28 sm:pb-14">
       <MotionConfig reducedMotion="user">
         <Container>
           <motion.div {...reveal(0)}>
@@ -136,63 +348,40 @@ export default function TechStack() {
             </motion.p>
           </div>
 
-          <motion.div {...reveal(1)} className="mt-12 sm:mt-16">
-            <SpotlightCard
-              theme="light"
-              spotlightColor="var(--c-brand)"
-              spotlightSize={380}
-              softness={0.85}
-              intensity={0.9}
-              borderGlow={0.9}
-              proximity={120}
-              smoothing={0.45}
-              ambient
-              flare={false}
-              style={LINES}
-              className="rounded-2xl p-0 sm:rounded-3xl"
-            >
-              <motion.ul
-                variants={field}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-80px" }}
-                className="grid grid-cols-3 gap-px sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10"
-              >
-                {TECHNOLOGIES.map((tech) => (
-                  <li key={tech.name} className="group flex h-28 items-center justify-center bg-white sm:h-32">
-                    <motion.div variants={mark} className="flex flex-col items-center gap-3 px-1">
-                      <span className="flex h-10 w-10 items-center justify-center overflow-hidden transition-transform duration-300 ease-out motion-safe:group-hover:scale-110 sm:h-11 sm:w-11">
-                        <Image
-                          src={tech.image}
-                          alt=""
-                          width={44}
-                          height={44}
-                          className={cn(
-                            "h-full w-full object-contain",
-                            tech.boxed && "contrast-[1.28]",
-                            tech.boxed === true && "scale-125",
-                          )}
-                        />
-                      </span>
-                      <span className="text-center text-[13px] leading-tight font-medium text-c-ink/70 transition-colors duration-300 group-hover:text-c-ink">
-                        {tech.name}
-                      </span>
-                    </motion.div>
-                  </li>
-                ))}
 
-                {/* Closing cell: completes the last row */}
-                <li className="flex h-28 items-center justify-center bg-c-ink text-white sm:h-32">
-                  <motion.div variants={mark} className="flex flex-col items-center gap-1.5">
-                    <span className="text-[2rem] leading-none font-semibold tracking-[-0.04em] tabular-nums sm:text-4xl">
-                      {TECHNOLOGIES.length}
-                    </span>
-                    <span className="text-[13px] leading-tight font-medium text-c-highlight-200">technologies</span>
-                  </motion.div>
-                </li>
-              </motion.ul>
-            </SpotlightCard>
+          {/* Lattice at the site's content width (same container as every other section), no panel or background of its own */}
+          <motion.div {...reveal(1)} className="mt-10 sm:mt-14">
+            <div
+                ref={stageRef}
+                style={{ height: comb.height }}
+                // Lattice and marks dissolve toward all four edges; the corners fade twice, so they go first
+                className="relative w-full overflow-hidden [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_11%,black_89%,transparent),linear-gradient(to_bottom,transparent,black_13%,black_87%,transparent)] [-webkit-mask-composite:source-in]"
+              >
+              <ShapeGrid
+                shape="hexagon"
+                cellSize={comb.cell}
+                direction="none"
+                lineWidth={1}
+                lineColor={`rgba(${neon}, 0.22)`}
+                hoverColor={`rgb(${neon})`}
+                hoverFillColor={`rgba(${neon}, 0.1)`}
+                fillOpacity={0.5}
+                glow={1}
+                twinkle={0.9}
+                trail={0.6}
+                  intro
+                clickCascade
+                backgroundColor="transparent"
+              />
+              {width > 0 && <Marks key={comb.slots.length} slots={comb.slots} cell={comb.cell} still={still} />}
+            </div>
           </motion.div>
+
+          <ul className="sr-only">
+            {TECHNOLOGIES.map((tech) => (
+              <li key={tech.name}>{tech.name}</li>
+            ))}
+          </ul>
         </Container>
       </MotionConfig>
     </section>
