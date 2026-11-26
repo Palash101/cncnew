@@ -1,18 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "motion/react";
-import { Monitor, Server, Smartphone, Cloud, Cpu, type LucideIcon } from "lucide-react";
-import {
-  Container,
-  Eyebrow,
-  Highlight,
-  TopHairline,
-  descriptionClass,
-  headingClass,
-  reveal,
-  revealHeading,
-} from "@/components/ui/section";
+import { Cpu } from "lucide-react";
+import { motion, MotionConfig } from "motion/react";
+import { Accent, Container, Eyebrow, SECTION_Y, headingClass, monoLabel, reveal, revealHeading } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 
 interface TechItem {
@@ -25,7 +16,6 @@ interface TechItem {
 interface CategoryRow {
   id: string;
   title: string;
-  icon: LucideIcon;
   items: TechItem[];
 }
 
@@ -33,7 +23,6 @@ const techCategories: CategoryRow[] = [
   {
     id: "frontend",
     title: "Frontend Development",
-    icon: Monitor,
     items: [
       { name: "React Js", image: "/frontend/react.png" },
       { name: "Next Js", image: "/frontend/nextjs.png" },
@@ -48,7 +37,6 @@ const techCategories: CategoryRow[] = [
   {
     id: "backend",
     title: "Backend Development",
-    icon: Server,
     items: [
       { name: "Node Js", image: "/backend/Node.js_.webp" },
       { name: ".Net", image: "/backend/dot net.webp" },
@@ -63,7 +51,6 @@ const techCategories: CategoryRow[] = [
   {
     id: "mobile",
     title: "Mobile Frameworks",
-    icon: Smartphone,
     items: [
       { name: "iOS", image: "/mobile framework/ios.webp" },
       { name: "Android", image: "/mobile framework/android.png" },
@@ -75,7 +62,6 @@ const techCategories: CategoryRow[] = [
   {
     id: "cloud",
     title: "Cloud & DevOps",
-    icon: Cloud,
     items: [
       { name: "Azure", image: "/cloud devops/azure.png" },
       { name: "AWS", image: "/cloud devops/aws-icon.webp" },
@@ -89,94 +75,81 @@ const techCategories: CategoryRow[] = [
   },
 ];
 
-// The stack, top to bottom: what people touch first, what everything runs on last.
-// Same pale-to-navy progression as the process section; the last layer meets the footer.
-const LAYERS = [
-  { id: "frontend", header: "light", surface: "bg-c-brand-100 text-c-ink", tile: "bg-c-brand text-white", muted: "text-slate-700" },
-  { id: "mobile", header: "light", surface: "bg-c-brand-200 text-c-ink", tile: "bg-c-brand text-white", muted: "text-slate-700" },
-  { id: "backend", header: "dark", surface: "bg-c-brand text-white", tile: "bg-white text-c-brand", muted: "text-white" },
-  { id: "cloud", header: "dark", surface: "bg-c-ink text-white", tile: "bg-c-highlight text-c-ink", muted: "text-slate-300" },
-];
+// The stack, top to bottom: what people touch first, what everything runs on last
+const ORDER = ["frontend", "mobile", "backend", "cloud"];
+const LAYERS = ORDER.flatMap((id) => techCategories.find((c) => c.id === id) ?? []);
+const TOTAL = LAYERS.reduce((sum, layer) => sum + layer.items.length, 0);
 
+/**
+ * Technology stack, on white, set as a specification table: one ruled row per layer,
+ * the layer's name in the left column and its logos on a shared eight-column grid, so the
+ * marks line up vertically from row to row. The logos sit directly on the page: white is
+ * the one background every one of them was drawn for.
+ */
 export default function TechStack() {
   return (
-    <section id="technology" data-header="light" className="relative isolate w-full overflow-hidden bg-white text-c-ink">
-      <TopHairline tone="light" />
-
-      <Container className="pt-20 pb-14 sm:pt-28 sm:pb-16">
-        <motion.div {...reveal(0)} className="mb-6">
+    <section id="technology" data-header="light" className={cn("relative w-full bg-white text-c-ink", SECTION_Y)}>
+      <MotionConfig reducedMotion="user">
+      <Container>
+        <motion.div {...reveal(0)}>
           <Eyebrow icon={Cpu} tone="light">
             Technology
           </Eyebrow>
         </motion.div>
-        <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
-          <motion.h2 {...revealHeading(1)} className={headingClass("light")}>
-            Our <Highlight tone="light">Technology Stack</Highlight>
-          </motion.h2>
-          <motion.p {...reveal(2)} className={cn(descriptionClass("light"), "max-w-xl")}>
-            Empowering enterprise applications with modern, battle-tested technologies.
+        <div className="mt-6 flex flex-col gap-x-8 gap-y-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <motion.h2 {...revealHeading(1)} className={headingClass("light")}>
+              Our <Accent tone="light">Technology Stack</Accent>
+            </motion.h2>
+            <motion.p {...reveal(2)} className="mt-5 max-w-2xl text-base leading-7 text-c-ink/70">
+              Empowering enterprise applications with modern, battle-tested technologies.
+            </motion.p>
+          </div>
+          <motion.p {...reveal(2)} className={cn(monoLabel, "text-c-ink/55 lg:pb-1.5")}>
+            {TOTAL} technologies / {LAYERS.length} layers
           </motion.p>
         </div>
+
+        <div className="mt-12 border-b border-c-ink/15 sm:mt-16">
+          {LAYERS.map((layer, i) => (
+            <motion.div
+              key={layer.id}
+              {...reveal(0)}
+              className="grid gap-x-8 gap-y-7 border-t border-c-ink/15 py-8 sm:py-10 lg:grid-cols-12"
+            >
+              <div className="flex items-baseline gap-4 lg:col-span-3 lg:flex-col lg:gap-3">
+                <span className={cn(monoLabel, "text-c-brand")}>{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="text-xl leading-tight font-semibold tracking-[-0.02em]">{layer.title}</h3>
+                <p className={cn(monoLabel, "ml-auto shrink-0 whitespace-nowrap text-c-ink/55 lg:ml-0")}>{layer.items.length} technologies</p>
+              </div>
+
+              <ul className="grid grid-cols-4 gap-x-4 gap-y-8 sm:grid-cols-8 lg:col-span-9">
+                {layer.items.map((tech) => (
+                  <li key={tech.name} className="group flex flex-col gap-3">
+                    <span className="flex h-11 w-11 items-center justify-center overflow-hidden transition-transform duration-300 ease-out motion-safe:group-hover:-translate-y-1">
+                      <Image
+                        src={tech.image}
+                        alt=""
+                        width={44}
+                        height={44}
+                        className={cn(
+                          "h-full w-full object-contain",
+                          tech.boxed && "contrast-[1.28]",
+                          tech.boxed === true && "scale-125",
+                        )}
+                      />
+                    </span>
+                    <span className="text-[13px] leading-tight font-medium text-c-ink/75 transition-colors duration-300 group-hover:text-c-ink sm:text-sm">
+                      {tech.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </div>
       </Container>
-
-      {/* Each layer is a full-width sheet that overlaps the one above it */}
-      {LAYERS.map((layer, i) => {
-        const category = techCategories.find((c) => c.id === layer.id);
-        if (!category) return null;
-        const Icon = category.icon;
-        const last = i === LAYERS.length - 1;
-        return (
-          <div
-            key={layer.id}
-            data-header={layer.header}
-            className={cn(
-              "relative rounded-t-[28px] shadow-[0_-18px_40px_-24px_color-mix(in_srgb,var(--c-ink)_45%,transparent)] sm:rounded-t-[40px]",
-              i > 0 && "-mt-8 sm:-mt-10",
-              layer.surface,
-            )}
-          >
-            <Container className={cn("pt-9 sm:pt-12", last ? "pb-14 sm:pb-20" : "pb-[4.25rem] sm:pb-[5.5rem]")}>
-              <motion.div
-                {...reveal(0)}
-                className="grid gap-7 lg:grid-cols-[14.5rem_minmax(0,1fr)] lg:items-center lg:gap-12"
-              >
-                <div className="flex items-center gap-4">
-                  <span
-                    className={cn("inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl", layer.tile)}
-                  >
-                    <Icon aria-hidden className="h-6 w-6" strokeWidth={1.9} />
-                  </span>
-                  <div>
-                    <h3 className="text-xl leading-tight font-semibold tracking-[-0.02em]">{category.title}</h3>
-                    <p className={cn("mt-1 text-sm", layer.muted)}>{category.items.length} technologies</p>
-                  </div>
-                </div>
-
-                <ul className="grid grid-cols-4 gap-x-2 gap-y-6 md:grid-cols-8 md:gap-x-3">
-                  {category.items.map((tech) => (
-                    <li key={tech.name} className="flex flex-col items-center gap-2.5">
-                      <span className="flex h-15 w-15 items-center justify-center overflow-hidden rounded-2xl bg-white p-3 shadow-[0_8px_20px_-10px_color-mix(in_srgb,var(--c-ink)_50%,transparent)] sm:h-[4.25rem] sm:w-[4.25rem] sm:p-3.5">
-                        <Image
-                          src={tech.image}
-                          alt=""
-                          width={48}
-                          height={48}
-                          className={cn(
-                            "h-full w-full object-contain",
-                            tech.boxed && "contrast-[1.28]",
-                            tech.boxed === true && "scale-125",
-                          )}
-                        />
-                      </span>
-                      <span className="text-center text-xs leading-tight font-medium sm:text-[13px]">{tech.name}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            </Container>
-          </div>
-        );
-      })}
+      </MotionConfig>
     </section>
   );
 }

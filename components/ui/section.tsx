@@ -75,6 +75,14 @@ export const revealHeading = (i = 0) => ({ ...reveal(i), variants: maskUp });
 export const revealCard = (i = 0) => ({ ...reveal(i), variants: cardUp, viewport: { once: true, margin: "-40px" } });
 export const revealBlock = (i = 0) => ({ ...reveal(i), variants: zoomIn });
 
+/** Emphasised words inside a heading: one flat accent colour */
+export function Accent({ children, tone = "dark" }: { children: React.ReactNode; tone?: Tone }) {
+  return <span className={tone === "dark" ? "text-c-highlight" : "text-c-brand"}>{children}</span>;
+}
+
+/** Small mono caption: indexes, counts, technical notes */
+export const monoLabel = "font-mono text-xs tracking-[0.04em]";
+
 /** Standard vertical rhythm for top-level sections */
 export const SECTION_Y = "py-20 sm:py-28";
 

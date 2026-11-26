@@ -1,34 +1,22 @@
 "use client";
 
-import {
-  Cpu,
-  Sparkles,
-  Bot,
-  Network,
-  Scan,
-  Cloud,
-  Search,
-  ShieldCheck,
-  Radio,
-  Layers,
-} from "lucide-react";
-import { motion } from "motion/react";
+import { Layers } from "lucide-react";
+import { motion, MotionConfig } from "motion/react";
 import { cn } from "@/lib/utils";
 import {
+  Accent,
   Container,
-  SectionHeader,
-  Highlight,
-  TopHairline,
-  reveal,
-  revealCard,
+  Eyebrow,
   SECTION_Y,
+  headingClass,
+  monoLabel,
+  reveal,
+  revealHeading,
 } from "@/components/ui/section";
-import AmbientBackground from "@/components/ui/ambient-background";
 import { AgenticBackground, CircuitBackground, GenerativeBackground } from "@/components/expertise-art";
 
 interface ExpertiseItem {
   id: string;
-  icon: React.ComponentType<{ className?: string }>;
   title: string;
   description: string;
 }
@@ -36,178 +24,155 @@ interface ExpertiseItem {
 const expertiseItems: ExpertiseItem[] = [
   {
     id: "ai",
-    icon: Cpu,
     title: "Artificial Intelligence",
     description:
       "AI only creates value when it fits into how an organization actually works. We help enterprises apply intelligence in ways that improve decisions, reduce manual effort, and support operations at scale.",
   },
   {
     id: "gen-ai",
-    icon: Sparkles,
     title: "Generative AI",
     description:
       "Gen AI is most useful when it becomes part of everyday work. We integrate it into internal knowledge systems, customer interactions, and operational tools, with the controls and governance enterprises expect.",
   },
   {
     id: "agentic-ai",
-    icon: Bot,
     title: "Agentic AI",
     description:
       "We work with organizations exploring autonomous systems, helping them introduce AI agents that can take action across processes while remaining transparent, supervised, and accountable.",
   },
   {
     id: "ml",
-    icon: Network,
     title: "Machine Learning",
     description:
       "ML in enterprise environments is less about experimentation and more about reliability. We develop models that adapt over time and continue to perform as data, demand, and conditions change.",
   },
   {
     id: "cv",
-    icon: Scan,
     title: "Computer Vision",
     description:
       "In environments where speed and accuracy matter, vision-based systems can remove friction. We apply computer vision to automate inspection, monitoring, and visual analysis across real operational settings.",
   },
   {
     id: "cloud",
-    icon: Cloud,
     title: "Cloud",
     description:
       "Cloud modernization is not a lift-and-shift exercise. We help enterprises rethink how applications and infrastructure are structured so systems remain secure, resilient, and ready to scale over time.",
   },
   {
     id: "data-science",
-    icon: Search,
     title: "Data Science and Analytics",
     description:
       "Data only becomes useful when teams can rely on it. We design data foundations that support analytics and insight across functions, without adding complexity or dependency.",
   },
   {
     id: "cybersecurity",
-    icon: ShieldCheck,
     title: "Cybersecurity",
     description:
       "Security is treated as a design constraint, not a checklist item. Our systems account for governance, compliance, and risk from the earliest architectural decisions.",
   },
   {
     id: "iot",
-    icon: Radio,
     title: "IoT",
     description:
       "Connected devices generate value only when their data is usable. We help organizations bring physical systems into their digital landscape, improving visibility and control across operations.",
   },
 ];
 
-// Background drawings for cards 02 and 03, in order
+// Background drawings for 02 and 03, in order
 const FEATURED_BACKGROUNDS = [GenerativeBackground, AgenticBackground];
 
+const number = (i: number) => String(i + 1).padStart(2, "0");
+
+/**
+ * Technical expertise, on white.
+ * The heading stays pinned in a narrow left column while the capabilities scroll past on
+ * the right: the three AI practices share one charcoal panel (Artificial Intelligence
+ * leads, with the circuit drawing), and the six foundations follow as a ruled index.
+ */
 export default function ExpertiseSection() {
-  // First three = flagship AI capabilities (featured); the rest = supporting capabilities
   const [lead, ...featuredRest] = expertiseItems.slice(0, 3);
   const supporting = expertiseItems.slice(3);
-  const LeadIcon = lead.icon;
 
   return (
-    <section
-      id="services"
-      data-header="dark"
-      className={cn(
-        "relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-ink)_0%,var(--c-panel)_55%,var(--c-night)_100%)] text-white",
-        SECTION_Y
-      )}
-    >
-      <TopHairline />
-      <AmbientBackground variant="dark" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-c-night" />
-
+    <section id="services" data-header="light" className={cn("relative w-full bg-white text-c-ink", SECTION_Y)}>
+      <MotionConfig reducedMotion="user">
       <Container>
-        {/* Header: title left, intro line right */}
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
-          <SectionHeader
-            align="left"
-            eyebrow="What We Do"
-            eyebrowIcon={Layers}
-            title={
-              <>
-                Deep Technical Expertise, <Highlight>Supporting Modern Systems</Highlight>
-              </>
-            }
-          />
-          <motion.p {...reveal(2)} className="max-w-md text-base leading-7 text-slate-400 lg:pb-2">
-            {expertiseItems.length} capabilities, one engineering team — from intelligent systems to the cloud,
-            data and security foundations they run on.
-          </motion.p>
-        </div>
+        <div className="grid gap-x-8 gap-y-12 lg:grid-cols-12">
+          {/* Heading column */}
+          <div className="lg:sticky lg:top-28 lg:col-span-4 lg:self-start">
+            <motion.div {...reveal(0)}>
+              <Eyebrow icon={Layers} tone="light">
+                What We Do
+              </Eyebrow>
+            </motion.div>
+            <motion.h2 {...revealHeading(1)} className={cn(headingClass("light"), "mt-6 lg:text-[2.75rem]")}>
+              Deep Technical Expertise, <Accent tone="light">Supporting Modern Systems</Accent>
+            </motion.h2>
+            <motion.p {...reveal(2)} className="mt-6 max-w-md text-base leading-7 text-c-ink/70">
+              {expertiseItems.length} capabilities, one engineering team — from intelligent systems to the cloud,
+              data and security foundations they run on.
+            </motion.p>
+          </div>
 
-        {/* ───── Featured bento ───── */}
-        <div className="mt-14 grid gap-5 sm:mt-16 lg:grid-cols-12 lg:grid-rows-2">
-          {/* Lead capability */}
-          <motion.article
-            {...revealCard(0)}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-sky-400/20 bg-[linear-gradient(160deg,color-mix(in_srgb,var(--c-brand)_30%,transparent)_0%,color-mix(in_srgb,var(--c-panel)_90%,transparent)_55%)] p-7 transition-colors duration-300 hover:border-sky-400/45 sm:p-9 lg:col-span-7 lg:row-span-2"
-          >
-            {/* Background drawing: takes no space, and is masked out where the text is
-                (top area + the right margin stay visible) */}
-            <CircuitBackground className="pointer-events-none absolute inset-0 h-full w-full opacity-85 transition-opacity duration-500 [mask-image:linear-gradient(to_bottom,black_22%,transparent_44%),linear-gradient(to_left,black_0%,transparent_6%)] group-hover:opacity-100 lg:[mask-image:linear-gradient(to_bottom,black_30%,transparent_52%),linear-gradient(to_left,black_3%,transparent_12%)]" />
+          <div className="lg:col-span-8">
+            {/* ───── The AI practice ───── */}
+            <motion.div {...reveal(1)} className="overflow-hidden rounded-2xl bg-c-ink text-white">
+              <article className="group relative flex min-h-[25rem] flex-col justify-between p-7 sm:min-h-[27rem] sm:p-10">
+                {/* Drawing: takes no space, and is masked out where the text is */}
+                <CircuitBackground className="pointer-events-none absolute inset-0 h-full w-full opacity-80 [mask-image:linear-gradient(to_bottom,black_30%,transparent_56%),linear-gradient(to_left,black_0%,transparent_6%)] lg:[mask-image:linear-gradient(to_bottom,black_34%,transparent_58%),linear-gradient(to_left,black_3%,transparent_12%)]" />
 
-            <div className="relative flex items-start justify-between">
-              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-400/40 bg-c-deep-600 text-sky-200">
-                <LeadIcon className="h-7 w-7" />
-              </span>
-              <span className="font-mono text-xs text-sky-300/70">01 / Core</span>
-            </div>
-
-            <div className="relative mt-16 lg:mt-0">
-              <h3 className="text-2xl font-semibold tracking-[-0.03em] text-white sm:text-[2rem]">{lead.title}</h3>
-              <p className="mt-4 max-w-lg text-base leading-7 text-slate-300">{lead.description}</p>
-            </div>
-          </motion.article>
-
-          {/* Two more featured */}
-          {featuredRest.map((item, i) => {
-            const Icon = item.icon;
-            const Background = FEATURED_BACKGROUNDS[i];
-            return (
-              <motion.article
-                key={item.id}
-                {...revealCard(i + 1)}
-                className="group relative overflow-hidden rounded-2xl border border-sky-400/15 bg-[linear-gradient(160deg,color-mix(in_srgb,var(--c-brand)_30%,transparent)_0%,color-mix(in_srgb,var(--c-panel)_90%,transparent)_55%)] p-6 transition-colors duration-300 hover:border-sky-400/40 sm:p-7 lg:col-span-5"
-              >
-                <Background />
-                <div className="relative flex items-center gap-4">
-                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-sky-400/30 bg-sky-400/10 text-sky-300">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="text-xl font-semibold tracking-tight text-white">{item.title}</h3>
-                  <span className="ml-auto font-mono text-xs text-slate-400">0{i + 2}</span>
+                <p className={cn(monoLabel, "relative text-c-highlight-200")}>{number(0)} / Core</p>
+                <div className="relative mt-48 sm:mt-0">
+                  <h3 className="text-[1.75rem] leading-tight font-semibold tracking-[-0.03em] sm:text-4xl">{lead.title}</h3>
+                  <p className="mt-4 max-w-lg text-base leading-7 text-white/75">{lead.description}</p>
                 </div>
-                <p className="relative mt-4 text-sm leading-relaxed text-slate-300 sm:text-[15px]">{item.description}</p>
-              </motion.article>
-            );
-          })}
-        </div>
+              </article>
 
-        {/* ───── Supporting capabilities: divider list, not cards ───── */}
-        <div className="mt-14 grid gap-x-10 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-          {supporting.map((item, i) => {
-            const Icon = item.icon;
-            return (
-              <motion.article
-                key={item.id}
-                {...revealCard(i % 3)}
-                className="group border-t border-white/10 py-7 transition-colors duration-300 hover:border-sky-400/50"
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className="h-5 w-5 text-sky-400 transition-transform duration-300 group-hover:-translate-y-0.5" />
-                  <h3 className="text-lg font-semibold tracking-tight text-white">{item.title}</h3>
-                </div>
-                <p className="mt-3 text-sm leading-relaxed text-slate-400">{item.description}</p>
-              </motion.article>
-            );
-          })}
+              <div className="grid border-t border-white/10 md:grid-cols-2">
+                {featuredRest.map((item, i) => {
+                  const Background = FEATURED_BACKGROUNDS[i];
+                  return (
+                    <article
+                      key={item.id}
+                      className={cn(
+                        "group relative p-7 pb-9 sm:px-10",
+                        i > 0 && "border-t border-white/10 md:border-t-0 md:border-l",
+                      )}
+                    >
+                      <Background />
+                      <div className="relative flex items-baseline justify-between gap-4">
+                        <h3 className="text-xl font-semibold tracking-[-0.02em]">{item.title}</h3>
+                        <span className={cn(monoLabel, "text-white/50")}>{number(i + 1)}</span>
+                      </div>
+                      <p className="relative mt-4 text-[15px] leading-relaxed text-white/70">{item.description}</p>
+                    </article>
+                  );
+                })}
+              </div>
+            </motion.div>
+
+            {/* ───── Foundations: ruled index ───── */}
+            <div className="mt-6 grid gap-x-8 sm:mt-10 sm:grid-cols-2">
+              {supporting.map((item, i) => (
+                <motion.article
+                  key={item.id}
+                  {...reveal(i % 2)}
+                  className="group border-t border-c-ink/15 py-7 transition-colors duration-300 hover:border-c-brand"
+                >
+                  <div className="flex items-baseline gap-4">
+                    <span className={cn(monoLabel, "w-5 shrink-0 text-c-ink/45 transition-colors duration-300 group-hover:text-c-brand")}>
+                      {number(i + 3)}
+                    </span>
+                    <h3 className="text-xl font-semibold tracking-[-0.02em]">{item.title}</h3>
+                  </div>
+                  <p className="mt-3 pl-9 text-[15px] leading-relaxed text-c-ink/70">{item.description}</p>
+                </motion.article>
+              ))}
+            </div>
+          </div>
         </div>
       </Container>
+      </MotionConfig>
     </section>
   );
 }
