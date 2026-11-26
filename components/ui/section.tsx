@@ -37,15 +37,14 @@ export const maskUp: Variants = {
   }),
 };
 
-/** Cards: rise, un-blur and settle, staggered by index */
+/** Cards: rise and settle, staggered by index (no blur: filters repaint the whole card every frame) */
 export const cardUp: Variants = {
-  hidden: { opacity: 0, y: 44, scale: 0.96, filter: "blur(6px)" },
+  hidden: { opacity: 0, y: 32, scale: 0.98 },
   show: (i: number = 0) => ({
     opacity: 1,
     y: 0,
     scale: 1,
-    filter: "blur(0px)",
-    transition: { duration: 0.8, ease: EASE, delay: i * 0.12 },
+    transition: { duration: 0.7, ease: EASE, delay: i * 0.1 },
   }),
 };
 
@@ -74,11 +73,6 @@ export const reveal = (i = 0) => ({
 export const revealHeading = (i = 0) => ({ ...reveal(i), variants: maskUp });
 export const revealCard = (i = 0) => ({ ...reveal(i), variants: cardUp, viewport: { once: true, margin: "-40px" } });
 export const revealBlock = (i = 0) => ({ ...reveal(i), variants: zoomIn });
-
-/** Emphasised words inside a heading: one flat accent colour */
-export function Accent({ children, tone = "dark" }: { children: React.ReactNode; tone?: Tone }) {
-  return <span className={tone === "dark" ? "text-c-highlight" : "text-c-brand"}>{children}</span>;
-}
 
 /** Small mono caption: indexes, counts, technical notes */
 export const monoLabel = "font-mono text-xs tracking-[0.04em]";

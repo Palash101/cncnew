@@ -227,7 +227,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <h4 className="text-lg leading-snug font-semibold tracking-tight text-c-ink">{project.title}</h4>
-        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{project.description}</p>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600">{project.description}</p>
         <div className="mt-5 mb-5">
           <TechList items={project.techStack} />
         </div>

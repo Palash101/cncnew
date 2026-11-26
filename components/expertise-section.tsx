@@ -4,7 +4,7 @@ import { Layers } from "lucide-react";
 import { motion, MotionConfig } from "motion/react";
 import { cn } from "@/lib/utils";
 import {
-  Accent,
+  Highlight,
   Container,
   Eyebrow,
   SECTION_Y,
@@ -106,7 +106,7 @@ export default function ExpertiseSection() {
               </Eyebrow>
             </motion.div>
             <motion.h2 {...revealHeading(1)} className={cn(headingClass("light"), "mt-6 lg:text-[2.75rem]")}>
-              Deep Technical Expertise, <Accent tone="light">Supporting Modern Systems</Accent>
+              Deep Technical Expertise, <Highlight tone="light">Supporting Modern Systems</Highlight>
             </motion.h2>
             <motion.p {...reveal(2)} className="mt-6 max-w-md text-base leading-7 text-c-ink/70">
               {expertiseItems.length} capabilities, one engineering team — from intelligent systems to the cloud,

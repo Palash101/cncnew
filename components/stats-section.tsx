@@ -96,16 +96,16 @@ export default function StatsSection() {
                       className={cn(
                         "border-white/15",
                         i % 2 === 0 ? "pr-5 sm:pr-8" : "border-l pl-5 sm:pl-8",
-                        i < 2 ? "pb-9 lg:pb-12" : "border-t pt-9 lg:pt-12"
+                        i < 2 ? "pb-10 lg:pb-14" : "border-t pt-10 lg:pt-14"
                       )}
                     >
                       <Icon aria-hidden className="h-6 w-6 text-sky-400" strokeWidth={1.75} />
-                      <p className="mt-4 text-5xl leading-none font-semibold tracking-[-0.04em] tabular-nums sm:text-6xl xl:text-7xl">
+                      <p className="mt-5 text-5xl leading-none font-semibold tracking-[-0.04em] tabular-nums sm:text-6xl xl:text-7xl">
                         <CountUp to={stat.value} />
-                        <span className="text-sky-400">+</span>
+                        <span className="font-medium text-sky-400">+</span>
                       </p>
-                      <p className="mt-4 text-base font-semibold sm:text-lg">{stat.label}</p>
-                      <p className="mt-1 text-sm leading-relaxed text-slate-300">{stat.description}</p>
+                      <p className="mt-5 text-base font-semibold sm:text-lg">{stat.label}</p>
+                      <p className="mt-1.5 text-sm leading-snug text-slate-300 sm:text-[15px]">{stat.description}</p>
                     </motion.li>
                   );
                 })}

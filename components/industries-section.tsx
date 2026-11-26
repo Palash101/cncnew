@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowUpRight, Building2 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, MotionConfig } from "motion/react";
 import { cn } from "@/lib/utils";
 import {
   Container,
@@ -93,7 +93,7 @@ const TONES = {
     art: undefined,
   },
   light: {
-    card: "bg-white text-c-ink",
+    card: "border border-transparent bg-white text-c-ink",
     picture: "bg-c-brand-100",
     description: "text-slate-700",
     link: "text-c-brand",
@@ -141,6 +141,7 @@ export default function IndustriesSection() {
       <AmbientBackground variant="dark" />
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-c-night to-transparent" />
 
+      <MotionConfig reducedMotion="user">
       <Container>
         {/* Split header */}
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
@@ -169,7 +170,7 @@ export default function IndustriesSection() {
                 <a
                   href={`#${item.id}`}
                   className={cn(
-                    "group flex h-full flex-col overflow-hidden rounded-2xl outline-offset-4 focus-visible:outline-2 focus-visible:outline-white",
+                    "group flex h-full flex-col overflow-hidden rounded-2xl outline-offset-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-2 focus-visible:outline-white motion-safe:hover:-translate-y-1",
                     shape.card,
                     tone.card
                   )}
@@ -195,6 +196,7 @@ export default function IndustriesSection() {
           })}
         </ul>
       </Container>
+      </MotionConfig>
     </section>
   );
 }

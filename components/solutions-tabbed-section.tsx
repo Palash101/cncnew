@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { FolderKanban, Sparkles, Bot } from "lucide-react";
 import AiSection, { aiCapabilities } from "@/components/ai-section";
 import ProjectsShowcase, { projectsData } from "@/components/projects-showcase";
@@ -62,6 +62,7 @@ export default function SolutionsTabbedSection() {
       <TopHairline tone="light" />
       <AmbientBackground variant="ice" />
 
+      <MotionConfig reducedMotion="user">
       <Container>
         {/* Split header: title left, tab-specific intro right */}
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end lg:gap-16">
@@ -138,6 +139,7 @@ export default function SolutionsTabbedSection() {
           })}
         </motion.div>
       </Container>
+      </MotionConfig>
 
       {/* Active panel */}
       <div

@@ -125,7 +125,7 @@ export default function AiSection() {
             {...revealCard(1)}
             className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_14px_40px_-26px_color-mix(in_srgb,var(--c-ink)_35%,transparent)] sm:flex-row lg:col-span-5"
           >
-            <div className="relative aspect-[16/9] shrink-0 overflow-hidden bg-c-brand-100 sm:aspect-auto sm:w-2/5 lg:w-[30%]">
+            <div className="relative aspect-[16/9] shrink-0 overflow-hidden bg-c-brand-100 sm:aspect-auto sm:w-2/5 lg:w-[36%]">
               <Image
                 src={tuning.imageUrl!}
                 alt=""

@@ -168,7 +168,7 @@ export default function AgileProcess() {
                     key={step.id}
                     points={chevronPoints(i)}
                     fill={FILLS[i]}
-                    initial={{ opacity: 0, x: -24 }}
+                    initial={{ opacity: 0, x: -16 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={VIEWPORT}
                     transition={{
@@ -209,7 +209,7 @@ export default function AgileProcess() {
 
             {/* Stage text, one column per chevron */}
             <ol
-              className="mt-9 grid grid-cols-6 gap-6"
+              className="mt-10 grid grid-cols-6 gap-7"
               aria-label="Process stages"
             >
               {steps.map((step, i) => (
@@ -232,7 +232,7 @@ export default function AgileProcess() {
                   <h3 className="mt-4 text-base font-semibold tracking-tight text-c-ink xl:text-lg">
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  <p className="mt-2 text-sm leading-relaxed text-slate-700">
                     {step.description}
                   </p>
                 </motion.li>

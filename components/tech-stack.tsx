@@ -2,8 +2,19 @@
 
 import Image from "next/image";
 import { Cpu } from "lucide-react";
-import { motion, MotionConfig } from "motion/react";
-import { Accent, Container, Eyebrow, SECTION_Y, headingClass, monoLabel, reveal, revealHeading } from "@/components/ui/section";
+import { motion, MotionConfig, type Variants } from "motion/react";
+import SpotlightCard from "@/components/react-bits/SpotlightCard";
+import {
+  Container,
+  EASE,
+  Eyebrow,
+  Highlight,
+  SECTION_Y,
+  descriptionClass,
+  headingClass,
+  reveal,
+  revealHeading,
+} from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 
 interface TechItem {
@@ -75,80 +86,114 @@ const techCategories: CategoryRow[] = [
   },
 ];
 
-// The stack, top to bottom: what people touch first, what everything runs on last
+// One continuous field, read left to right: what people touch first, what everything runs on last
 const ORDER = ["frontend", "mobile", "backend", "cloud"];
-const LAYERS = ORDER.flatMap((id) => techCategories.find((c) => c.id === id) ?? []);
-const TOTAL = LAYERS.reduce((sum, layer) => sum + layer.items.length, 0);
+const TECHNOLOGIES = ORDER.flatMap((id) => techCategories.find((c) => c.id === id)?.items ?? []);
+
+const field: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.028, delayChildren: 0.15 } },
+};
+const mark: Variants = {
+  hidden: { opacity: 0, y: 12, scale: 0.94 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: EASE } },
+};
+
+// The surface behind the cells is what shows through the 1px gaps: those are the grid lines
+const LINES = {
+  "--spotlight-card-surface": "color-mix(in srgb, var(--c-ink) 13%, #fff)",
+  "--spotlight-card-border": "color-mix(in srgb, var(--c-ink) 14%, #fff)",
+  "--spotlight-card-shadow": "0 30px 60px -44px color-mix(in srgb, var(--c-ink) 45%, transparent)",
+} as React.CSSProperties;
 
 /**
- * Technology stack, on white, set as a specification table: one ruled row per layer,
- * the layer's name in the left column and its logos on a shared eight-column grid, so the
- * marks line up vertically from row to row. The logos sit directly on the page: white is
- * the one background every one of them was drawn for.
+ * Technology stack, on white: one connected field instead of a panel per discipline.
+ * Every logo sits in the same ruled grid (10 × 3 on desktop down to 3 × 10 on phones, so all
+ * of them are always on screen), and the last cell closes the grid with the total.
+ *
+ * Motion (React Bits SpotlightCard): a soft brand-coloured light lives in the grid lines.
+ * It drifts slowly on its own, follows the cursor on pointer devices, and stays still for
+ * reduced motion. The logos themselves never move after their staggered entrance, except a
+ * small lift on hover. Cells stay pure white: several logo files have a white box baked in,
+ * which would show on any tinted cell.
  */
 export default function TechStack() {
   return (
     <section id="technology" data-header="light" className={cn("relative w-full bg-white text-c-ink", SECTION_Y)}>
       <MotionConfig reducedMotion="user">
-      <Container>
-        <motion.div {...reveal(0)}>
-          <Eyebrow icon={Cpu} tone="light">
-            Technology
-          </Eyebrow>
-        </motion.div>
-        <div className="mt-6 flex flex-col gap-x-8 gap-y-6 lg:flex-row lg:items-end lg:justify-between">
-          <div>
+        <Container>
+          <motion.div {...reveal(0)}>
+            <Eyebrow icon={Cpu} tone="light">
+              Technology
+            </Eyebrow>
+          </motion.div>
+          <div className="mt-6 grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
             <motion.h2 {...revealHeading(1)} className={headingClass("light")}>
-              Our <Accent tone="light">Technology Stack</Accent>
+              Our <Highlight tone="light">Technology Stack</Highlight>
             </motion.h2>
-            <motion.p {...reveal(2)} className="mt-5 max-w-2xl text-base leading-7 text-c-ink/70">
+            <motion.p {...reveal(2)} className={cn(descriptionClass("light"), "max-w-xl")}>
               Empowering enterprise applications with modern, battle-tested technologies.
             </motion.p>
           </div>
-          <motion.p {...reveal(2)} className={cn(monoLabel, "text-c-ink/55 lg:pb-1.5")}>
-            {TOTAL} technologies / {LAYERS.length} layers
-          </motion.p>
-        </div>
 
-        <div className="mt-12 border-b border-c-ink/15 sm:mt-16">
-          {LAYERS.map((layer, i) => (
-            <motion.div
-              key={layer.id}
-              {...reveal(0)}
-              className="grid gap-x-8 gap-y-7 border-t border-c-ink/15 py-8 sm:py-10 lg:grid-cols-12"
+          <motion.div {...reveal(1)} className="mt-12 sm:mt-16">
+            <SpotlightCard
+              theme="light"
+              spotlightColor="var(--c-brand)"
+              spotlightSize={380}
+              softness={0.85}
+              intensity={0.9}
+              borderGlow={0.9}
+              proximity={120}
+              smoothing={0.45}
+              ambient
+              flare={false}
+              style={LINES}
+              className="rounded-2xl p-0 sm:rounded-3xl"
             >
-              <div className="flex items-baseline gap-4 lg:col-span-3 lg:flex-col lg:gap-3">
-                <span className={cn(monoLabel, "text-c-brand")}>{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="text-xl leading-tight font-semibold tracking-[-0.02em]">{layer.title}</h3>
-                <p className={cn(monoLabel, "ml-auto shrink-0 whitespace-nowrap text-c-ink/55 lg:ml-0")}>{layer.items.length} technologies</p>
-              </div>
-
-              <ul className="grid grid-cols-4 gap-x-4 gap-y-8 sm:grid-cols-8 lg:col-span-9">
-                {layer.items.map((tech) => (
-                  <li key={tech.name} className="group flex flex-col gap-3">
-                    <span className="flex h-11 w-11 items-center justify-center overflow-hidden transition-transform duration-300 ease-out motion-safe:group-hover:-translate-y-1">
-                      <Image
-                        src={tech.image}
-                        alt=""
-                        width={44}
-                        height={44}
-                        className={cn(
-                          "h-full w-full object-contain",
-                          tech.boxed && "contrast-[1.28]",
-                          tech.boxed === true && "scale-125",
-                        )}
-                      />
-                    </span>
-                    <span className="text-[13px] leading-tight font-medium text-c-ink/75 transition-colors duration-300 group-hover:text-c-ink sm:text-sm">
-                      {tech.name}
-                    </span>
+              <motion.ul
+                variants={field}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-80px" }}
+                className="grid grid-cols-3 gap-px sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10"
+              >
+                {TECHNOLOGIES.map((tech) => (
+                  <li key={tech.name} className="group flex h-28 items-center justify-center bg-white sm:h-32">
+                    <motion.div variants={mark} className="flex flex-col items-center gap-3 px-1">
+                      <span className="flex h-10 w-10 items-center justify-center overflow-hidden transition-transform duration-300 ease-out motion-safe:group-hover:scale-110 sm:h-11 sm:w-11">
+                        <Image
+                          src={tech.image}
+                          alt=""
+                          width={44}
+                          height={44}
+                          className={cn(
+                            "h-full w-full object-contain",
+                            tech.boxed && "contrast-[1.28]",
+                            tech.boxed === true && "scale-125",
+                          )}
+                        />
+                      </span>
+                      <span className="text-center text-[13px] leading-tight font-medium text-c-ink/70 transition-colors duration-300 group-hover:text-c-ink">
+                        {tech.name}
+                      </span>
+                    </motion.div>
                   </li>
                 ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
-      </Container>
+
+                {/* Closing cell: completes the last row */}
+                <li className="flex h-28 items-center justify-center bg-c-ink text-white sm:h-32">
+                  <motion.div variants={mark} className="flex flex-col items-center gap-1.5">
+                    <span className="text-[2rem] leading-none font-semibold tracking-[-0.04em] tabular-nums sm:text-4xl">
+                      {TECHNOLOGIES.length}
+                    </span>
+                    <span className="text-[13px] leading-tight font-medium text-c-highlight-200">technologies</span>
+                  </motion.div>
+                </li>
+              </motion.ul>
+            </SpotlightCard>
+          </motion.div>
+        </Container>
       </MotionConfig>
     </section>
   );
