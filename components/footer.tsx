@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Phone, MapPin, ShieldCheck, Sparkles, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Sparkles, Send } from "lucide-react";
 import { motion } from "motion/react";
 import { useQuoteModal } from "@/context/quote-modal-context";
 import { cn } from "@/lib/utils";
@@ -121,8 +121,8 @@ export default function Footer() {
 
       {/* ───────── Links & info ───────── */}
       <Container className="border-t border-white/10 py-14 sm:py-16">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)_minmax(0,0.85fr)_minmax(0,1fr)] lg:gap-12">
-          {/* Brand + contact */}
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,0.8fr)_minmax(0,1.1fr)] lg:gap-12">
+          {/* Brand + social */}
           <motion.div {...reveal(0)} className="sm:col-span-2 lg:col-span-1">
             <Link
               href="/"
@@ -143,23 +143,22 @@ export default function Footer() {
               high-performance full-stack platforms for enterprises worldwide.
             </p>
 
-            <ul className="mt-6 space-y-3">
-              {CONTACTS.map(({ icon: Icon, label, href }) => (
-                <li key={label}>
-                  {href ? (
-                    <a href={href} className={cn(contactRow, "hover:text-white")}>
-                      <Icon className="h-4 w-4 shrink-0 text-sky-400" />
-                      {label}
-                    </a>
-                  ) : (
-                    <span className={contactRow}>
-                      <Icon className="h-4 w-4 shrink-0 text-sky-400" />
-                      {label}
-                    </span>
-                  )}
-                </li>
+            <div className="mt-6 flex items-center gap-2.5">
+              {SOCIALS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={s.label}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-white hover:bg-white hover:text-c-ink"
+                >
+                  <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden>
+                    <path d={s.path} />
+                  </svg>
+                </a>
               ))}
-            </ul>
+            </div>
           </motion.div>
 
           {/* Solutions */}
@@ -190,34 +189,26 @@ export default function Footer() {
             </ul>
           </motion.nav>
 
-          {/* Trust + social */}
+          {/* Contact */}
           <motion.div {...reveal(3)}>
-            <h4 className={columnTitle}>Enterprise Trust</h4>
-            <p className="flex items-center gap-2 text-sm font-semibold text-white">
-              <ShieldCheck className="h-4 w-4 shrink-0 text-sky-400" />
-              ISO 27001 & HIPAA Compliant
-            </p>
-            <p className={cn(bodyText, "mt-2")}>
-              Data sovereignty, zero-trust security, and end-to-end encrypted AI deployments.
-            </p>
-
-            <h4 className={cn(columnTitle, "mt-7 mb-3")}>Follow Us</h4>
-            <div className="flex items-center gap-2.5">
-              {SOCIALS.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-white hover:bg-white hover:text-c-ink"
-                >
-                  <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden>
-                    <path d={s.path} />
-                  </svg>
-                </a>
+            <h4 className={columnTitle}>Get in Touch</h4>
+            <ul className="space-y-3">
+              {CONTACTS.map(({ icon: Icon, label, href }) => (
+                <li key={label}>
+                  {href ? (
+                    <a href={href} className={cn(contactRow, "hover:text-white")}>
+                      <Icon className="h-4 w-4 shrink-0 text-sky-400" />
+                      {label}
+                    </a>
+                  ) : (
+                    <span className={contactRow}>
+                      <Icon className="h-4 w-4 shrink-0 text-sky-400" />
+                      {label}
+                    </span>
+                  )}
+                </li>
               ))}
-            </div>
+            </ul>
           </motion.div>
         </div>
       </Container>
