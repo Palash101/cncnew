@@ -1,24 +1,14 @@
 "use client";
 
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
-import { Cpu } from "lucide-react";
-import { AnimatePresence, motion, MotionConfig } from "motion/react";
-import ShapeGrid from "@/components/react-bits/ShapeGrid";
-import {
-  Mark,
-  TECH_ORDER as ORDER,
-  techCategories,
-} from "@/components/tech-marks";
+import Image from "next/image";
+import { motion } from "motion/react";
+import { Monitor, Server, Smartphone, Cloud, Cpu, type LucideIcon } from "lucide-react";
+import { techCategories } from "@/components/tech-marks";
 import {
   Container,
   Eyebrow,
   Highlight,
+  TopHairline,
   descriptionClass,
   headingClass,
   reveal,
@@ -26,423 +16,151 @@ import {
 } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 
-const TECHNOLOGIES = ORDER.flatMap(
-  (id) => techCategories.find((c) => c.id === id)?.items ?? [],
-);
-
-/* ── the neon colour as plain numbers (the canvas cannot read CSS variables) ── */
-
-const FALLBACK_RGB = "22, 115, 184";
-let cachedKey = "";
-let cachedRgb = FALLBACK_RGB;
-
-function readNeon() {
-  const root = document.documentElement;
-  const key = `${root.dataset.palette ?? ""}|${root.getAttribute("style") ?? ""}`;
-  if (key === cachedKey) return cachedRgb;
-  cachedKey = key;
-  const probe = document.createElement("span");
-  probe.style.color = "var(--c-brand)";
-  document.body.appendChild(probe);
-  const color = getComputedStyle(probe).color;
-  probe.remove();
-  const context = document.createElement("canvas").getContext("2d");
-  if (context) {
-    context.fillStyle = color;
-    context.fillRect(0, 0, 1, 1);
-    cachedRgb = Array.from(
-      context.getImageData(0, 0, 1, 1).data.slice(0, 3),
-    ).join(", ");
-  }
-  return cachedRgb;
-}
-
-// The colour-testing panel announces palette changes with this event
-const watchNeon = (onChange: () => void) => {
-  window.addEventListener("cnc-theme-preview", onChange);
-  return () => window.removeEventListener("cnc-theme-preview", onChange);
-};
-
-const MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-const prefersStill = () => window.matchMedia(MOTION_QUERY).matches;
-const watchMotion = (onChange: () => void) => {
-  const query = window.matchMedia(MOTION_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-};
-
-/* ── honeycomb geometry: identical to ShapeGrid's hexagon layout, so marks land in its cells ── */
-
-const SQRT3 = Math.sqrt(3);
-const ROWS = 4;
-// How far in from each edge the lattice fades out (share of width / height)
-const FADE_X = 0.11;
-const FADE_Y = 0.13;
-
-type Slot = { x: number; y: number; opacity: number };
-
-function honeycomb(width: number) {
-  const cell = width < 480 ? 76 : width < 900 ? 92 : width < 1700 ? 104 : 116; // height of one hexagon
-  const radius = cell / SQRT3;
-  const stepX = radius * 1.5;
-  const height = (ROWS + 0.5) * cell;
-  // Whole cells only, with the half cells left over on both sides shared equally
-  const columns = Math.max(1, Math.floor((width - radius) / stepX));
-  const offset = (width - (columns + 1) * stepX) / 2;
-  const edge = (at: number, size: number, share: number) =>
-    Math.min(1, Math.min(at, size - at) / (size * share));
-  const slots: Slot[] = [];
-  for (let i = 1; i <= columns; i++) {
-    for (let row = 0; row < ROWS; row++) {
-      const x = offset + i * stepX;
-      const y = (i % 2 === 1 ? cell / 2 : cell) + row * cell;
-      // Marks follow the fade of the lattice, but never so far that a name becomes unreadable
-      const opacity =
-        0.55 + 0.45 * edge(x, width, FADE_X) * edge(y, height, FADE_Y);
-      slots.push({ x, y, opacity });
-    }
-  }
-  // Cells closest to the middle first: a single category gathers there
-  const centred = slots
-    .map((slot, index) => ({
-      index,
-      distance: Math.hypot(slot.x - width / 2, (slot.y - height / 2) * 1.35),
-    }))
-    .sort((a, b) => a.distance - b.distance)
-    .map((entry) => entry.index);
-  // The canvas starts two columns early (keeps the odd / even column pattern) so it covers both edges
-  return {
-    cell,
-    radius,
-    slots,
-    centred,
-    height,
-    canvasLeft: offset - 2 * stepX,
-  };
-}
-
-/**
- * Which technology each cell holds (index into TECHNOLOGIES); null = an empty cell.
- * `zone` = the cells that may be used, `pool` = the technologies to show.
- */
-function firstFill(slotCount: number, zone: number[], pool: number[]) {
-  const fill: (number | null)[] = Array(slotCount).fill(null);
-  // Most cells lit, but always some empty ones so marks have somewhere to move to
-  const everything = pool.length === TECHNOLOGIES.length;
-  const lit = Math.max(
-    1,
-    Math.min(
-      pool.length,
-      everything
-        ? Math.min(24, Math.round(zone.length * 0.62))
-        : zone.length - 2,
-    ),
-  );
-  // Spread the first marks evenly instead of bunching them together
-  for (let n = 0; n < lit; n++)
-    fill[zone[Math.floor(((n + 0.5) * zone.length) / lit)]] = pool[n];
-  return { fill, next: lit % pool.length };
-}
-
-/** Flat-top hexagon, slightly smaller than its cell: the plate that marks a lit cell */
-const PLATE = "25,5 75,5 96,43.3 75,81.6 25,81.6 4,43.3";
-
-/** The marks: every beat one goes dark and another lights up in a different empty cell */
-function Marks({
-  slots,
-  zone,
-  pool,
-  cell,
-  radius,
-  still,
-}: {
-  slots: Slot[];
-  zone: number[];
-  pool: number[];
-  cell: number;
-  radius: number;
-  still: boolean;
-}) {
-  const [state, setState] = useState(() => firstFill(slots.length, zone, pool));
-  const live = useRef(state);
-
-  useEffect(() => {
-    live.current = state;
-  }, [state]);
-
-  useEffect(() => {
-    const beat = window.setInterval(
-      () => {
-        const { fill, next } = live.current;
-        const lit = zone.filter((slot) => fill[slot] !== null);
-        const empty = zone.filter((slot) => fill[slot] === null);
-        if (!lit.length || !empty.length) return;
-        const leaving = lit[Math.floor(Math.random() * lit.length)];
-        const arriving = empty[Math.floor(Math.random() * empty.length)];
-        const updated = [...fill];
-        updated[leaving] = null;
-        if (lit.length >= pool.length) {
-          // Everything is already on screen: the mark just moves to another cell
-          updated[arriving] = fill[leaving];
-          setState({ fill: updated, next });
-          return;
-        }
-        // Next technology in line that is not already on screen, so every one gets its turn
-        let turn = next;
-        while (fill.includes(pool[turn])) turn = (turn + 1) % pool.length;
-        updated[arriving] = pool[turn];
-        setState({ fill: updated, next: (turn + 1) % pool.length });
-      },
-      still ? 2600 : 850,
-    );
-    return () => window.clearInterval(beat);
-  }, [still, zone, pool]);
-
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 text-c-brand"
-    >
-      {slots.map((slot, i) => {
-        const tech =
-          state.fill[i] === null ? null : TECHNOLOGIES[state.fill[i] as number];
-        return (
-          <div
-            key={i}
-            style={{
-              left: slot.x,
-              top: slot.y,
-              width: radius * 2,
-              height: cell,
-              opacity: slot.opacity,
-            }}
-            className="absolute -translate-x-1/2 -translate-y-1/2"
-          >
-            <AnimatePresence>
-              {tech && (
-                <motion.div
-                  key={tech.name}
-                  initial={{ opacity: 0 }}
-                  // A tube striking: on, dip, on. Leaving is the same in reverse
-                  animate={{ opacity: still ? 1 : [0, 1, 0.2, 1, 0.65, 1] }}
-                  exit={{
-                    opacity: still ? 0 : [1, 0.25, 0.8, 0],
-                    transition: { duration: still ? 0.8 : 0.6, ease: "linear" },
-                  }}
-                  // Lights up only once the mark that went dark has gone, so a mark that moves is never seen twice
-                  transition={{
-                    duration: still ? 0.8 : 0.75,
-                    ease: "linear",
-                    delay: still ? 0.8 : 0.6,
-                  }}
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-1.5"
-                >
-                  {/* Lit cell: a tinted plate with a brighter rim, so it reads as switched on */}
-                  <svg
-                    viewBox="0 0 100 86.6"
-                    preserveAspectRatio="none"
-                    className="absolute inset-0 h-full w-full overflow-visible"
-                  >
-                    <polygon
-                      points={PLATE}
-                      vectorEffect="non-scaling-stroke"
-                      className="fill-c-brand/[0.07] stroke-c-brand/50 [filter:drop-shadow(0_0_5px_color-mix(in_srgb,var(--c-highlight)_70%,transparent))]"
-                      strokeWidth={1}
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <div className="relative flex flex-col items-center gap-1.5 [filter:drop-shadow(0_0_5px_color-mix(in_srgb,var(--c-highlight)_90%,transparent))_drop-shadow(0_0_14px_color-mix(in_srgb,var(--c-highlight)_55%,transparent))]">
-                    <Mark
-                      name={tech.name}
-                      className={cell < 90 ? "h-6 w-6" : "h-8 w-8"}
-                    />
-                    <span className="text-center text-[9px] leading-none font-semibold tracking-[0.06em] whitespace-nowrap uppercase sm:text-[10px]">
-                      {tech.name}
-                    </span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-const ALL = TECHNOLOGIES.map((_, index) => index);
-const FILTERS = [
-  { id: "all", title: "All", pool: ALL },
-  ...ORDER.flatMap((id) => {
-    const category = techCategories.find((c) => c.id === id);
-    if (!category) return [];
-    return [
-      {
-        id,
-        title: category.title,
-        pool: category.items.map((item) => TECHNOLOGIES.indexOf(item)),
-      },
-    ];
-  }),
+// The stack, top to bottom: what people touch first, what everything runs on last.
+// Same pale-to-navy progression as the process section; the last layer meets the footer.
+const LAYERS: {
+  id: string;
+  icon: LucideIcon;
+  header: "light" | "dark";
+  surface: string;
+  tile: string;
+  muted: string;
+}[] = [
+  {
+    id: "frontend",
+    icon: Monitor,
+    header: "light",
+    surface: "bg-c-brand-100 text-c-ink",
+    tile: "bg-c-brand text-white",
+    muted: "text-slate-700",
+  },
+  {
+    id: "mobile",
+    icon: Smartphone,
+    header: "light",
+    surface: "bg-c-brand-200 text-c-ink",
+    tile: "bg-c-brand text-white",
+    muted: "text-slate-700",
+  },
+  {
+    id: "backend",
+    icon: Server,
+    header: "dark",
+    surface: "bg-c-brand text-white",
+    tile: "bg-white text-c-brand",
+    muted: "text-white",
+  },
+  {
+    id: "cloud",
+    icon: Cloud,
+    header: "dark",
+    surface: "bg-c-ink text-white",
+    tile: "bg-c-highlight text-c-ink",
+    muted: "text-slate-300",
+  },
 ];
 
 /**
- * Technology stack: one neon honeycomb at the site's content width, with no panel or
- * background of its own.
- * React Bits ShapeGrid draws the hexagon lattice in the brand colour: faint lines, cells that
- * flare up on their own and a glowing trail under the cursor. The technologies are one-colour
- * marks with their names inside the cells, in the same colour as the light; a lit cell also gets
- * a tinted plate. Only some cells are lit at a time; every beat one mark flickers out and the
- * next technology flickers on in another empty cell, so the whole list passes through.
- * The row of filters narrows the comb to one category, gathered in the middle.
- * Reduced motion: the lattice holds still and marks change with a slow plain fade.
- * The full list is always present as text for screen readers.
+ * Technology stack: one full-width sheet per group, each in its own colour, with every
+ * technology shown as its logo on a white tile. The list itself lives in tech-marks.tsx,
+ * shared with the header menu.
  */
 export default function TechStack() {
-  const stageRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(0);
-  const [filterId, setFilterId] = useState("all");
-  const neon = useSyncExternalStore(watchNeon, readNeon, () => FALLBACK_RGB);
-  const still = useSyncExternalStore(watchMotion, prefersStill, () => false);
-
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    const observer = new ResizeObserver(([entry]) =>
-      setWidth(Math.round(entry.contentRect.width)),
-    );
-    observer.observe(stage);
-    return () => observer.disconnect();
-  }, []);
-
-  const comb = useMemo(() => honeycomb(width || 1088), [width]);
-  const filter = FILTERS.find((entry) => entry.id === filterId) ?? FILTERS[0];
-  const zone = useMemo(
-    () =>
-      filter.id === "all"
-        ? comb.slots.map((_, index) => index)
-        : comb.centred.slice(
-            0,
-            Math.min(comb.slots.length, filter.pool.length + 6),
-          ),
-    [comb, filter],
-  );
-
   return (
-    <section
-      id="technology"
-      data-header="light"
-      className="relative w-full overflow-hidden bg-white pt-20 pb-10 text-c-ink sm:pt-28 sm:pb-14"
-    >
-      <MotionConfig reducedMotion="user">
-        <Container>
-          <motion.div {...reveal(0)}>
-            <Eyebrow icon={Cpu} tone="light">
-              Technology
-            </Eyebrow>
-          </motion.div>
-          <div className="mt-6 grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
-            <motion.h2 {...revealHeading(1)} className={headingClass("light")}>
-              Our <Highlight tone="light">Technology Stack</Highlight>
-            </motion.h2>
-            <motion.p
-              {...reveal(2)}
-              className={cn(descriptionClass("light"), "max-w-xl")}
-            >
-              The modern, proven technologies we use to build and run enterprise
-              applications.
-            </motion.p>
-          </div>
+    <section id="technology" data-blend-footer data-header="light" className="relative isolate w-full overflow-hidden bg-white text-c-ink">
+      <TopHairline tone="light" />
 
-          {/* Narrow the comb to one category */}
-          <motion.div
-            {...reveal(3)}
-            role="group"
-            aria-label="Filter technologies by category"
-            // Phones: one row that scrolls sideways. Wider screens: the row simply wraps
-            className="-mx-6 mt-6 flex gap-2 overflow-x-auto px-6 py-3 [scrollbar-width:none] sm:mx-0 sm:mt-8 sm:flex-wrap sm:gap-2.5 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden"
+      <Container className="pt-20 pb-14 sm:pt-28 sm:pb-16">
+        <motion.div {...reveal(0)} className="mb-6">
+          <Eyebrow icon={Cpu} tone="light">
+            Technology
+          </Eyebrow>
+        </motion.div>
+        <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
+          <motion.h2 {...revealHeading(1)} className={headingClass("light")}>
+            Our <Highlight tone="light">Technology Stack</Highlight>
+          </motion.h2>
+          <motion.p {...reveal(2)} className={cn(descriptionClass("light"), "max-w-xl")}>
+            The modern, proven technologies we use to build and run enterprise applications.
+          </motion.p>
+        </div>
+      </Container>
+
+      {/* Each layer is a full-width sheet that overlaps the one above it */}
+      {LAYERS.map((layer, i) => {
+        const category = techCategories.find((c) => c.id === layer.id);
+        if (!category) return null;
+        const Icon = layer.icon;
+        const last = i === LAYERS.length - 1;
+        return (
+          <div
+            key={layer.id}
+            data-header={layer.header}
+            className={cn(
+              "relative rounded-t-[28px] shadow-[0_-18px_40px_-24px_color-mix(in_srgb,var(--c-ink)_45%,transparent)] sm:rounded-t-[40px]",
+              i > 0 && "-mt-8 sm:-mt-10",
+              layer.surface,
+              last && "isolate",
+            )}
           >
-            {FILTERS.map((entry) => {
-              const active = entry.id === filter.id;
-              return (
-                <button
-                  key={entry.id}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => setFilterId(entry.id)}
-                  className={cn(
-                    "inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2 text-[13px] leading-none font-semibold whitespace-nowrap transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-c-brand sm:px-4 sm:text-sm",
-                    active
-                      ? "border-c-brand bg-c-brand text-white shadow-[0_8px_22px_-10px_var(--c-brand)]"
-                      : "border-c-brand/20 text-slate-600 hover:border-c-brand/50 hover:text-c-ink",
-                  )}
-                >
-                  {entry.title}
-                  <span
-                    className={cn(
-                      "font-mono text-[11px]",
-                      active ? "text-white/75" : "text-c-brand",
-                    )}
-                  >
-                    {String(entry.pool.length).padStart(2, "0")}
-                  </span>
-                </button>
-              );
-            })}
-          </motion.div>
-
-          {/* Lattice at the site's content width (same container as every other section), no panel or background of its own */}
-          <motion.div {...reveal(1)} className="mt-5 sm:mt-7">
-            <div
-              ref={stageRef}
-              style={{ height: comb.height }}
-              className="relative w-full"
-            >
-              {/* The lattice dissolves toward all four edges; the corners fade twice, so they go first */}
-              <div className="absolute inset-0 overflow-hidden [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_11%,black_89%,transparent),linear-gradient(to_bottom,transparent,black_13%,black_87%,transparent)] [-webkit-mask-composite:source-in]">
-                <div
-                  className="absolute inset-y-0"
-                  style={{ left: comb.canvasLeft, right: comb.canvasLeft }}
-                >
-                  <ShapeGrid
-                    shape="hexagon"
-                    cellSize={comb.cell}
-                    direction="none"
-                    lineWidth={1}
-                    lineColor={`rgba(${neon}, 0.22)`}
-                    hoverColor={`rgb(${neon})`}
-                    hoverFillColor={`rgba(${neon}, 0.1)`}
-                    fillOpacity={0.5}
-                    glow={1}
-                    twinkle={0.9}
-                    trail={0.6}
-                    intro
-                    clickCascade
-                    backgroundColor="transparent"
-                  />
-                </div>
+            {/* The footer's top glow starts here, so the last sheet and the footer read as one surface.
+                Same size and colour as the glow in footer.tsx, placed so the two halves meet at the seam. */}
+            {last && (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-t-[inherit]"
+              >
+                <div className="absolute -bottom-64 left-1/2 h-[26rem] w-[56rem] -translate-x-1/2 rounded-full bg-sky-500/15 blur-[120px]" />
               </div>
-              {width > 0 && (
-                <Marks
-                  key={`${comb.slots.length}-${filter.id}`}
-                  slots={comb.slots}
-                  zone={zone}
-                  pool={filter.pool}
-                  cell={comb.cell}
-                  radius={comb.radius}
-                  still={still}
-                />
-              )}
-            </div>
-          </motion.div>
+            )}
+            <Container className={cn("pt-9 sm:pt-12", last ? "pb-14 sm:pb-20" : "pb-[4.25rem] sm:pb-[5.5rem]")}>
+              <motion.div
+                {...reveal(0)}
+                className="grid gap-7 lg:grid-cols-[14.5rem_minmax(0,1fr)] lg:items-center lg:gap-12"
+              >
+                <div className="flex items-center gap-4">
+                  <span
+                    className={cn("inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl", layer.tile)}
+                  >
+                    <Icon aria-hidden className="h-6 w-6" strokeWidth={1.9} />
+                  </span>
+                  <div>
+                    <h3 className="text-xl leading-tight font-semibold tracking-[-0.02em]">{category.title}</h3>
+                    <p className={cn("mt-1 text-sm", layer.muted)}>{category.items.length} technologies</p>
+                  </div>
+                </div>
 
-          <ul className="sr-only">
-            {TECHNOLOGIES.map((tech) => (
-              <li key={tech.name}>{tech.name}</li>
-            ))}
-          </ul>
-        </Container>
-      </MotionConfig>
+                <ul className="grid grid-cols-4 gap-x-2 gap-y-6 md:grid-cols-8 md:gap-x-3">
+                  {category.items.map((tech) => (
+                    <li key={tech.name} className="flex flex-col items-center gap-2.5">
+                      <span className="flex h-15 w-15 items-center justify-center overflow-hidden rounded-2xl bg-white p-3 shadow-[0_8px_20px_-10px_color-mix(in_srgb,var(--c-ink)_50%,transparent)] sm:h-[4.25rem] sm:w-[4.25rem] sm:p-3.5">
+                        <Image
+                          src={tech.image}
+                          alt=""
+                          width={48}
+                          height={48}
+                          className={cn(
+                            "h-full w-full object-contain",
+                            tech.boxed && "contrast-[1.28]",
+                            tech.boxed === true && "scale-125",
+                          )}
+                        />
+                      </span>
+                      <span className="text-center text-xs leading-tight font-medium sm:text-[13px]">{tech.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            </Container>
+            {/* Same content-width rule the footer uses between its own blocks */}
+            {last && (
+              <Container>
+                <div aria-hidden className="border-t border-white/10" />
+              </Container>
+            )}
+          </div>
+        );
+      })}
     </section>
   );
 }

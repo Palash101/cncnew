@@ -59,7 +59,10 @@ export default function Footer() {
 
   return (
     <footer data-header="dark" className="relative isolate w-full overflow-hidden bg-[linear-gradient(180deg,var(--c-ink)_0%,var(--c-panel)_45%,var(--color-slate-950)_100%)] text-slate-300">
-      <TopHairline />
+      {/* No dividing line after a section that blends into the footer (the technology stack) */}
+      <div className="[main:has([data-blend-footer])+footer_&]:hidden">
+        <TopHairline />
+      </div>
 
       {/* Background: soft glows */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
