@@ -13,6 +13,7 @@ const IndustriesSection = dynamic(
   () => import("@/components/industries-section"),
 );
 const AgileProcess = dynamic(() => import("@/components/agile-process"));
+const ReviewsSection = dynamic(() => import("@/components/reviews-section"));
 const TechStack = dynamic(() => import("@/components/tech-stack"));
 
 export default function Home() {
@@ -33,6 +34,7 @@ export default function Home() {
         <ExpertiseSection />
         <IndustriesSection />
         <AgileProcess />
+        <ReviewsSection />
         <TechStack />
       </div>
     </main>
