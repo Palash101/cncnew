@@ -109,8 +109,8 @@ export default function ExpertiseSection() {
               Deep Technical Expertise, <Highlight tone="light">Supporting Modern Systems</Highlight>
             </motion.h2>
             <motion.p {...reveal(2)} className="mt-6 max-w-md text-base leading-7 text-c-ink/70">
-              {expertiseItems.length} capabilities from one engineering team, covering intelligent systems and the
-              cloud, data and security foundations they run on.
+              One engineering team for the whole job, from AI and machine learning to the cloud, data and security
+              work that keeps those systems running.
             </motion.p>
           </div>
 
