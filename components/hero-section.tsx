@@ -79,7 +79,8 @@ export default function HeroSection() {
       </h1>
 
       <p className="animate-hero-rise mt-[var(--gap)] max-w-2xl text-base leading-7 text-slate-200 [animation-delay:180ms] sm:text-xl sm:leading-9">
-        Accelerating growth for ambitious brands with technology, experience &amp; innovation for over a decade.
+        We design and build software that helps ambitious brands grow, backed by more than a decade of engineering
+        experience.
       </p>
 
       <div className="animate-hero-rise mt-[calc(var(--gap)*1.3)] flex w-full flex-col items-center justify-center gap-3 [animation-delay:270ms] sm:w-auto sm:flex-row sm:gap-4">

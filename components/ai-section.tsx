@@ -23,8 +23,8 @@ export const aiCapabilities: AiCapability[] = [
     subtitle: "Enterprise Models",
     imageUrl: "https://images.unsplash.com/photo-1676299081847-824916de030a?q=80&w=1200&auto=format&fit=crop",
     description:
-      "Train & deploy private conversational AI models on custom data with full enterprise data sovereignty.",
-    highlights: ["Custom ChatGPT Chatbots", "Private Enterprise Sovereignty", "Multi-Turn Context & Memory"],
+      "We train and deploy private conversational AI models on your own data, so sensitive information stays under your control.",
+    highlights: ["Custom ChatGPT Chatbots", "Full Data Sovereignty", "Multi-Turn Context & Memory"],
   },
   {
     id: "fine-tuning",
@@ -32,11 +32,11 @@ export const aiCapabilities: AiCapability[] = [
     title: "Fine-Tuning & RAG",
     subtitle: "Domain Intelligence",
     description:
-      "Fine-tune open-source models (LLaMA 3, DeepSeek) with QLoRA/LoRA techniques and vector RAG search.",
+      "We fine-tune open-source models like LLaMA 3 and DeepSeek using QLoRA/LoRA, and ground their answers with vector search.",
     highlights: [
       "QLoRA / LoRA Weight Adaptation",
       "Vector Search (Pinecone/Milvus)",
-      "High Precision & Reduced Hallucinations",
+      "Higher Precision, Fewer Hallucinations",
     ],
   },
   {
@@ -45,7 +45,7 @@ export const aiCapabilities: AiCapability[] = [
     title: "Wisper AI Agent",
     subtitle: "Voice & Audio Translation",
     description:
-      "Real-time voice changing, pitch modulation, and zero-latency audio translation for live video calls.",
+      "Real-time voice changing, pitch modulation and low-latency audio translation for live video calls.",
     highlights: ["Live Video Call Translation", "Real-Time Voice Modulation", "Sub-120ms Latency Audio Stream"],
   },
 ];

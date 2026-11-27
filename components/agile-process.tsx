@@ -31,42 +31,42 @@ const steps: ProcessStep[] = [
     id: "scoping",
     title: "Scoping",
     description:
-      "We begin with in-depth discovery, defining requirements, module breakdown, and technical roadmap architecture.",
+      "We start with in-depth discovery to define requirements, break the work into modules and map the technical roadmap.",
     icon: Eye,
   },
   {
     id: "cost-estimation",
     title: "Cost Estimation",
     description:
-      "Get the complete project module wise cost breakdown with maintenance and support plan.",
+      "You get a complete module-wise cost breakdown for the project, along with a maintenance and support plan.",
     icon: CreditCard,
   },
   {
     id: "development",
     title: "Development",
     description:
-      "Agile development sprints with clean code, scalable architecture, and continuous integration.",
+      "We build in agile sprints with clean code, scalable architecture and continuous integration.",
     icon: Code2,
   },
   {
     id: "qa-testing",
     title: "QA & Testing",
     description:
-      "Rigorous automated testing, security audits, and bug fixes to guarantee top-grade software delivery.",
+      "Automated testing, security audits and bug fixing make sure the software is solid before it ships.",
     icon: CheckCheck,
   },
   {
     id: "deployment",
     title: "Deployment",
     description:
-      "Automated zero-downtime deployment setup on secure cloud infrastructure environments.",
+      "We set up automated, zero-downtime deployments on secure cloud infrastructure.",
     icon: PackageCheck,
   },
   {
     id: "maintenance",
     title: "Maintenance",
     description:
-      "Continuous 24/7 post-launch monitoring, performance tuning, regular security updates, and SLA support.",
+      "After launch we provide 24/7 monitoring, performance tuning, regular security updates and SLA-backed support.",
     icon: ClipboardList,
   },
 ];
@@ -144,9 +144,9 @@ export default function AgileProcess() {
               {...reveal(2)}
               className="max-w-md text-base leading-7 text-slate-600 lg:pb-2"
             >
-              We follow a structured and agile development approach with project
-              management planner to ensure the successful delivery of every
-              project, focusing on quality, cost-optimization, transparency, and
+              We follow a structured, agile development approach backed by
+              clear project planning, so every project is delivered successfully
+              with a focus on quality, cost optimization, transparency and
               client satisfaction.
             </motion.p>
           </div>

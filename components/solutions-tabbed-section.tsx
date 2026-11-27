@@ -26,7 +26,7 @@ const TABS: { id: TabOption; label: string; icon: React.ElementType; count: numb
     icon: FolderKanban,
     count: projectsData.length,
     blurb:
-      "Scalable web applications, mobile platforms and customised Odoo ERP implementations built for brands around the world.",
+      "Scalable web applications, mobile platforms and customized Odoo ERP implementations built for brands around the world.",
   },
 ];
 

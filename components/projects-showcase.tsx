@@ -91,7 +91,7 @@ export const projectsData: Project[] = [
     category: "odoo",
     categoryLabel: "Odoo ERP",
     description:
-      "Tailor-made Odoo module bridging global suppliers with local logistics centers for automated purchase orders and stock alerts.",
+      "Custom Odoo module that connects global suppliers with local logistics centers, automating purchase orders and stock alerts.",
     imageUrl: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1000&auto=format&fit=crop",
     techStack: ["Odoo 17", "Python", "XML-RPC", "Docker"],
     metrics: "30k+ Orders Managed Daily",
@@ -262,7 +262,7 @@ function ProjectCta({ after }: { after: number }) {
           Have a project in mind?
         </h4>
         <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-600">
-          Share your requirements and our lead technical architects will get back to you within 24 hours.
+          Tell us what you need and one of our lead technical architects will reply within 24 hours.
         </p>
         <button
           type="button"

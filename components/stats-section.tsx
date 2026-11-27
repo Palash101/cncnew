@@ -10,10 +10,10 @@ import { Container, EASE, Eyebrow, Highlight, headingClass, reveal, revealHeadin
 type Stat = { value: number; label: string; description: string; icon: LucideIcon };
 
 const STATS: Stat[] = [
-  { value: 15, label: "Years Experience", description: "Delivering top-tier software", icon: Award },
-  { value: 50, label: "Global Clients", description: "Trusted partners worldwide", icon: Users },
-  { value: 50, label: "Mobile Apps", description: "iOS & Android solutions", icon: Smartphone },
-  { value: 100, label: "Web Apps", description: "Scalable web platforms", icon: Laptop },
+  { value: 15, label: "Years of Experience", description: "Building production software", icon: Award },
+  { value: 50, label: "Global Clients", description: "Long-term partners worldwide", icon: Users },
+  { value: 50, label: "Mobile Apps", description: "Shipped for iOS and Android", icon: Smartphone },
+  { value: 100, label: "Web Apps", description: "Web platforms built to scale", icon: Laptop },
 ];
 
 /** Counts up once, the first time it scrolls into view (static for reduced motion) */
@@ -72,9 +72,9 @@ export default function StatsSection() {
               </motion.h2>
 
               <motion.p {...reveal(2)} className="mt-6 max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-                With years of deep technical mastery, Craft and Code bridges complex infrastructure with intuitive user
-                experiences. We empower organizations globally through continuous digital transformation and resilient
-                systems.
+                Craft and Code has spent more than 15 years turning complex infrastructure into products people find
+                easy to use. We work with organizations around the world to modernize their systems and keep them
+                running reliably.
               </motion.p>
             </div>
 

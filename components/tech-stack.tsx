@@ -421,7 +421,7 @@ export default function TechStack() {
               Our <Highlight tone="light">Technology Stack</Highlight>
             </motion.h2>
             <motion.p {...reveal(2)} className={cn(descriptionClass("light"), "max-w-xl")}>
-              Empowering enterprise applications with modern, battle-tested technologies.
+              The modern, proven technologies we use to build and run enterprise applications.
             </motion.p>
           </div>
 

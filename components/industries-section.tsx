@@ -25,61 +25,61 @@ const industries: IndustryItem[] = [
     id: "healthcare",
     title: "Healthcare",
     description:
-      "It empowers healthcare providers and facilities with secure and compliant digital solutions elevating patient experience.",
+      "Secure, compliant digital solutions that help healthcare providers and facilities deliver a better patient experience.",
   },
   {
     id: "ecommerce",
     title: "E-Commerce",
     description:
-      "Crafting scalable ecommerce platforms that improves customer experiences effectively driving customer growth.",
+      "Scalable e-commerce platforms that give shoppers a smoother experience and help your customer base grow.",
   },
   {
     id: "finance",
     title: "Finance",
     description:
-      "Providing innovative opportunities for data-driven decisions in Fintech industries elevating operational efficiency and trust.",
+      "Fintech solutions that support data-driven decisions, improve operational efficiency and build trust with your customers.",
   },
   {
     id: "ev",
     title: "Electric Vehicles (EV)",
     description:
-      "Building smart battery management systems, fleet telemetry analytics, and IoT charging station networks for the EV ecosystem.",
+      "Smart battery management systems, fleet telemetry analytics and IoT charging station networks for the EV ecosystem.",
   },
   {
     id: "edtech",
     title: "Ed-Tech",
     description:
-      "Crafting unique learning platforms that allow accessible and engaging educational experiences.",
+      "Learning platforms that make education accessible and keep students engaged from start to finish.",
   },
   {
     id: "manufacturing",
     title: "Manufacturing",
     description:
-      "Enabling facilities to automate operations and create a streamlined approach to efficiency.",
+      "Automation solutions that streamline plant operations and help facilities run more efficiently.",
   },
   {
     id: "retail",
     title: "Retail",
     description:
-      "Helping retail businesses advance customer engagement, streamline operations and accelerate growth.",
+      "Tools that help retail businesses engage their customers, streamline operations and grow faster.",
   },
   {
     id: "government-saas",
     title: "Government & SaaS",
     description:
-      "Enhancing faster & efficient operations through automation solutions for SaaS businesses and government agencies.",
+      "Automation solutions that make operations faster and more efficient for SaaS businesses and government agencies.",
   },
   {
     id: "realestate",
     title: "Real Estate",
     description:
-      "Driving business growth with digital transformation solutions for real estate businesses with property management, transactions, and others.",
+      "Digital solutions for real estate businesses, covering property management, transactions and the day-to-day work around them.",
   },
   {
     id: "logistics",
     title: "Logistics",
     description:
-      "It enhances visibility and efficiency while managing access control across modern supply chain ecosystems.",
+      "Supply chain solutions that improve visibility, efficiency and access control across modern logistics networks.",
   },
 ];
 
@@ -156,8 +156,9 @@ export default function IndustriesSection() {
             }
           />
           <motion.p {...reveal(2)} className="max-w-md text-base leading-7 text-slate-300 lg:pb-2">
-            We provide a diverse range of solutions for distinct industries that amplify and boost business
-            performance.
+            We build software for the industries where reliability counts, from healthcare and finance to
+            manufacturing, retail and logistics. Each solution is shaped around how the sector actually works, so it
+            improves daily operations and delivers results you can measure.
           </motion.p>
         </div>
 

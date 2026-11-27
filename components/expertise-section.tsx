@@ -26,55 +26,55 @@ const expertiseItems: ExpertiseItem[] = [
     id: "ai",
     title: "Artificial Intelligence",
     description:
-      "AI only creates value when it fits into how an organization actually works. We help enterprises apply intelligence in ways that improve decisions, reduce manual effort, and support operations at scale.",
+      "We help enterprises put AI to work inside the processes they already run. The focus is practical: better decisions, less manual effort and operations that keep up as the business grows.",
   },
   {
     id: "gen-ai",
     title: "Generative AI",
     description:
-      "Gen AI is most useful when it becomes part of everyday work. We integrate it into internal knowledge systems, customer interactions, and operational tools, with the controls and governance enterprises expect.",
+      "We build generative AI into the tools your teams use every day, including internal knowledge systems, customer interactions and operational software, with the controls and governance enterprises expect.",
   },
   {
     id: "agentic-ai",
     title: "Agentic AI",
     description:
-      "We work with organizations exploring autonomous systems, helping them introduce AI agents that can take action across processes while remaining transparent, supervised, and accountable.",
+      "We help organizations introduce AI agents that can take action across business processes on their own, while every step stays transparent, supervised and accountable.",
   },
   {
     id: "ml",
     title: "Machine Learning",
     description:
-      "ML in enterprise environments is less about experimentation and more about reliability. We develop models that adapt over time and continue to perform as data, demand, and conditions change.",
+      "We develop machine learning models for production use. They are built to adapt over time and keep performing as your data, demand and business conditions change.",
   },
   {
     id: "cv",
     title: "Computer Vision",
     description:
-      "In environments where speed and accuracy matter, vision-based systems can remove friction. We apply computer vision to automate inspection, monitoring, and visual analysis across real operational settings.",
+      "We apply computer vision to automate inspection, monitoring and visual analysis in real operational settings, where the work has to be both fast and accurate.",
   },
   {
     id: "cloud",
     title: "Cloud",
     description:
-      "Cloud modernization is not a lift-and-shift exercise. We help enterprises rethink how applications and infrastructure are structured so systems remain secure, resilient, and ready to scale over time.",
+      "We help enterprises restructure their applications and infrastructure for the cloud, so systems stay secure, resilient and ready to scale as needs change.",
   },
   {
     id: "data-science",
     title: "Data Science and Analytics",
     description:
-      "Data only becomes useful when teams can rely on it. We design data foundations that support analytics and insight across functions, without adding complexity or dependency.",
+      "We design data foundations your teams can rely on, supporting analytics and insight across every function without adding complexity or new dependencies.",
   },
   {
     id: "cybersecurity",
     title: "Cybersecurity",
     description:
-      "Security is treated as a design constraint, not a checklist item. Our systems account for governance, compliance, and risk from the earliest architectural decisions.",
+      "We build security in from the earliest architectural decisions, so governance, compliance and risk are accounted for long before a system goes live.",
   },
   {
     id: "iot",
     title: "IoT",
     description:
-      "Connected devices generate value only when their data is usable. We help organizations bring physical systems into their digital landscape, improving visibility and control across operations.",
+      "We connect devices, machines and other physical systems to your digital landscape and make their data usable, giving you better visibility and control across operations.",
   },
 ];
 
@@ -109,8 +109,8 @@ export default function ExpertiseSection() {
               Deep Technical Expertise, <Highlight tone="light">Supporting Modern Systems</Highlight>
             </motion.h2>
             <motion.p {...reveal(2)} className="mt-6 max-w-md text-base leading-7 text-c-ink/70">
-              {expertiseItems.length} capabilities, one engineering team — from intelligent systems to the cloud,
-              data and security foundations they run on.
+              {expertiseItems.length} capabilities from one engineering team, covering intelligent systems and the
+              cloud, data and security foundations they run on.
             </motion.p>
           </div>
 

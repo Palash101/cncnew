@@ -18,10 +18,10 @@ const SOLUTION_LINKS = [
 
 const COMPANY_LINKS = [
   { href: "/#services", label: "Our Technical Expertise" },
-  { href: "/#industries", label: "Target Industries" },
-  { href: "/#work", label: "Portfolio Showcase" },
-  { href: "/#agile", label: "Agile Workflow Process" },
-  { href: "#", label: "Careers & Hiring" },
+  { href: "/#industries", label: "Industries We Serve" },
+  { href: "/#work", label: "Our Portfolio" },
+  { href: "/#agile", label: "Our Agile Process" },
+  { href: "#", label: "Careers" },
 ];
 
 const SOCIALS = [
@@ -45,7 +45,7 @@ const SOCIALS = [
 const CONTACTS = [
   { icon: Mail, label: "discuss@craftandcode.in", href: "mailto:discuss@craftandcode.in" },
   { icon: Phone, label: "+91-72249 01787", href: "tel:+917224901787" },
-  { icon: MapPin, label: "Global Delivery Centers — USA & India" },
+  { icon: MapPin, label: "Global Delivery Centers in USA & India" },
 ];
 
 // One set of text styles for every footer column
@@ -77,14 +77,14 @@ export default function Footer() {
             <div className="max-w-xl">
               <p className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] text-sky-300 uppercase">
                 <Sparkles className="h-3.5 w-3.5" />
-                Ready to Elevate Your Enterprise?
+                Ready to Start Your Next Project?
               </p>
               <h3 className="mt-3 text-2xl leading-tight font-semibold tracking-[-0.03em] text-white sm:text-3xl">
                 Let&apos;s Build Something <Highlight>Extraordinary Together</Highlight>
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-slate-400 sm:text-base">
-                Partner with our engineering experts to deploy custom AI models, enterprise ERP platforms, and
-                high-frequency web systems.
+                Work with our engineers to launch custom AI models, enterprise ERP platforms and high-performance
+                web applications.
               </p>
             </div>
 
@@ -136,8 +136,8 @@ export default function Footer() {
             </Link>
 
             <p className={cn(bodyText, "mt-5 max-w-sm")}>
-              A digital engineering firm specializing in Next-Gen AI, custom Odoo & ERPNext integrations, and
-              high-performance full-stack platforms for global enterprises.
+              A digital engineering firm specializing in AI, custom Odoo and ERPNext integrations, and
+              high-performance full-stack platforms for enterprises worldwide.
             </p>
 
             <ul className="mt-6 space-y-3">
