@@ -1,37 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { Cpu } from "lucide-react";
 import {
-  IconBrandAndroid,
-  IconBrandAngular,
-  IconBrandApple,
-  IconBrandAws,
-  IconBrandAzure,
-  IconBrandBitbucket,
-  IconBrandCSharp,
-  IconBrandCss3,
-  IconBrandDocker,
-  IconBrandFlutter,
-  IconBrandGithub,
-  IconBrandGitlab,
-  IconBrandGolang,
-  IconBrandGoogle,
-  IconBrandHtml5,
-  IconBrandKotlin,
-  IconBrandNextjs,
-  IconBrandNodejs,
-  IconBrandPhp,
-  IconBrandPython,
-  IconBrandReact,
-  IconBrandReactNative,
-  IconBrandVue,
-  IconBrandWebflow,
-  IconBrandWordpress,
-  type Icon,
-} from "@tabler/icons-react";
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import { Cpu } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import ShapeGrid from "@/components/react-bits/ShapeGrid";
+import {
+  Mark,
+  TECH_ORDER as ORDER,
+  techCategories,
+} from "@/components/tech-marks";
 import {
   Container,
   Eyebrow,
@@ -43,129 +26,9 @@ import {
 } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 
-interface TechItem {
-  name: string;
-  image: string;
-  /** The file has a light-grey box and wide margins baked in: lift the grey to white and enlarge the mark ("clean" = no enlarging) */
-  boxed?: true | "clean";
-}
-
-interface CategoryRow {
-  id: string;
-  title: string;
-  items: TechItem[];
-}
-
-const techCategories: CategoryRow[] = [
-  {
-    id: "frontend",
-    title: "Frontend Development",
-    items: [
-      { name: "React Js", image: "/frontend/react.png" },
-      { name: "Next Js", image: "/frontend/nextjs.png" },
-      { name: "Vue JS", image: "/frontend/vue.webp", boxed: true },
-      { name: "Angular Js", image: "/frontend/angular.png" },
-      { name: "HTML5", image: "/frontend/html.png" },
-      { name: "CSS 3", image: "/frontend/css.png" },
-      { name: "Wordpress", image: "/frontend/wordpress.png" },
-      { name: "Webflow", image: "/frontend/webflow.png" },
-    ],
-  },
-  {
-    id: "backend",
-    title: "Backend Development",
-    items: [
-      { name: "Node Js", image: "/backend/Node.js_.webp" },
-      { name: ".Net", image: "/backend/dot net.webp" },
-      { name: "Java", image: "/backend/java.png" },
-      { name: "Python", image: "/backend/python.webp" },
-      { name: "C#", image: "/backend/c sharp.png" },
-      { name: "PHP", image: "/backend/php.png" },
-      { name: "Go-Lang", image: "/backend/Go_Logo_B.webp" },
-      { name: "Odoo", image: "/Odoo.png" },
-    ],
-  },
-  {
-    id: "mobile",
-    title: "Mobile Frameworks",
-    items: [
-      { name: "iOS", image: "/mobile framework/ios.webp" },
-      { name: "Android", image: "/mobile framework/android.png" },
-      { name: "Flutter", image: "/mobile framework/flutter.png" },
-      { name: "Kotlin", image: "/mobile framework/Kotlin_icon.webp" },
-      { name: "React Native", image: "/mobile framework/react native.png", boxed: "clean" },
-    ],
-  },
-  {
-    id: "cloud",
-    title: "Cloud & DevOps",
-    items: [
-      { name: "Azure", image: "/cloud devops/azure.png" },
-      { name: "AWS", image: "/cloud devops/aws-icon.webp" },
-      { name: "Google Cloud", image: "/cloud devops/google cloud.webp", boxed: true },
-      { name: "Docker", image: "/cloud devops/docker.png", boxed: true },
-      { name: "Bitbucket", image: "/cloud devops/bit bucket.png" },
-      { name: "Github", image: "/cloud devops/github.png" },
-      { name: "Gitlab", image: "/cloud devops/git lab.png" },
-      { name: "Sharepoint", image: "/cloud devops/SharePoint_.webp" },
-    ],
-  },
-];
-
-// One continuous sequence: what people touch first, what everything runs on last
-const ORDER = ["frontend", "mobile", "backend", "cloud"];
-const TECHNOLOGIES = ORDER.flatMap((id) => techCategories.find((c) => c.id === id)?.items ?? []);
-
-/**
- * One-colour marks. Most are outline brand icons; the four brands the icon set lacks use the
- * project's own logo file as a silhouette (those files have transparent backgrounds).
- */
-const MARKS: Record<string, Icon | string> = {
-  "React Js": IconBrandReact,
-  "Next Js": IconBrandNextjs,
-  "Vue JS": IconBrandVue,
-  "Angular Js": IconBrandAngular,
-  HTML5: IconBrandHtml5,
-  "CSS 3": IconBrandCss3,
-  Wordpress: IconBrandWordpress,
-  Webflow: IconBrandWebflow,
-  "Node Js": IconBrandNodejs,
-  ".Net": "/backend/dot net.webp",
-  Java: "/backend/java.png",
-  Python: IconBrandPython,
-  "C#": IconBrandCSharp,
-  PHP: IconBrandPhp,
-  "Go-Lang": IconBrandGolang,
-  Odoo: "/Odoo.png",
-  iOS: IconBrandApple,
-  Android: IconBrandAndroid,
-  Flutter: IconBrandFlutter,
-  Kotlin: IconBrandKotlin,
-  "React Native": IconBrandReactNative,
-  Azure: IconBrandAzure,
-  AWS: IconBrandAws,
-  "Google Cloud": IconBrandGoogle,
-  Docker: IconBrandDocker,
-  Bitbucket: IconBrandBitbucket,
-  Github: IconBrandGithub,
-  Gitlab: IconBrandGitlab,
-  Sharepoint: "/cloud devops/SharePoint_.webp",
-};
-
-function Mark({ name, className }: { name: string; className?: string }) {
-  const mark = MARKS[name];
-  if (typeof mark === "string") {
-    const image = `url("${encodeURI(mark)}")`;
-    return (
-      <span
-        className={cn("block bg-current", className)}
-        style={{ maskImage: image, WebkitMaskImage: image, maskSize: "contain", maskRepeat: "no-repeat", maskPosition: "center" }}
-      />
-    );
-  }
-  const Glyph = mark;
-  return <Glyph className={className} stroke={1.5} />;
-}
+const TECHNOLOGIES = ORDER.flatMap(
+  (id) => techCategories.find((c) => c.id === id)?.items ?? [],
+);
 
 /* ── the neon colour as plain numbers (the canvas cannot read CSS variables) ── */
 
@@ -187,7 +50,9 @@ function readNeon() {
   if (context) {
     context.fillStyle = color;
     context.fillRect(0, 0, 1, 1);
-    cachedRgb = Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3)).join(", ");
+    cachedRgb = Array.from(
+      context.getImageData(0, 0, 1, 1).data.slice(0, 3),
+    ).join(", ");
   }
   return cachedRgb;
 }
@@ -224,24 +89,36 @@ function honeycomb(width: number) {
   // Whole cells only, with the half cells left over on both sides shared equally
   const columns = Math.max(1, Math.floor((width - radius) / stepX));
   const offset = (width - (columns + 1) * stepX) / 2;
-  const edge = (at: number, size: number, share: number) => Math.min(1, Math.min(at, size - at) / (size * share));
+  const edge = (at: number, size: number, share: number) =>
+    Math.min(1, Math.min(at, size - at) / (size * share));
   const slots: Slot[] = [];
   for (let i = 1; i <= columns; i++) {
     for (let row = 0; row < ROWS; row++) {
       const x = offset + i * stepX;
       const y = (i % 2 === 1 ? cell / 2 : cell) + row * cell;
       // Marks follow the fade of the lattice, but never so far that a name becomes unreadable
-      const opacity = 0.55 + 0.45 * edge(x, width, FADE_X) * edge(y, height, FADE_Y);
+      const opacity =
+        0.55 + 0.45 * edge(x, width, FADE_X) * edge(y, height, FADE_Y);
       slots.push({ x, y, opacity });
     }
   }
   // Cells closest to the middle first: a single category gathers there
   const centred = slots
-    .map((slot, index) => ({ index, distance: Math.hypot(slot.x - width / 2, (slot.y - height / 2) * 1.35) }))
+    .map((slot, index) => ({
+      index,
+      distance: Math.hypot(slot.x - width / 2, (slot.y - height / 2) * 1.35),
+    }))
     .sort((a, b) => a.distance - b.distance)
     .map((entry) => entry.index);
   // The canvas starts two columns early (keeps the odd / even column pattern) so it covers both edges
-  return { cell, radius, slots, centred, height, canvasLeft: offset - 2 * stepX };
+  return {
+    cell,
+    radius,
+    slots,
+    centred,
+    height,
+    canvasLeft: offset - 2 * stepX,
+  };
 }
 
 /**
@@ -252,9 +129,18 @@ function firstFill(slotCount: number, zone: number[], pool: number[]) {
   const fill: (number | null)[] = Array(slotCount).fill(null);
   // Most cells lit, but always some empty ones so marks have somewhere to move to
   const everything = pool.length === TECHNOLOGIES.length;
-  const lit = Math.max(1, Math.min(pool.length, everything ? Math.min(24, Math.round(zone.length * 0.62)) : zone.length - 2));
+  const lit = Math.max(
+    1,
+    Math.min(
+      pool.length,
+      everything
+        ? Math.min(24, Math.round(zone.length * 0.62))
+        : zone.length - 2,
+    ),
+  );
   // Spread the first marks evenly instead of bunching them together
-  for (let n = 0; n < lit; n++) fill[zone[Math.floor(((n + 0.5) * zone.length) / lit)]] = pool[n];
+  for (let n = 0; n < lit; n++)
+    fill[zone[Math.floor(((n + 0.5) * zone.length) / lit)]] = pool[n];
   return { fill, next: lit % pool.length };
 }
 
@@ -313,13 +199,23 @@ function Marks({
   }, [still, zone, pool]);
 
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 text-c-brand">
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 text-c-brand"
+    >
       {slots.map((slot, i) => {
-        const tech = state.fill[i] === null ? null : TECHNOLOGIES[state.fill[i] as number];
+        const tech =
+          state.fill[i] === null ? null : TECHNOLOGIES[state.fill[i] as number];
         return (
           <div
             key={i}
-            style={{ left: slot.x, top: slot.y, width: radius * 2, height: cell, opacity: slot.opacity }}
+            style={{
+              left: slot.x,
+              top: slot.y,
+              width: radius * 2,
+              height: cell,
+              opacity: slot.opacity,
+            }}
             className="absolute -translate-x-1/2 -translate-y-1/2"
           >
             <AnimatePresence>
@@ -329,13 +225,24 @@ function Marks({
                   initial={{ opacity: 0 }}
                   // A tube striking: on, dip, on. Leaving is the same in reverse
                   animate={{ opacity: still ? 1 : [0, 1, 0.2, 1, 0.65, 1] }}
-                  exit={{ opacity: still ? 0 : [1, 0.25, 0.8, 0], transition: { duration: still ? 0.8 : 0.6, ease: "linear" } }}
+                  exit={{
+                    opacity: still ? 0 : [1, 0.25, 0.8, 0],
+                    transition: { duration: still ? 0.8 : 0.6, ease: "linear" },
+                  }}
                   // Lights up only once the mark that went dark has gone, so a mark that moves is never seen twice
-                  transition={{ duration: still ? 0.8 : 0.75, ease: "linear", delay: still ? 0.8 : 0.6 }}
+                  transition={{
+                    duration: still ? 0.8 : 0.75,
+                    ease: "linear",
+                    delay: still ? 0.8 : 0.6,
+                  }}
                   className="absolute inset-0 flex flex-col items-center justify-center gap-1.5"
                 >
                   {/* Lit cell: a tinted plate with a brighter rim, so it reads as switched on */}
-                  <svg viewBox="0 0 100 86.6" preserveAspectRatio="none" className="absolute inset-0 h-full w-full overflow-visible">
+                  <svg
+                    viewBox="0 0 100 86.6"
+                    preserveAspectRatio="none"
+                    className="absolute inset-0 h-full w-full overflow-visible"
+                  >
                     <polygon
                       points={PLATE}
                       vectorEffect="non-scaling-stroke"
@@ -345,7 +252,10 @@ function Marks({
                     />
                   </svg>
                   <div className="relative flex flex-col items-center gap-1.5 [filter:drop-shadow(0_0_5px_color-mix(in_srgb,var(--c-highlight)_90%,transparent))_drop-shadow(0_0_14px_color-mix(in_srgb,var(--c-highlight)_55%,transparent))]">
-                    <Mark name={tech.name} className={cell < 90 ? "h-6 w-6" : "h-8 w-8"} />
+                    <Mark
+                      name={tech.name}
+                      className={cell < 90 ? "h-6 w-6" : "h-8 w-8"}
+                    />
                     <span className="text-center text-[9px] leading-none font-semibold tracking-[0.06em] whitespace-nowrap uppercase sm:text-[10px]">
                       {tech.name}
                     </span>
@@ -366,7 +276,13 @@ const FILTERS = [
   ...ORDER.flatMap((id) => {
     const category = techCategories.find((c) => c.id === id);
     if (!category) return [];
-    return [{ id, title: category.title, pool: category.items.map((item) => TECHNOLOGIES.indexOf(item)) }];
+    return [
+      {
+        id,
+        title: category.title,
+        pool: category.items.map((item) => TECHNOLOGIES.indexOf(item)),
+      },
+    ];
   }),
 ];
 
@@ -392,7 +308,9 @@ export default function TechStack() {
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
-    const observer = new ResizeObserver(([entry]) => setWidth(Math.round(entry.contentRect.width)));
+    const observer = new ResizeObserver(([entry]) =>
+      setWidth(Math.round(entry.contentRect.width)),
+    );
     observer.observe(stage);
     return () => observer.disconnect();
   }, []);
@@ -403,12 +321,19 @@ export default function TechStack() {
     () =>
       filter.id === "all"
         ? comb.slots.map((_, index) => index)
-        : comb.centred.slice(0, Math.min(comb.slots.length, filter.pool.length + 6)),
+        : comb.centred.slice(
+            0,
+            Math.min(comb.slots.length, filter.pool.length + 6),
+          ),
     [comb, filter],
   );
 
   return (
-    <section id="technology" data-header="light" className="relative w-full overflow-hidden bg-white pt-20 pb-10 text-c-ink sm:pt-28 sm:pb-14">
+    <section
+      id="technology"
+      data-header="light"
+      className="relative w-full overflow-hidden bg-white pt-20 pb-10 text-c-ink sm:pt-28 sm:pb-14"
+    >
       <MotionConfig reducedMotion="user">
         <Container>
           <motion.div {...reveal(0)}>
@@ -420,8 +345,12 @@ export default function TechStack() {
             <motion.h2 {...revealHeading(1)} className={headingClass("light")}>
               Our <Highlight tone="light">Technology Stack</Highlight>
             </motion.h2>
-            <motion.p {...reveal(2)} className={cn(descriptionClass("light"), "max-w-xl")}>
-              The modern, proven technologies we use to build and run enterprise applications.
+            <motion.p
+              {...reveal(2)}
+              className={cn(descriptionClass("light"), "max-w-xl")}
+            >
+              The modern, proven technologies we use to build and run enterprise
+              applications.
             </motion.p>
           </div>
 
@@ -449,7 +378,12 @@ export default function TechStack() {
                   )}
                 >
                   {entry.title}
-                  <span className={cn("font-mono text-[11px]", active ? "text-white/75" : "text-c-brand")}>
+                  <span
+                    className={cn(
+                      "font-mono text-[11px]",
+                      active ? "text-white/75" : "text-c-brand",
+                    )}
+                  >
                     {String(entry.pool.length).padStart(2, "0")}
                   </span>
                 </button>
@@ -459,10 +393,17 @@ export default function TechStack() {
 
           {/* Lattice at the site's content width (same container as every other section), no panel or background of its own */}
           <motion.div {...reveal(1)} className="mt-5 sm:mt-7">
-            <div ref={stageRef} style={{ height: comb.height }} className="relative w-full">
+            <div
+              ref={stageRef}
+              style={{ height: comb.height }}
+              className="relative w-full"
+            >
               {/* The lattice dissolves toward all four edges; the corners fade twice, so they go first */}
               <div className="absolute inset-0 overflow-hidden [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_11%,black_89%,transparent),linear-gradient(to_bottom,transparent,black_13%,black_87%,transparent)] [-webkit-mask-composite:source-in]">
-                <div className="absolute inset-y-0" style={{ left: comb.canvasLeft, right: comb.canvasLeft }}>
+                <div
+                  className="absolute inset-y-0"
+                  style={{ left: comb.canvasLeft, right: comb.canvasLeft }}
+                >
                   <ShapeGrid
                     shape="hexagon"
                     cellSize={comb.cell}
