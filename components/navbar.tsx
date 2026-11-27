@@ -165,7 +165,6 @@ const NAV_LINKS: NavLink[] = [
       },
     ],
   },
-  { href: "/industries", label: "Industries" },
   {
     href: "/technology",
     label: "Technology",
