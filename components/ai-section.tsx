@@ -61,7 +61,9 @@ const fraction = (value: number) => value - Math.floor(value);
 const EMBEDDINGS = Array.from({ length: 46 }, (_, i) => {
   const x = Math.round(fraction((i + 1) * 0.7548776662) * SPACE);
   const y = Math.round(fraction((i + 1) * 0.569840291) * SPACE);
-  return { x, y, distance: Math.hypot(x - MIDDLE, y - MIDDLE) };
+  // Rounded: the last decimals of Math.hypot differ between the server and some phone browsers,
+  // which made the server and browser markup disagree
+  return { x, y, distance: Math.round(Math.hypot(x - MIDDLE, y - MIDDLE) * 100) / 100 };
 })
   .filter((point) => point.distance >= 24)
   .sort((a, b) => a.distance - b.distance);

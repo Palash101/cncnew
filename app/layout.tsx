@@ -95,7 +95,8 @@ export default function RootLayout({
       suppressHydrationWarning // TEMPORARY: colour testing sets attributes before hydration
       className={`${plusJakartaSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      {/* Browser extensions (Grammarly and others) add attributes to <body> before React loads */}
+      <body suppressHydrationWarning className="min-h-full flex flex-col font-sans">
         <ThemeScript /> {/* TEMPORARY: colour testing */}
         <JsonLd />
         <SmoothScroll>{children}</SmoothScroll>

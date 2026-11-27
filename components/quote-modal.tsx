@@ -15,18 +15,7 @@ import {
   Building2,
 } from "lucide-react";
 import { useQuoteModal } from "@/context/quote-modal-context";
-
-const SERVICES = [
-  "AI & Machine Learning Solutions",
-  "Odoo 18 ERP Customization",
-  "ERPNext Integration",
-  "Custom Full-Stack Web App",
-  "Cloud & DevOps Infrastructure",
-  "Mobile App Development",
-  "Other / Consulting",
-];
-
-const BUDGET_RANGES = ["< $10,000", "$10k - $25k", "$25k - $50k", "$50k+"];
+import { BUDGET_RANGES, SERVICES } from "@/lib/inquiry";
 
 export default function QuoteModal() {
   const { isOpen, closeQuoteModal, selectedService } = useQuoteModal();

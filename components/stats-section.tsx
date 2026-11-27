@@ -9,7 +9,8 @@ import { Container, EASE, Eyebrow, Highlight, headingClass, reveal, revealHeadin
 
 type Stat = { value: number; label: string; description: string; icon: LucideIcon };
 
-const STATS: Stat[] = [
+// Also shown on the About page, so the numbers are only written once
+export const STATS: Stat[] = [
   { value: 12, label: "Years of Experience", description: "Building production software", icon: Award },
   { value: 50, label: "Global Clients", description: "Long-term partners worldwide", icon: Users },
   { value: 150, label: "Mobile Apps", description: "Shipped for iOS and Android", icon: Smartphone },
@@ -62,7 +63,7 @@ export default function StatsSection() {
         <Container>
           <div className="lg:grid lg:min-h-[640px] lg:grid-cols-2 lg:items-center">
             {/* Statement */}
-            <div className="pt-20 pb-14 sm:pt-24 lg:py-24 lg:pr-12">
+            <div className="pt-16 pb-12 sm:pt-24 sm:pb-14 lg:py-24 lg:pr-12">
               <motion.div {...reveal(0)}>
                 <Eyebrow icon={Globe}>Enterprise Global Network</Eyebrow>
               </motion.div>
@@ -79,14 +80,15 @@ export default function StatsSection() {
             </div>
 
             {/* Numbers */}
-            <div className="relative isolate pt-20 pb-16 lg:py-24 lg:pl-20">
+            <div className="relative isolate pt-16 pb-14 sm:pt-20 sm:pb-16 lg:py-24 lg:pl-20">
               {/* Phone / tablet curve: full-bleed, rising from below */}
               <div
                 aria-hidden
                 className="absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 rounded-t-[50%_56px] bg-[linear-gradient(180deg,var(--c-deep-600)_0%,var(--c-deep-650)_40%,var(--c-deep-800)_100%)] shadow-[0_-4px_0_var(--c-brand),0_-24px_70px_-10px_color-mix(in_srgb,var(--c-glow)_40%,transparent)] lg:hidden"
               />
 
-              <ul className="grid grid-cols-2">
+              {/* Phones and tablets: four separate tiles. Desktop: one grid split by thin lines. */}
+              <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-0">
                 {STATS.map((stat, i) => {
                   const Icon = stat.icon;
                   return (
@@ -94,18 +96,19 @@ export default function StatsSection() {
                       key={stat.label}
                       {...reveal(i)}
                       className={cn(
-                        "border-white/15",
-                        i % 2 === 0 ? "pr-5 sm:pr-8" : "border-l pl-5 sm:pl-8",
-                        i < 2 ? "pb-10 lg:pb-14" : "border-t pt-10 lg:pt-14"
+                        "rounded-2xl border border-white/15 bg-white/[0.07] p-4 sm:p-6",
+                        "lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0",
+                        i % 2 === 0 ? "lg:pr-8" : "lg:border-l lg:pl-8",
+                        i < 2 ? "lg:pb-14" : "lg:border-t lg:pt-14"
                       )}
                     >
                       <Icon aria-hidden className="h-6 w-6 text-sky-400" strokeWidth={1.75} />
-                      <p className="mt-5 text-5xl leading-none font-semibold tracking-[-0.04em] tabular-nums sm:text-6xl xl:text-7xl">
+                      <p className="mt-4 text-[2.5rem] leading-none font-semibold tracking-[-0.04em] tabular-nums sm:mt-5 sm:text-6xl xl:text-7xl">
                         <CountUp to={stat.value} />
                         <span className="font-medium text-sky-400">+</span>
                       </p>
-                      <p className="mt-5 text-base font-semibold sm:text-lg">{stat.label}</p>
-                      <p className="mt-1.5 text-sm leading-snug text-slate-300 sm:text-[15px]">{stat.description}</p>
+                      <p className="mt-3 text-[15px] leading-snug font-semibold sm:mt-5 sm:text-lg">{stat.label}</p>
+                      <p className="mt-1.5 text-[13px] leading-snug text-slate-300 sm:text-[15px]">{stat.description}</p>
                     </motion.li>
                   );
                 })}
